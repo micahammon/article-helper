@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English Article Helper</title>
+    <style>
+        /* --- Basic Styling & Layout --- */
+        :root {
+            --bg-color: #f0f2f5;
+            --container-bg: #ffffff;
+            --text-color: #1c1e21;
+            --primary-color: #1877f2;
+            --primary-hover: #166fe5;
+            --secondary-text: #606770;
+            --border-color: #dddfe2;
+            --shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding-top: 50px;
+            margin: 0;
+            min-height: 100vh;
+        }
+        .container {
+            width: 100%;
+            max-width: 600px;
+            background-color: var(--container-bg);
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            padding: 20px 30px;
+            box-sizing: border-box;
+        }
+
+        /* --- Widget Styling --- */
+        h1 {
+            text-align: center;
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+        .input-frame {
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 15px;
+            margin-bottom: 25px;
+        }
+        .input-frame label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        .input-group {
+            display: flex;
+            gap: 10px;
+        }
+        .input-group input {
+            flex-grow: 1;
+            padding: 12px;
+            font-size: 16px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+        }
+        .input-group button, .option-button, .reset-button {
+            padding: 12px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .input-group button:hover, .option-button:hover, .reset-button:hover {
+            background-color: var(--primary-hover);
+        }
+        .display-frame {
+            text-align: center;
+        }
+        #question-label {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        #details-label {
+            font-size: 16px;
+            font-style: italic;
+            color: var(--secondary-text);
+            margin-bottom: 20px;
+            min-height: 40px; /* Reserve space */
+        }
+        #options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .explanation-text {
+            text-align: left;
+            background-color: var(--bg-color);
+            padding: 15px;
+            border-radius: 6px;
+            line-height: 1.5;
+        }
+        .explanation-text span {
+            font-weight: bold;
+            color: var(--secondary-text);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>English Article Helper</h1>
+
+        <div class="input-frame">
+            <label for="noun-entry">Enter a noun or phrase:</label>
+            <div class="input-group">
+                <input type="text" id="noun-entry" placeholder="e.g., car, USA, breakfast...">
+                <button id="check-button">Check Article</button>
+            </div>
+        </div>
+
+        <div class="display-frame">
+            <h2 id="question-label">Welcome! Enter a noun above to get started.</h2>
+            <p id="details-label"></p>
+            <div id="options-container"></div>
+        </div>
+    </div>
+
+    <script>
+        // ==============================================================================
+        // JAVASCRIPT "BRAIN" - CONVERTED FROM rules.py
+        // ==============================================================================
+        
+        const LOOKUP_TABLE = {
+            "cinema": {"article": "the", "explanation": "As a general concept of entertainment, we say 'go to the cinema'.", "rule_ref": "4.1"},
+            "opera": {"article": "the", "explanation": "As a general concept of entertainment, we say 'go to the opera'.", "rule_ref": "4.1"},
+            "theatre": {"article": "the", "explanation": "As a general concept of entertainment, we say 'go to the theatre'.", "rule_ref": "4.1"},
+            "ballet": {"article": "the", "explanation": "As a general concept of entertainment, we say 'go to the ballet'.", "rule_ref": "4.1"},
+            "internet": {"article": "the", "explanation": "The name of a global system, 'the internet', always takes 'the'.", "rule_ref": "4.14"},
+            "radio": {"article": "the", "explanation": "As a medium of communication, we say 'listen to the radio'.", "rule_ref": "4.5"},
+            "post": {"article": "the", "explanation": "Referring to the mail system, we say 'in the post'.", "rule_ref": "4.5"},
+            "phone": {"article": "the", "explanation": "When referring to the device as a means of communication, we say 'on the phone'.", "rule_ref": "4.5"},
+            "piano": {"article": "the", "explanation": "Musical instruments, especially with 'play', take 'the'. E.g., 'play the piano'.", "rule_ref": "4.3"},
+            "guitar": {"article": "the", "explanation": "Musical instruments, especially with 'play', take 'the'. E.g., 'play the guitar'.", "rule_ref": "4.3"},
+            "violin": {"article": "the", "explanation": "Musical instruments, especially with 'play', take 'the'. E.g., 'play the violin'.", "rule_ref": "4.3"},
+            "sun": {"article": "the", "explanation": "Unique celestial bodies in our solar system take 'the'.", "rule_ref": "2.3"},
+            "moon": {"article": "the", "explanation": "Unique celestial bodies in our solar system take 'the'.", "rule_ref": "2.3"},
+            "world": {"article": "the", "explanation": "As a unique concept, we say 'in the world'.", "rule_ref": "2.3"},
+            "environment": {"article": "the", "explanation": "As a unique, shared concept, we say 'protect the environment'.", "rule_ref": "4.14"},
+            "police": {"article": "the", "explanation": "Refers to the police force as a whole organization.", "rule_ref": "4.14"},
+            "countryside": {"article": "the", "explanation": "As a general geographical concept, we say 'in the countryside'.", "rule_ref": "4.10"},
+            "nature": {"article": "no article", "explanation": "The abstract concept of 'nature' does not take an article.", "rule_ref": "4.15"},
+            "society": {"article": "no article", "explanation": "The abstract concept of 'society' does not take an article.", "rule_ref": "4.15"},
+            "space": {"article": "no article", "explanation": "When meaning 'outer space', this abstract concept does not take an article.", "rule_ref": "4.15"},
+            "history": {"article": "no article", "explanation": "The abstract concept of 'history' does not take an article.", "rule_ref": "4.15"},
+            "art": {"article": "no article", "explanation": "The abstract concept of 'art' does not take an article.", "rule_ref": "4.15"},
+            "music": {"article": "no article", "explanation": "The abstract concept of 'music' does not take an article.", "rule_ref": "4.15"},
+            "breakfast": {"article": "no article", "explanation": "Names of meals (breakfast, lunch, dinner) generally take no article.", "rule_ref": "6.1.2"},
+            "lunch": {"article": "no article", "explanation": "Names of meals (breakfast, lunch, dinner) generally take no article.", "rule_ref": "6.1.2"},
+            "dinner": {"article": "no article", "explanation": "Names of meals (breakfast, lunch, dinner) generally take no article.", "rule_ref": "6.1.2"},
+            "golf": {"article": "no article", "explanation": "Names of sports and games generally take no article.", "rule_ref": "6.1.3"},
+            "tennis": {"article": "no article", "explanation": "Names of sports and games generally take no article.", "rule_ref": "6.1.3"},
+            "football": {"article": "no article", "explanation": "Names of sports and games generally take no article.", "rule_ref": "6.1.3"},
+            "bed": {"article": "no article", "explanation": "When referring to the state of being in bed to sleep/rest, use 'no article' (e.g., 'go to bed'). For the physical object, follow the normal rules.", "rule_ref": "7.4.1"},
+            "home": {"article": "no article", "explanation": "When used with verbs of motion like 'go', 'come', 'arrive', we say 'go home' with no article.", "rule_ref": "7.4.2"},
+            "work": {"article": "no article", "explanation": "When referring to the place of employment, we say 'at work' or 'go to work' with no article.", "rule_ref": "7.4.3"},
+            "flu": {"article": "the", "explanation": "For some common illnesses, it's conventional to use 'the' (e.g., 'I have the flu'). 'No article' is also sometimes possible.", "rule_ref": "7.5"},
+            "measles": {"article": "the", "explanation": "For some common illnesses, it's conventional to use 'the' (e.g., 'I have the measles'). 'No article' is also sometimes possible.", "rule_ref": "7.5"},
+            "cancer": {"article": "no article", "explanation": "Most serious or uncountable illnesses like 'cancer' or 'heart disease' take no article.", "rule_ref": "7.5"},
+            "usa": {"article": "the", "explanation": "Plural proper nouns like 'the United States of America' take 'the'.", "rule_ref": "9.2.1"},
+            "united kingdom": {"article": "the", "explanation": "Proper nouns signifying a collection of states (kingdom, republic) take 'the'.", "rule_ref": "9.2.1"},
+            "netherlands": {"article": "the", "explanation": "Plural proper nouns like 'the Netherlands' take 'the'.", "rule_ref": "9.2.1"},
+            "philippines": {"article": "the", "explanation": "Plural proper nouns like 'the Philippines' take 'the'.", "rule_ref": "9.2.1"},
+            "the hague": {"article": "the", "explanation": "'The Hague' is an exception where 'The' is part of the city's official name.", "rule_ref": "9.2.1"},
+            "nile river": {"article": "the", "explanation": "Names of rivers, oceans, and seas always take 'the'.", "rule_ref": "9.2.2"},
+            "sahara desert": {"article": "the", "explanation": "Names of deserts always take 'the'.", "rule_ref": "9.2.2"},
+            "alps": {"article": "the", "explanation": "Names of mountain ranges (plural) always take 'the'.", "rule_ref": "9.2.2"},
+            "mount fuji": {"article": "no article", "explanation": "Names of single mountains or peaks generally take no article.", "rule_ref": "9.2.1"},
+            "lake geneva": {"article": "no article", "explanation": "Names of lakes generally take no article.", "rule_ref": "9.2.1"},
+            "poor": {"article": "the", "explanation": "To refer to a group of people as a whole, use 'the' + adjective (e.g., 'the poor', 'the rich').", "rule_ref": "3.5"},
+            "rich": {"article": "the", "explanation": "To refer to a group of people as a whole, use 'the' + adjective (e.g., 'the poor', 'the rich').", "rule_ref": "3.5"},
+            "unemployed": {"article": "the", "explanation": "To refer to a group of people as a whole, use 'the' + adjective (e.g., 'the unemployed').", "rule_ref": "3.5"},
+            "elderly": {"article": "the", "explanation": "To refer to a group of people as a whole, use 'the' + adjective (e.g., 'the elderly').", "rule_ref": "3.5"},
+        };
+
+        const DECISION_TREE = {
+            "start": {
+                "question": "Is your word part of a two-noun pair, like 'bus station' or 'sun cream'?",
+                "details": "The first noun often acts like an adjective describing the second noun.",
+                "options": {
+                    "Yes, it's a noun-noun pair": "noun_adjunct_rule",
+                    "No, it's a regular noun": "main_menu"
+                }
+            },
+            "noun_adjunct_rule": {
+                "article": "GUIDANCE",
+                "explanation": "In a noun-noun pair (a noun adjunct), the first noun acts like an adjective. The article you choose depends entirely on the SECOND noun. Please restart the check and focus only on the second noun in your pair.",
+                "rule_ref": "7.1"
+            },
+            "main_menu": {
+                "question": "What is the context of your noun? Choose the best fit.",
+                "details": "This helps narrow down the specific set of rules that apply.",
+                "options": {
+                    "It's a common noun (e.g., 'book', 'water', 'idea')": "specific_or_general",
+                    "It's a nationality (e.g., 'French', 'Brazilians')": "nationality_check",
+                    "It's an institution (e.g., 'school', 'hospital', 'prison')": "institution_check",
+                    "It's a noun followed by a number (e.g., 'page 5', 'question 3')": "noun_number_check",
+                    "It's an uncountable noun with an adjective (e.g., 'a deep knowledge')": "uncountable_adjective_check"
+                }
+            },
+            "specific_or_general": {
+                "question": "Are you referring to a specific thing/person, or the general concept of that thing/person?",
+                "details": "e.g., 'I read a book' (Specific) vs. 'Books are interesting' (General).",
+                "options": {
+                    "A Specific Thing": "specific_known",
+                    "A General Concept": "general_type"
+                }
+            },
+            "general_type": {
+                "question": "How are you making the generalization?",
+                "details": "Choose the description that best matches your sentence.",
+                "options": {
+                    "With a plural or uncountable noun (e.g., 'Cats are great')": "result_no_article_general",
+                    "With a singular noun representing the whole group (e.g., 'A lion has a mane')": "result_a_an_general",
+                    "To classify or define something (e.g., 'She is a doctor')": "result_a_an_classify",
+                    "To talk about a typical member of a group (formal, e.g., 'the customer')": "result_the_typical_member",
+                }
+            },
+            "specific_known": {
+                "question": "Does the person you're speaking/writing to know *which specific one(s)* you mean?",
+                "details": "e.g., 'Pass me the book on the table' (Listener knows) vs. 'I bought a book yesterday' (Listener doesn't know).",
+                "options": {"Yes, they know": "result_the_specific", "No, they don't know": "specific_unknown_type"}
+            },
+            "specific_unknown_type": {
+                "question": "What kind of noun is it?",
+                "details": "Countable nouns can be counted (one book, two books). Uncountable nouns cannot (water, advice).",
+                "options": {
+                    "Singular & Countable": "result_a_an_specific",
+                    "Plural or Uncountable": "result_no_article_specific"
+                }
+            },
+            "institution_check": {
+                "question": "Are you talking about the general purpose/activity of the institution, or the physical building?",
+                "details": "This is a key distinction for places like 'school' or 'church'.",
+                "options": {
+                    "The Purpose / Activity": "institution_type_check",
+                    "The Physical Building": "specific_or_general"
+                }
+            },
+            "institution_type_check": {
+                "question": "Is this an institution where one can be 'in' or 'at' for its primary purpose?",
+                "details": "This special rule applies to only a few common places.",
+                "options": {
+                    "Yes, it is (school, church, hospital, prison, bed, home, work)": "result_no_article_institution",
+                    "No, it's a different kind of institution (e.g., government, company, university)": "specific_or_general"
+                }
+            },
+            "nationality_check": {
+                "question": "What form is the nationality?",
+                "details": "e.g., 'French' is an adjective, 'a German' is a noun.",
+                "options": {
+                    "Adjective form for the whole group (-ish, -ch, -ese like 'the French')": "result_the_nationality_adj",
+                    "Noun form (plural) for the whole group (e.g., 'Germans', 'Kenyans')": "result_no_article_general"
+                }
+            },
+            "noun_number_check": {"article": "no article", "explanation": "When a noun is followed by a classifying number or letter (e.g., Platform 9, Page 42, Question B), you use no article.", "rule_ref": "6.3"},
+            "uncountable_adjective_check": {"article": "a / an", "explanation": "In formal or literary English, you can use 'a/an' with an uncountable noun if you are describing a *particular type* of it, usually with an adjective (e.g., 'a profound sadness', 'an excellent knowledge of history').", "rule_ref": "7.2"},
+            "result_the_specific": {"article": "the", "explanation": "Use 'the' when it's clear which specific thing(s) you mean. This can be because it's unique (the sun), previously mentioned, or identified by other words in the sentence (the girl I met).", "rule_ref": "Section 2"},
+            "result_a_an_specific": {"article": "a / an", "explanation": "Use 'a/an' to talk about a single, specific item that is new to your listener.", "rule_ref": "2.1.2"},
+            "result_no_article_specific": {"article": "no article (or 'some')", "explanation": "Use 'no article' or 'some' for specific plural or uncountable items that are new to your listener.", "rule_ref": "2.1.2"},
+            "result_no_article_general": {"article": "no article", "explanation": "The most common way to generalize is to use a plural countable noun (dogs) or an uncountable noun (water) with no article.", "rule_ref": "3.1"},
+            "result_a_an_general": {"article": "a / an", "explanation": "Use 'a/an' with a singular noun to represent any single member of a group, standing for the whole group (e.g., 'A dog needs exercise').", "rule_ref": "3.3"},
+            "result_a_an_classify": {"article": "a / an", "explanation": "Use 'a/an' with a singular noun when classifying something or stating its category, job, or type.", "rule_ref": "5.2"},
+            "result_the_typical_member": {"article": "the", "explanation": "In formal contexts, use 'the' with a singular noun to talk about a typical member of a group or class (e.g., 'the customer', 'the student').", "rule_ref": "3.4"},
+            "result_no_article_institution": {"article": "no article", "explanation": "When referring to the purpose or activity associated with an institution, use no article (e.g., 'at school', 'in prison', 'to church').", "rule_ref": "7.3"},
+            "result_the_nationality_adj": {"article": "the", "explanation": "Use 'the' with nationality adjectives ending in -ish, -ch, or -ese to refer to the people of that country as a group (e.g., 'the British', 'the French').", "rule_ref": "3.6"},
+        };
+
+        class ArticleLogic {
+            constructor() { this.currentNodeId = "start"; }
+            reset() { this.currentNodeId = "start"; }
+            checkLookupTable(noun) { return LOOKUP_TABLE[noun.toLowerCase()]; }
+            getCurrentNode() { return DECISION_TREE[this.currentNodeId]; }
+            processAnswer(selectedOptionText) {
+                const currentNode = this.getCurrentNode();
+                const nextNodeId = currentNode.options[selectedOptionText];
+                this.currentNodeId = nextNodeId;
+                return this.getCurrentNode();
+            }
+        }
+
+        // ==============================================================================
+        // JAVASCRIPT "GLUE" - CONNECTING THE BRAIN TO THE HTML
+        // ==============================================================================
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const nounEntry = document.getElementById('noun-entry');
+            const checkButton = document.getElementById('check-button');
+            const questionLabel = document.getElementById('question-label');
+            const detailsLabel = document.getElementById('details-label');
+            const optionsContainer = document.getElementById('options-container');
+
+            const logic = new ArticleLogic();
+
+            const startCheck = () => {
+                logic.reset();
+                const userInput = nounEntry.value.trim();
+                if (!userInput) {
+                    alert("Please enter a noun or phrase to check.");
+                    return;
+                }
+
+                const lookupResult = logic.checkLookupTable(userInput);
+                if (lookupResult) {
+                    displayFinalResult(lookupResult);
+                } else {
+                    const startNode = logic.getCurrentNode();
+                    updateQuestionAndOptions(startNode);
+                }
+            };
+
+            const updateQuestionAndOptions = (nodeData) => {
+                optionsContainer.innerHTML = ''; // Clear old options
+                questionLabel.textContent = nodeData.question;
+                detailsLabel.textContent = nodeData.details || "";
+
+                for (const optionText in nodeData.options) {
+                    const button = document.createElement('button');
+                    button.textContent = optionText;
+                    button.className = 'option-button';
+                    button.addEventListener('click', () => handleOptionClick(optionText));
+                    optionsContainer.appendChild(button);
+                }
+            };
+
+            const handleOptionClick = (selectedOption) => {
+                const nextNode = logic.processAnswer(selectedOption);
+                if (nextNode.question) {
+                    updateQuestionAndOptions(nextNode);
+                } else {
+                    displayFinalResult(nextNode);
+                }
+            };
+
+            const displayFinalResult = (resultData) => {
+                optionsContainer.innerHTML = '';
+                const articleResult = resultData.article.toUpperCase();
+                questionLabel.textContent = `Recommended Article: '${articleResult}'`;
+                detailsLabel.textContent = "";
+
+                const explanationEl = document.createElement('div');
+                explanationEl.className = 'explanation-text';
+                explanationEl.innerHTML = `${resultData.explanation}<br><br><span>(Reference: ${resultData.rule_ref})</span>`;
+                optionsContainer.appendChild(explanationEl);
+
+                const resetButton = document.createElement('button');
+                resetButton.textContent = "Start Over";
+                resetButton.className = 'reset-button';
+                resetButton.style.marginTop = '20px';
+                resetButton.addEventListener('click', resetApp);
+                optionsContainer.appendChild(resetButton);
+            };
+
+            const resetApp = () => {
+                logic.reset();
+                nounEntry.value = "";
+                questionLabel.textContent = "Welcome! Enter a noun above to get started.";
+                detailsLabel.textContent = "";
+                optionsContainer.innerHTML = '';
+            };
+            
+            checkButton.addEventListener('click', startCheck);
+            nounEntry.addEventListener('keyup', (event) => {
+                if (event.key === 'Enter') {
+                    startCheck();
+                }
+            });
+        });
+
+    </script>
+</body>
+</html>
