@@ -1,6 +1,6 @@
 # English Article Helper 📖
 
-[![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen?style=for-the-badge&logo=github)](https://micahammon.github.io/article-helper/)
+[![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen?style=for-the-badge&logo=github)](https://micahammon.github.io/article-helper/index.html)
 
 An interactive, rule-based tool to help English learners choose the correct article (`a/an`, `the`, or no article). This project is built with pure HTML, CSS, and JavaScript, translating the logic from Seonaid Beckwith's excellent guide, "'A' and 'The' Explained".
 
