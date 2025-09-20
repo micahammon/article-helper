@@ -1,8 +1,11 @@
 # app.py (Version 4 - With Details)
 
-import customtkinter as ctk
-from logic import ArticleLogic
 from tkinter import messagebox
+
+import customtkinter as ctk
+
+from logic import ArticleLogic
+from rules import GUIDANCE_NODE_TYPE
 
 ctk.set_appearance_mode("System")
 ctk.set_default_color_theme("blue")
@@ -93,15 +96,33 @@ class ArticleApp(ctk.CTk):
         for widget in self.options_frame.winfo_children():
             widget.destroy()
 
-        result_title = f"Recommended Article: '{result_data['article'].upper()}'"
-        result_body = f"{result_data['explanation']}\n\n(Reference: {result_data['rule_ref']})"
-        
+        article_value = result_data.get("article")
+        is_guidance = result_data.get("type") == GUIDANCE_NODE_TYPE or article_value is None
+
+        if is_guidance:
+            result_title = "Guidance Provided (no article recommendation)"
+            body_prefix = "Guidance:\n"
+        else:
+            article_display = str(article_value).upper()
+            result_title = f"Recommended Article: '{article_display}'"
+            body_prefix = ""
+
+        explanation_text = result_data.get("explanation", "")
+        rule_reference = result_data.get("rule_ref")
+        reference_text = f"\n\n(Reference: {rule_reference})" if rule_reference else ""
+        result_body = f"{body_prefix}{explanation_text}{reference_text}"
+
         self.question_label.configure(text=result_title)
-        
+
         # UPDATE: Clear the details label when showing the result
         self.details_label.configure(text="")
 
-        explanation_label = ctk.CTkLabel(self.options_frame, text=result_body, wraplength=500, justify="left")
+        explanation_label = ctk.CTkLabel(
+            self.options_frame,
+            text=result_body,
+            wraplength=500,
+            justify="left",
+        )
         explanation_label.grid(sticky="ew", padx=20, pady=10)
 
         start_over_button = ctk.CTkButton(self.options_frame, text="Start Over", command=self.reset_app)

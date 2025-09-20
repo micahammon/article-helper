@@ -110,6 +110,15 @@
             font-weight: bold;
             color: var(--secondary-text);
         }
+
+        .explanation-text.guidance {
+            border-left: 4px solid var(--primary-color);
+            background-color: rgba(24, 119, 242, 0.1);
+        }
+
+        .explanation-text.guidance strong {
+            color: var(--primary-color);
+        }
     </style>
 </head>
 <body>
@@ -139,6 +148,7 @@
 
         const DETERMINER_PATTERN = /^(?:the|an|a)\s+/i;
         const SIMPLE_PUNCTUATION_PATTERN = /[!"#$%&'()*+,\-./:;<=>?@[\\\]^_`{|}~]/g;
+        const GUIDANCE_NODE_TYPE = "guidance";
 
         // Mirror the Python normalization used for lookup table checks.
         function normalizeNoun(noun) {
@@ -152,6 +162,38 @@
             normalized = normalized.replace(/\s+/g, " ").trim();
 
             return normalized.toLowerCase();
+        }
+
+        function normalizeRulesData(rawData) {
+            if (!rawData || typeof rawData !== "object") {
+                return { lookup_table: {}, decision_tree: {} };
+            }
+
+            const normalized = rawData;
+            const decisionTree = normalized.decision_tree || {};
+
+            Object.values(decisionTree).forEach((node) => {
+                if (!node || typeof node !== "object") {
+                    return;
+                }
+
+                const articleValue = node.article;
+
+                if (node.type === GUIDANCE_NODE_TYPE) {
+                    if (articleValue !== null) {
+                        node.article = null;
+                    }
+                    return;
+                }
+
+                if (typeof articleValue === "string" && articleValue.toUpperCase() === "GUIDANCE") {
+                    node.type = GUIDANCE_NODE_TYPE;
+                    node.article = null;
+                }
+            });
+
+            normalized.decision_tree = decisionTree;
+            return normalized;
         }
 
         class ArticleLogic {
@@ -205,8 +247,9 @@
             detailsLabel.textContent = "Please wait while we fetch the article guide.";
 
             const initializeApp = (data) => {
-                const lookupTable = data.lookup_table;
-                const decisionTree = data.decision_tree;
+                const normalizedData = normalizeRulesData(data);
+                const lookupTable = normalizedData.lookup_table;
+                const decisionTree = normalizedData.decision_tree;
 
                 if (!lookupTable || !decisionTree) {
                     throw new Error('Invalid rules data format.');
@@ -224,13 +267,31 @@
 
                 function displayFinalResult(resultData) {
                     optionsContainer.innerHTML = '';
-                    const articleResult = resultData.article.toUpperCase();
-                    questionLabel.textContent = `Recommended Article: '${articleResult}'`;
+
+                    const articleValue = resultData && resultData.article;
+                    const isGuidance = (resultData && resultData.type === GUIDANCE_NODE_TYPE) || articleValue == null;
+
+                    let headlineText = "Guidance Provided (no article recommendation)";
+                    if (!isGuidance) {
+                        const articleResult = String(articleValue || '').toUpperCase();
+                        headlineText = `Recommended Article: '${articleResult}'`;
+                    }
+
+                    questionLabel.textContent = headlineText;
                     detailsLabel.textContent = "";
 
                     const explanationEl = document.createElement('div');
                     explanationEl.className = 'explanation-text';
-                    explanationEl.innerHTML = `${resultData.explanation}<br><br><span>(Reference: ${resultData.rule_ref})</span>`;
+                    if (isGuidance) {
+                        explanationEl.classList.add('guidance');
+                    }
+
+                    const explanationCopy = (resultData && resultData.explanation) ? resultData.explanation : '';
+                    const ruleRef = (resultData && resultData.rule_ref)
+                        ? `<br><br><span>(Reference: ${resultData.rule_ref})</span>`
+                        : '';
+                    const guidancePrefix = isGuidance ? '<strong>Guidance:</strong> ' : '';
+                    explanationEl.innerHTML = `${guidancePrefix}${explanationCopy}${ruleRef}`;
                     optionsContainer.appendChild(explanationEl);
 
                     const resetButton = document.createElement('button');

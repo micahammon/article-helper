@@ -256,7 +256,8 @@
             }
         },
         "noun_adjunct_rule": {
-            "article": "GUIDANCE",
+            "type": "guidance",
+            "article": null,
             "explanation": "In a noun-noun pair (a noun adjunct), the first noun acts like an adjective. The article you choose depends entirely on the SECOND noun. Please restart the check and focus only on the second noun in your pair.",
             "rule_ref": "7.1"
         },
