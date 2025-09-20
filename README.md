@@ -22,6 +22,8 @@ The tool uses a two-pronged approach to determine the correct article:
 
 2.  **Decision Tree:** For all other nouns, the tool guides the user through a series of contextual questions. By asking about specificity, listener knowledge, and the noun's function (e.g., general concept, institution, classification), it follows a logical path to deduce the correct article based on the rules of English grammar.
 
+Both data sets live in a single machine-readable file, [`rules_data.json`](rules_data.json). The Python logic and the browser UI read from the same source so they always stay in sync.
+
 ### How to Use
 
 1.  **Enter a Noun:** Type the noun or phrase you're unsure about into the input box.
@@ -31,7 +33,10 @@ The tool uses a two-pronged approach to determine the correct article:
 
 ### Running Locally
 
-This is a self-contained HTML file. No server or build process is needed.
+Because the browser app now fetches its rules from `rules_data.json`, you should serve the files over HTTP when running locally.
 
-1.  Clone this repository or download the `index.html` file.
-2.  Open the `index.html` file in any modern web browser.
+1.  Clone this repository or download the project files.
+2.  From the project directory, start a simple web server: `python -m http.server`
+3.  Open `http://localhost:8000/index.html` in any modern web browser.
+
+The Tkinter desktop app (`app.py`) reads the same JSON file, so no extra setup is required beyond installing its Python dependencies.
