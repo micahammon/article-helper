@@ -137,6 +137,23 @@
         // JAVASCRIPT "BRAIN" - CONVERTED FROM rules.py
         // ==============================================================================
 
+        const DETERMINER_PATTERN = /^(?:the|an|a)\s+/i;
+        const SIMPLE_PUNCTUATION_PATTERN = /[!"#$%&'()*+,\-./:;<=>?@[\\\]^_`{|}~]/g;
+
+        // Mirror the Python normalization used for lookup table checks.
+        function normalizeNoun(noun) {
+            if (noun == null) {
+                return "";
+            }
+
+            let normalized = String(noun).trim();
+            normalized = normalized.replace(DETERMINER_PATTERN, "");
+            normalized = normalized.replace(SIMPLE_PUNCTUATION_PATTERN, "");
+            normalized = normalized.replace(/\s+/g, " ").trim();
+
+            return normalized.toLowerCase();
+        }
+
         class ArticleLogic {
             constructor(lookupTable, decisionTree) {
                 this.lookupTable = lookupTable;
@@ -149,7 +166,12 @@
             }
 
             checkLookupTable(noun) {
-                return this.lookupTable[noun.toLowerCase()];
+                const normalized = normalizeNoun(noun);
+                if (!normalized) {
+                    return undefined;
+                }
+
+                return this.lookupTable[normalized];
             }
 
             getCurrentNode() {
