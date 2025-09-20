@@ -20,6 +20,8 @@ The tool uses a two-pronged approach to determine the correct article:
 
 1.  **Lookup Table:** A direct lookup for nouns with fixed, specific rules (e.g., proper nouns like "the USA", abstract concepts like "music", or systems like "the internet"). This provides an instant, accurate answer for common exceptions.
 
+    The lookup step automatically normalizes what you type—trimming extra spaces, ignoring a leading "a/an/the", and removing simple punctuation—so entries such as "the USA" or "an opera" still match the right rule immediately.
+
 2.  **Decision Tree:** For all other nouns, the tool guides the user through a series of contextual questions. By asking about specificity, listener knowledge, and the noun's function (e.g., general concept, institution, classification), it follows a logical path to deduce the correct article based on the rules of English grammar.
 
 Both data sets live in a single machine-readable file, [`rules_data.json`](rules_data.json). The Python logic and the browser UI read from the same source so they always stay in sync.
