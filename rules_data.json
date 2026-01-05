@@ -27,17 +27,17 @@
         },
         "radio": {
             "article": "the",
-            "explanation": "As a medium of communication, we say 'listen to the radio'.",
+            "explanation": "As a medium of communication, we say 'listen to the radio'. Note: with 'by radio', use no article.",
             "rule_ref": "4.5"
         },
         "post": {
             "article": "the",
-            "explanation": "Referring to the mail system, we say 'in the post'.",
+            "explanation": "Referring to the mail system, we say 'in the post'. Note: with 'by post' (UK) / 'by mail' (US), use no article.",
             "rule_ref": "4.5"
         },
         "phone": {
             "article": "the",
-            "explanation": "When referring to the device as a means of communication, we say 'on the phone'.",
+            "explanation": "When referring to the device as a means of communication, we say 'on the phone'. Note: with 'by phone', use no article.",
             "rule_ref": "4.5"
         },
         "piano": {
@@ -147,17 +147,17 @@
         },
         "bed": {
             "article": "no article",
-            "explanation": "When referring to the state of being in bed to sleep/rest, use 'no article' (e.g., 'go to bed'). For the physical object, follow the normal rules.",
+            "explanation": "When referring to the state of being in bed to sleep/rest, use 'no article' (e.g., 'go to bed'). If you mean the physical object, use normal rules (a/the).",
             "rule_ref": "7.4.1"
         },
         "home": {
             "article": "no article",
-            "explanation": "When used with verbs of motion like 'go', 'come', 'arrive', we say 'go home' with no article.",
+            "explanation": "When used with verbs of motion like 'go', 'come', 'arrive', we say 'go home' with no article. If you mean a specific building/house, use normal rules (a/the).",
             "rule_ref": "7.4.2"
         },
         "work": {
             "article": "no article",
-            "explanation": "When referring to the place of employment, we say 'at work' or 'go to work' with no article.",
+            "explanation": "When referring to the place of employment, we say 'at work' or 'go to work' with no article. If you mean a specific job/task, use normal rules (a/the).",
             "rule_ref": "7.4.3"
         },
         "flu": {
@@ -316,10 +316,10 @@
         },
         "institution_type_check": {
             "question": "Is this an institution where one can be 'in' or 'at' for its primary purpose?",
-            "details": "This special rule applies to only a few common places.",
+            "details": "This special rule applies to a few common institutions used for their purpose. (Bed/home/work are covered as separate special cases.)",
             "options": {
-                "Yes, it is (school, church, hospital, prison, bed, home, work)": "result_no_article_institution",
-                "No, it's a different kind of institution (e.g., government, company, university)": "specific_or_general"
+                "Yes, it is (school, church, hospital, prison, university)": "result_no_article_institution",
+                "No, it's a different kind of institution (e.g., government, company, museum)": "specific_or_general"
             }
         },
         "nationality_check": {
