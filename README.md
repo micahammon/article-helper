@@ -42,3 +42,13 @@ Because the browser app now fetches its rules from `rules_data.json`, you should
 3.  Open `http://localhost:8000/index.html` in any modern web browser.
 
 The Tkinter desktop app (`app.py`) reads the same JSON file, so no extra setup is required beyond installing its Python dependencies.
+
+
+ Added a small unittest suite that locks in the updated mapping and caveats so regressions are easy to catch. New file:
+  C:\Users\meeky\OneDrive\Documents\#Dev\Article-Helper\tests\test_rules_mapping.py.
+
+  You can run it with:
+
+  python -m unittest -v
+
+  from C:\Users\meeky\OneDrive\Documents\#Dev\Article-Helper.
