@@ -1,3 +1,6 @@
 docs/'A' and 'The' Explained--the_defining_doc.pdf
 AGENTS.md
 TASKS.md
+/__pycache__
+/tests/__pycache__
+/tests

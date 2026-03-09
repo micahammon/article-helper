@@ -9,6 +9,8 @@ import string
 # Import the data structures from our rules file
 from rules import LOOKUP_TABLE, DECISION_TREE
 
+WORD_PATTERN = re.compile(r"[A-Za-z]+(?:'[A-Za-z]+)?")
+
 
 def _normalize_noun(noun):
     """Return a canonical form of ``noun`` for lookup-table comparisons."""
@@ -21,6 +23,60 @@ def _normalize_noun(noun):
     normalized = re.sub(r"\s+", " ", normalized).strip()
 
     return normalized.lower()
+
+
+def _tokenize_words(text):
+    """Return lowercase word tokens from free-form user text."""
+    if text is None:
+        return []
+    return [token.lower() for token in WORD_PATTERN.findall(str(text))]
+
+
+def _find_lookup_phrase(tokens):
+    """
+    Find the longest phrase in ``tokens`` that exists in the lookup table.
+    Returns:
+        tuple[str, int, int] | None: (matched_key, start_index, end_index_exclusive)
+    """
+    if not tokens:
+        return None
+
+    max_window = min(4, len(tokens))
+    for window_size in range(max_window, 0, -1):
+        for start_index in range(0, len(tokens) - window_size + 1):
+            end_index = start_index + window_size
+            candidate = " ".join(tokens[start_index:end_index])
+            if candidate in LOOKUP_TABLE:
+                return candidate, start_index, end_index
+    return None
+
+
+def _infer_focus_noun(tokens):
+    """Infer a focus noun from free-form text when no lookup phrase matches."""
+    if not tokens:
+        return ""
+
+    determiners = {"a", "an", "the"}
+    for index, token in enumerate(tokens[:-1]):
+        if token in determiners:
+            candidate = tokens[index + 1]
+            if candidate not in determiners:
+                return candidate
+
+    stop_words = {
+        "i", "you", "he", "she", "it", "we", "they", "me", "him", "her", "us", "them",
+        "my", "your", "his", "our", "their", "am", "is", "are", "was", "were", "be",
+        "been", "being", "do", "does", "did", "have", "has", "had", "go", "goes", "went",
+        "come", "came", "arrive", "arrived", "buy", "bought", "see", "saw", "like", "use",
+        "at", "in", "on", "to", "for", "from", "with", "by", "of", "and", "or", "but",
+        "this", "that", "these", "those", "today", "tomorrow", "yesterday", "now", "then",
+    }
+
+    filtered = [token for token in tokens if token not in determiners and token not in stop_words]
+    if filtered:
+        return filtered[-1]
+
+    return ""
 
 class ArticleLogic:
     """
@@ -48,6 +104,40 @@ class ArticleLogic:
             return None
 
         return LOOKUP_TABLE.get(normalized)
+
+    def analyze_input(self, text):
+        """
+        Analyze free-form user input and prepare the next step.
+        Returns:
+            dict: {
+                "mode": "lookup" | "question",
+                "focus_noun": str,
+                "result": dict | None
+            }
+        """
+        direct_lookup = self.check_lookup_table(text)
+        if direct_lookup:
+            return {
+                "mode": "lookup",
+                "focus_noun": _normalize_noun(text),
+                "result": direct_lookup,
+            }
+
+        tokens = _tokenize_words(text)
+        phrase_match = _find_lookup_phrase(tokens)
+        if phrase_match:
+            matched_phrase = phrase_match[0]
+            return {
+                "mode": "lookup",
+                "focus_noun": matched_phrase,
+                "result": LOOKUP_TABLE[matched_phrase],
+            }
+
+        return {
+            "mode": "question",
+            "focus_noun": _infer_focus_noun(tokens),
+            "result": None,
+        }
 
     def get_current_node(self):
         """

@@ -262,8 +262,8 @@
             "rule_ref": "7.1"
         },
         "main_menu": {
-            "question": "What is the context of your noun? Choose the best fit.",
-            "details": "This helps narrow down the specific set of rules that apply.",
+            "question": "Which type of word are you using? Choose the closest option.",
+            "details": "Pick one option to quickly reach the right rule.",
             "options": {
                 "It's a common noun (e.g., 'book', 'water', 'idea')": "specific_or_general",
                 "It's a nationality (e.g., 'French', 'Brazilians')": "nationality_check",
@@ -273,34 +273,34 @@
             }
         },
         "specific_or_general": {
-            "question": "Are you referring to a specific thing/person, or the general concept of that thing/person?",
-            "details": "e.g., 'I read a book' (Specific) vs. 'Books are interesting' (General).",
+            "question": "Are you talking about one particular thing/person, or things in general?",
+            "details": "Example: 'I read a book' (one particular item) vs. 'Books are interesting' (general idea).",
             "options": {
-                "A Specific Thing": "specific_known",
-                "A General Concept": "general_type"
+                "One particular thing/person": "specific_known",
+                "Things in general": "general_type"
             }
         },
         "general_type": {
-            "question": "How are you making the generalization?",
-            "details": "Choose the description that best matches your sentence.",
+            "question": "How does your sentence talk about a whole group?",
+            "details": "Choose the pattern that matches your sentence.",
             "options": {
                 "With a plural or uncountable noun (e.g., 'Cats are great')": "result_no_article_general",
                 "With a singular noun representing the whole group (e.g., 'A lion has a mane')": "result_a_an_general",
                 "To classify or define something (e.g., 'She is a doctor')": "result_a_an_classify",
-                "To talk about a typical member of a group (formal, e.g., 'the customer')": "result_the_typical_member"
+                "To talk about a typical member in formal style (e.g., 'the customer')": "result_the_typical_member"
             }
         },
         "specific_known": {
-            "question": "Does the person you're speaking/writing to know *which specific one(s)* you mean?",
-            "details": "e.g., 'Pass me the book on the table' (Listener knows) vs. 'I bought a book yesterday' (Listener doesn't know).",
+            "question": "Will your listener/reader know exactly which one you mean?",
+            "details": "Example: 'Pass me the book on the table' (they know) vs. 'I bought a book yesterday' (they do not know).",
             "options": {
-                "Yes, they know": "result_the_specific",
-                "No, they don't know": "specific_unknown_type"
+                "Yes, they know which one": "result_the_specific",
+                "No, they do not know which one": "specific_unknown_type"
             }
         },
         "specific_unknown_type": {
             "question": "What kind of noun is it?",
-            "details": "Countable nouns can be counted (one book, two books). Uncountable nouns cannot (water, advice).",
+            "details": "Countable = can count it (one book, two books). Uncountable = cannot count it directly (water, advice).",
             "options": {
                 "Singular & Countable": "result_a_an_specific",
                 "Plural or Uncountable": "result_no_article_specific"
@@ -315,16 +315,16 @@
             }
         },
         "institution_type_check": {
-            "question": "Is this an institution where one can be 'in' or 'at' for its primary purpose?",
-            "details": "This special rule applies to a few common institutions used for their purpose. (Bed/home/work are covered as separate special cases.)",
+            "question": "Is it a place people normally use for its main purpose (at school, in prison, in hospital)?",
+            "details": "If yes, this pattern often uses no article. (Bed/home/work are handled in separate special rules.)",
             "options": {
                 "Yes, it is (school, church, hospital, prison, university)": "result_no_article_institution",
                 "No, it's a different kind of institution (e.g., government, company, museum)": "specific_or_general"
             }
         },
         "nationality_check": {
-            "question": "What form is the nationality?",
-            "details": "e.g., 'French' is an adjective, 'a German' is a noun.",
+            "question": "How is the nationality written in your sentence?",
+            "details": "Example: 'French' is an adjective; 'a German' / 'Germans' are nouns.",
             "options": {
                 "Adjective form for the whole group (-ish, -ch, -ese like 'the French')": "result_the_nationality_adj",
                 "Noun form (plural) for the whole group (e.g., 'Germans', 'Kenyans')": "result_no_article_general"

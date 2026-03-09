@@ -28,10 +28,11 @@ Both data sets live in a single machine-readable file, [`rules_data.json`](rules
 
 ### How to Use
 
-1.  **Enter a Noun:** Type the noun or phrase you're unsure about into the input box.
-2.  **Check Article:** Click the "Check Article" button.
-3.  **Answer the Questions:** If your noun doesn't have a fixed rule, the tool will ask you a series of questions. Choose the option that best fits the context of your sentence.
-4.  **Get Your Answer:** The tool will provide the recommended article, a clear explanation of the rule, and the relevant section from the source PDF.
+1.  **Enter Text:** Type a noun, phrase, or full sentence (for example, `I bought book yesterday`).
+2.  **Analyze Phrase:** Click the "Analyze Phrase" button.
+3.  **Get an Instant Rule Match (when possible):** The app first tries to detect a focus noun/phrase and match it directly to known rules.
+4.  **Follow Guided Questions (if needed):** If no direct match is found, the tool asks learner-friendly context questions.
+5.  **Read the Result + Example:** The final output includes the recommended article, explanation, example sentence, and source section reference.
 
 ### Running Locally
 
@@ -44,11 +45,11 @@ Because the browser app now fetches its rules from `rules_data.json`, you should
 The Tkinter desktop app (`app.py`) reads the same JSON file, so no extra setup is required beyond installing its Python dependencies.
 
 
- Added a small unittest suite that locks in the updated mapping and caveats so regressions are easy to catch. New file:
-  C:\Users\meeky\OneDrive\Documents\#Dev\Article-Helper\tests\test_rules_mapping.py.
+Added unit tests for phrase-first analysis behavior. New file:
+`tests/test_phrase_first.py`.
 
-  You can run it with:
+You can run all tests with:
 
-  python -m unittest -v
+`python -m unittest discover -s tests -v`
 
-  from C:\Users\meeky\OneDrive\Documents\#Dev\Article-Helper.
+from `C:\Users\meeky\OneDrive\Documents\#Dev\Article-Helper`.

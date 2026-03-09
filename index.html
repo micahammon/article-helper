@@ -129,13 +129,13 @@
         <div class="input-frame">
             <label for="noun-entry">Enter a noun or phrase:</label>
             <div class="input-group">
-                <input type="text" id="noun-entry" placeholder="e.g., car, USA, breakfast...">
-                <button id="check-button">Check Article</button>
+                <input type="text" id="noun-entry" placeholder="e.g., I bought book yesterday / USA / breakfast">
+                <button id="check-button">Analyze Phrase</button>
             </div>
         </div>
 
         <div class="display-frame">
-            <h2 id="question-label">Welcome! Enter a noun above to get started.</h2>
+            <h2 id="question-label">Welcome! Enter text above to get started.</h2>
             <p id="details-label"></p>
             <div id="options-container"></div>
         </div>
@@ -148,6 +148,7 @@
 
         const DETERMINER_PATTERN = /^(?:the|an|a)\s+/i;
         const SIMPLE_PUNCTUATION_PATTERN = /[!"#$%&'()*+,\-./:;<=>?@[\\\]^_`{|}~]/g;
+        const WORD_PATTERN = /[A-Za-z]+(?:'[A-Za-z]+)?/g;
         const GUIDANCE_NODE_TYPE = "guidance";
 
         // Mirror the Python normalization used for lookup table checks.
@@ -196,6 +197,87 @@
             return normalized;
         }
 
+        function tokenizeWords(text) {
+            if (text == null) {
+                return [];
+            }
+            const words = String(text).match(WORD_PATTERN);
+            return words ? words.map((token) => token.toLowerCase()) : [];
+        }
+
+        function findLookupPhrase(tokens, lookupTable) {
+            if (!tokens.length) {
+                return undefined;
+            }
+
+            const maxWindow = Math.min(4, tokens.length);
+            for (let windowSize = maxWindow; windowSize > 0; windowSize -= 1) {
+                for (let start = 0; start <= tokens.length - windowSize; start += 1) {
+                    const end = start + windowSize;
+                    const candidate = tokens.slice(start, end).join(' ');
+                    if (lookupTable[candidate]) {
+                        return candidate;
+                    }
+                }
+            }
+            return undefined;
+        }
+
+        function inferFocusNoun(tokens) {
+            if (!tokens.length) {
+                return "";
+            }
+
+            const determiners = new Set(["a", "an", "the"]);
+            for (let index = 0; index < tokens.length - 1; index += 1) {
+                if (determiners.has(tokens[index])) {
+                    const candidate = tokens[index + 1];
+                    if (!determiners.has(candidate)) {
+                        return candidate;
+                    }
+                }
+            }
+
+            const stopWords = new Set([
+                "i", "you", "he", "she", "it", "we", "they", "me", "him", "her", "us", "them",
+                "my", "your", "his", "our", "their", "am", "is", "are", "was", "were", "be",
+                "been", "being", "do", "does", "did", "have", "has", "had", "go", "goes", "went",
+                "come", "came", "arrive", "arrived", "buy", "bought", "see", "saw", "like", "use",
+                "at", "in", "on", "to", "for", "from", "with", "by", "of", "and", "or", "but",
+                "this", "that", "these", "those", "today", "tomorrow", "yesterday", "now", "then",
+            ]);
+
+            const filtered = tokens.filter((token) => !determiners.has(token) && !stopWords.has(token));
+            if (filtered.length) {
+                return filtered[filtered.length - 1];
+            }
+            return "";
+        }
+
+        function buildExampleSentence(articleValue, focusNoun) {
+            if (!focusNoun) {
+                return "";
+            }
+
+            const nounText = String(focusNoun).trim();
+            if (!nounText) {
+                return "";
+            }
+
+            const normalizedArticle = String(articleValue || "").toLowerCase();
+            if (normalizedArticle === "the") {
+                return `Example: Please pass the ${nounText}.`;
+            }
+            if (normalizedArticle === "a / an") {
+                const articleChoice = /^[aeiou]/i.test(nounText) ? "an" : "a";
+                return `Example: I saw ${articleChoice} ${nounText} near my house.`;
+            }
+            if (normalizedArticle.startsWith("no article")) {
+                return `Example: I use ${nounText} every day.`;
+            }
+            return "";
+        }
+
         class ArticleLogic {
             constructor(lookupTable, decisionTree) {
                 this.lookupTable = lookupTable;
@@ -214,6 +296,33 @@
                 }
 
                 return this.lookupTable[normalized];
+            }
+
+            analyzeInput(text) {
+                const directLookup = this.checkLookupTable(text);
+                if (directLookup) {
+                    return {
+                        mode: "lookup",
+                        focusNoun: normalizeNoun(text),
+                        result: directLookup,
+                    };
+                }
+
+                const tokens = tokenizeWords(text);
+                const phraseMatch = findLookupPhrase(tokens, this.lookupTable);
+                if (phraseMatch) {
+                    return {
+                        mode: "lookup",
+                        focusNoun: phraseMatch,
+                        result: this.lookupTable[phraseMatch],
+                    };
+                }
+
+                return {
+                    mode: "question",
+                    focusNoun: inferFocusNoun(tokens),
+                    result: undefined,
+                };
             }
 
             getCurrentNode() {
@@ -239,7 +348,8 @@
             const detailsLabel = document.getElementById('details-label');
             const optionsContainer = document.getElementById('options-container');
 
-            const WELCOME_MESSAGE = "Welcome! Enter a noun above to get started.";
+            const WELCOME_MESSAGE = "Welcome! Enter text above to get started.";
+            let currentFocusNoun = "";
 
             nounEntry.disabled = true;
             checkButton.disabled = true;
@@ -259,13 +369,14 @@
 
                 function resetApp() {
                     logic.reset();
+                    currentFocusNoun = "";
                     nounEntry.value = "";
                     questionLabel.textContent = WELCOME_MESSAGE;
                     detailsLabel.textContent = "";
                     optionsContainer.innerHTML = '';
                 }
 
-                function displayFinalResult(resultData) {
+                function displayFinalResult(resultData, focusNoun = "") {
                     optionsContainer.innerHTML = '';
 
                     const articleValue = resultData && resultData.article;
@@ -287,11 +398,14 @@
                     }
 
                     const explanationCopy = (resultData && resultData.explanation) ? resultData.explanation : '';
+                    const exampleCopy = buildExampleSentence(articleValue, focusNoun);
+                    const focusCopy = focusNoun ? `<span>Focus noun:</span> ${focusNoun}<br><br>` : '';
                     const ruleRef = (resultData && resultData.rule_ref)
                         ? `<br><br><span>(Reference: ${resultData.rule_ref})</span>`
                         : '';
                     const guidancePrefix = isGuidance ? '<strong>Guidance:</strong> ' : '';
-                    explanationEl.innerHTML = `${guidancePrefix}${explanationCopy}${ruleRef}`;
+                    const exampleSection = exampleCopy ? `<br><br>${exampleCopy}` : '';
+                    explanationEl.innerHTML = `${focusCopy}${guidancePrefix}${explanationCopy}${exampleSection}${ruleRef}`;
                     optionsContainer.appendChild(explanationEl);
 
                     const resetButton = document.createElement('button');
@@ -314,7 +428,12 @@
                 function updateQuestionAndOptions(nodeData) {
                     optionsContainer.innerHTML = '';
                     questionLabel.textContent = nodeData.question;
-                    detailsLabel.textContent = nodeData.details || "";
+                    const detailsText = nodeData.details || "";
+                    if (currentFocusNoun) {
+                        detailsLabel.textContent = `Detected focus word: '${currentFocusNoun}'. ${detailsText}`.trim();
+                    } else {
+                        detailsLabel.textContent = detailsText;
+                    }
 
                     for (const optionText of Object.keys(nodeData.options)) {
                         const button = document.createElement('button');
@@ -327,19 +446,23 @@
 
                 function startCheck() {
                     logic.reset();
+                    currentFocusNoun = "";
                     const userInput = nounEntry.value.trim();
                     if (!userInput) {
                         alert("Please enter a noun or phrase to check.");
                         return;
                     }
 
-                    const lookupResult = logic.checkLookupTable(userInput);
-                    if (lookupResult) {
-                        displayFinalResult(lookupResult);
-                    } else {
-                        const startNode = logic.getCurrentNode();
-                        updateQuestionAndOptions(startNode);
+                    const analysis = logic.analyzeInput(userInput);
+                    currentFocusNoun = analysis.focusNoun || "";
+
+                    if (analysis.mode === "lookup" && analysis.result) {
+                        displayFinalResult(analysis.result, currentFocusNoun);
+                        return;
                     }
+
+                    const startNode = logic.getCurrentNode();
+                    updateQuestionAndOptions(startNode);
                 }
 
                 checkButton.addEventListener('click', startCheck);
