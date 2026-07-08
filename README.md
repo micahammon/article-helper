@@ -52,4 +52,4 @@ You can run all tests with:
 
 `python -m unittest discover -s tests -v`
 
-from `C:\Users\meeky\OneDrive\Documents\#Dev\Article-Helper`.
+from `C:\Dev\Article-Helper`.
