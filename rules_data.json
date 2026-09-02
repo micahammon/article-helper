@@ -1051,6 +1051,7 @@
   },
   "decision_tree": {
     "q2": {
+      "short": "a proper noun?",
       "gate": "Question 2",
       "q": "Is it a proper noun — a name?",
       "note": "",
@@ -1066,6 +1067,7 @@
       ]
     },
     "q2a": {
+      "short": "in the the-taking class?",
       "gate": "Question 2a",
       "q": "Is it in the <em>the</em>-taking class of names?",
       "note": "Plural names, <em>of</em>-constructions, water and landforms, regions, buildings and publications.",
@@ -1095,6 +1097,7 @@
       "why": "People, cities, single countries, single mountains, streets, continents, languages and companies take no article. Also titles used with a name: <em>President Sánchez</em>, <em>Doctor Ruiz</em> — but <em>the president</em> on its own is a role noun and routes to 4g."
     },
     "q3": {
+      "short": "whole class, or instances?",
       "gate": "Question 3",
       "q": "Am I talking about the whole class, or about particular instances?",
       "note": "Test: can you insert <em>in general</em> without changing the meaning? If yes, it's generic.",
@@ -1113,6 +1116,7 @@
       "warn": "<strong>Highest-error node for a Spanish speaker.</strong> <em>La vida es dura</em> becomes <em>Life is hard</em>, not <em>the life</em>. When you're unsure at this question, generic plus zero is the safer guess."
     },
     "q3a": {
+      "short": "how is it behaving?",
       "gate": "Question 3a",
       "q": "How is the noun behaving here?",
       "note": "All three forms can be generic in English. This is the one place where <em>the</em> and <em>a</em> and zero are all live options for the same meaning.",
@@ -1166,6 +1170,7 @@
       "why": "Names the class as a single entity. Formal and mostly scientific: <em>The blue whale is endangered.</em> Note this reading is only reachable from Question 3 — if you route a generic through the later questions instead, you'll never arrive here."
     },
     "q4": {
+      "short": "can the listener identify it?",
       "gate": "Question 4",
       "q": "Can my listener identify <em>which one</em> I mean?",
       "note": "Work down the list. The first one that matches is your answer — they all produce <em>the</em>, and the labels just tell you why.",
@@ -1244,6 +1249,7 @@
       "why": "Shared world knowledge does the identifying. No context needed at all."
     },
     "q4f": {
+      "short": "a place, or an activity?",
       "gate": "Question 4f · check first",
       "q": "Does the noun name a place, or an institutional activity?",
       "note": "This is where <em>the mall</em> and <em>at school</em> collide. Both are familiar community places, so the wrong branch is easy to take.",
@@ -1280,6 +1286,7 @@
       "why": "Role nouns are inherently <em>of</em> something: government of a country, capital of a country, manager of a team. The article is licensed because the noun carries an implicit slot that context fills — and the slot can stay unfilled out loud. <em>What should the government do?</em> works between an American and a Spaniard discussing neither country, because it means <em>the government of whatever situation we're discussing</em>. Unique relative to an argument, not unique in the world."
     },
     "q5": {
+      "short": "countable, as used here?",
       "gate": "Question 5",
       "q": "How am I using the noun here — countable or not?",
       "note": "Ask about this use, not about the noun. <em>Coffee</em> and <em>a coffee</em>. <em>Experience</em> and <em>an experience</em>. <em>Paper</em> and <em>a paper</em>. A noun-property question sends dual-membership nouns down the wrong branch and keeps them there.",

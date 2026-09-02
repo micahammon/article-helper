@@ -568,7 +568,11 @@ function renderTrail(){
   hist.forEach(function(step){
     var n = T[step.node], o = n.opts[step.opt];
     var li = document.createElement("li");
-    li.innerHTML = '<span class="q">' + n.gate + ' \u2014 </span>' +
+    /* the gate number alone says nothing ("Question 2 - No"), so carry the
+       question with it */
+    var gate = n.short ? n.gate.split(" \u00b7 ")[0] : n.gate;
+    var asked = gate + (n.short ? " \u00b7 " + n.short : "");
+    li.innerHTML = '<span class="q">' + asked + ' \u2014 </span>' +
                    '<span class="a">' + o.label.replace(/^\d[a-z]? \u00b7 /, "") + '</span>';
     trail.appendChild(li);
   });
