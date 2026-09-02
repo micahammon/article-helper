@@ -71,7 +71,14 @@ never drift from the logic.
 4. **Read the result** — the recommended article, why it applies, the phrase
    built for you, and the rule reference.
 
+Every step you take is recorded in **Your path**, naming both the question and
+your answer — `Question 3 · whole class, or instances? — Particular instances` —
+so the route to an answer stays readable after the fact. `Go back a step` walks
+it backwards.
+
 Or click any of the chips at the bottom to watch a worked example route itself.
+Some are answered instantly by Gate 0, others walk the tree, which is the
+quickest way to see the two halves working.
 
 ### Running Locally
 
@@ -91,10 +98,33 @@ opening the `.html` from disk will not work (the page says so if you try).
 | `classic.html` | The previous web version, kept for reference. |
 | `rules_data.classic.json` | Frozen data for `classic.html`. |
 | `app.py`, `logic.py`, `rules.py` | Tkinter desktop app, reading the same JSON. |
+| `tests/` | Suite guarding the tree and Gate 0. |
 
 The desktop app and the browser read the same `rules_data.json`, so they stay in
 sync. `rules.py` adapts the browser-shaped nodes into the plain-text shape the
 Tkinter GUI expects.
+
+### Changing the Rules
+
+**Every article rule lives in `rules_data.json`** — the tree, all question and
+answer text, the fixed-expression lists, the lookup table, the proper-noun and
+nationality lists, and every rule reference. Neither front-end decides an
+article in code, so editing that file changes the web page and the desktop app
+together, and no code change is needed to correct a rule or add a phrase.
+
+| To change | Edit |
+|---|---|
+| A memorized phrase | `fixed_expressions` — each entry names its own `article` |
+| A noun with a fixed rule | `lookup_table` |
+| A name that takes *the* | `proper_noun_the.named` or `.keywords` |
+| A question's wording | `decision_tree.<node>.q`, `.note`, `.opts[].label` |
+| Its label in the path trail | `decision_tree.<node>.short` |
+| An explanation or citation | the leaf's `why` and `rule_ref` |
+
+The map view and the path trail are both generated from this file, so neither
+can drift from the logic it documents. `tests/test_gate_zero.py` enforces the
+no-hardcoding property directly: it flips a value in memory and asserts the
+answer follows.
 
 ### Tests
 
@@ -110,4 +140,21 @@ python -m unittest discover -s tests -v
   is a dead end**;
 - the worked examples land on the leaves they claim;
 - chips meant to demonstrate Gate 0 actually hit it, and chips meant to walk the
-  tree are not shadowed by Gate 0.
+  tree are not shadowed by Gate 0;
+- every Gate 0 rule carries its own `article` and `rule_ref`, and the answer
+  follows the data when that value is changed — so a hardcoded form fails the
+  suite instead of going unnoticed.
+
+### Deploying
+
+The site is served by GitHub Pages from `main` at `/`, so pushing to `main`
+publishes it. Two things to know:
+
+- `index.html` and `rules_data.json` are cached separately for ten minutes. The
+  page fetches its rules with `cache: "no-cache"` so the data can never be older
+  than the code reading it, but a returning visitor may still see the previous
+  version of the page itself until that expires. First-time visitors are
+  unaffected, and a hard reload gets the latest immediately. GitHub Pages does
+  not allow custom cache headers, so this is a floor rather than a bug.
+- Mismatches degrade quietly rather than erroring, so verify a deploy by
+  exercising the live page — not just by checking that the build went green.
