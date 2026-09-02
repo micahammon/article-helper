@@ -330,10 +330,12 @@ function displayWord(s){
   return n.replace(/\s+/g, " ").trim();
 }
 
+/* mirrors WORD_PATTERN in logic.py: the clitic stays attached, so `There's`
+   is one token and can be told apart from a possessive */
 function tokenize(s){
-  var t = stripPunct(String(s == null ? "" : s).toLowerCase());
-  t = t.replace(/\s+/g, " ").trim();
-  return t ? t.split(" ") : [];
+  var m = String(s == null ? "" : s).toLowerCase()
+            .match(/[a-z0-9]+(?:['\u2019][a-z]+)?/g);
+  return m || [];
 }
 
 /* word tokens with their original capitalisation kept */
@@ -396,6 +398,7 @@ function formOf(article){
   var a = String(article).toLowerCase();
   if(a.indexOf("either") === 0) return "either";
   if(a === "one") return "one";
+  if(a.indexOf("a / an with") === 0) return "countable";
   if(a.indexOf("the") === 0) return "the";
   if(a.indexOf("a /") === 0 || a.indexOf("a/") === 0 || a.indexOf("an") === 0) return "an";
   return "zero";
@@ -493,7 +496,9 @@ function checkConstructions(text, tokens, wholeOnly){
     m = new RegExp(rule.regex, rule.case_sensitive ? "" : "i").exec(subject);
     if(!m) continue;
     covers = (m.index === 0 && m.index + m[0].length === subject.replace(/^\s+|\s+$/g, "").length);
-    if(wholeOnly !== covers) continue;
+    /* a frame rule describes the shape of the whole clause rather than an
+       adjunct inside it, so it belongs in the first pass even when partial */
+    if(wholeOnly !== (covers || !!rule.frame)) continue;
     return {form:formOf(rule.article), why:rule.explanation, ref:rule.rule_ref,
             cat:"Gate 0 \u00b7 construction", match:phrase,
             construction:true,
@@ -665,8 +670,13 @@ function checkDeterminer(text, tokens){
     }
   }
 
-  /* a possessive 's fills the same slot: Sarah's car */
-  if(/^\s*\S+['\u2019]s\s+\S+/.test(String(text || ""))){
+  /* a possessive 's fills the same slot: Sarah's car. A contraction does not -
+     "There's a post office" is "there is". */
+  var CONTRACTIONS = ["there","here","it","that","what","who","he","she","let",
+                      "this","how","where"];
+  var stem = String(first).split(/['\u2019]/)[0];
+  if(CONTRACTIONS.indexOf(stem) === -1 &&
+     /^\s*\S+['\u2019]s\s+\S+/.test(String(text || ""))){
     return {form:"blocked", why:det.explanation, blocked:true, ref:det.rule_ref,
             cat:"Gate 0 \u00b7 the slot is already taken",
             match:tokens.slice(1).join(" ") || tokens[0]};

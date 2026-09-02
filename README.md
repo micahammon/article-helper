@@ -27,10 +27,19 @@ Type a noun or phrase and the tool normalizes it (trims spaces, drops a leading
    `a second cup of coffee`, `The more you do, the better`, `most people` vs
    `the most intelligent`, `few problems`, `one of the students`,
    `half an hour`, `she touched him on the arm`, `the Smiths`,
-   `a Mr Thompson`. These run in two passes — a match covering the whole input
-   goes first, ahead of everything; a match buried in a longer sentence goes
-   **last**, so `They moved to the United Kingdom last year` stays a question
-   about the country rather than about `last year`.
+   `a Mr Thompson`, `There's a post office`, `What a beautiful day`,
+   `She was elected president`.
+
+   These run in two passes. A match covering the whole input goes first, ahead
+   of everything. A match buried in a longer sentence goes **last**, so
+   `They moved to the United Kingdom last year` stays a question about the
+   country rather than about `last year`.
+
+   The exception is a **sentence frame** — `there is/are` (2.7), exclamations
+   (5.3) and unique roles (6.5). These describe the shape of the whole clause
+   rather than an adjunct inside it, so they join the first pass even when the
+   match is partial: `There's a post office in my town` is Part 2.7, not a
+   question about the noun `post`.
 1. **Is the slot already taken?** A possessive, demonstrative or quantifier
    leaves no room for an article: `my book`, `this book`, `each student`,
    `some water`, `Sarah's car`. The answer is **not** "no article" — the
@@ -177,6 +186,7 @@ together, and no code change is needed to correct a rule or add a phrase.
 | A month, day, holiday, season, period | `time_words.groups.<name>.words` |
 | A date / year / decade pattern | `time_words.patterns` |
 | A phrase-shape rule | `constructions` (ordered; first match wins) |
+| Whether it outranks the lexical gates | that rule's `frame` flag |
 | When a noun is only fixed in context | that entry's `conditions` |
 | A caveat shown alongside an answer | that entry's `note` |
 | An a/an pronunciation exception | `phonetics` |
@@ -227,6 +237,8 @@ python -m unittest discover -s tests -v
 - every construction cites a real section and carries examples, `next week`
   stays distinct from `the next bus`, and an incidental match inside a longer
   sentence does not hijack the answer;
+- a sentence frame outranks the lexical gates but does not swallow them, and a
+  contraction (`There's`) is not mistaken for a possessive (`Sarah's`);
 - context-sensitive nouns defer rather than answer — `I bought a piano`,
   `a lovely dinner`, `the history of art` — while the fixed senses still
   answer, and every condition block actually has a trigger.
@@ -238,10 +250,13 @@ phrase-shape rules — *next/last* (7.11), ordinals (7.12), *most* (7.8),
 *few/little* (7.7), *a/an* vs *one* and *half* (7.9), comparatives (7.13),
 body parts (4.7) and people's names (9.4).
 
-Still missing, and deliberately so — these depend on sentence structure or
-register rather than on the noun, so they need a different mechanism than Gate
-0: existential *there is/are* (2.7), exclamations (5.3), newspaper headlines
-(6.4), and unique roles after *elect* / *appoint* / *become* (6.5).
+Only **newspaper headlines** (6.4) are left out, deliberately: dropping
+articles there is a journalist's stylistic choice, not a rule a learner needs.
+
+Two rules answer with a split, because nothing in the input settles them: a
+season takes either `the` or none (6.2.6), and an exclamation takes `a/an`
+before a singular countable noun and nothing before a plural or uncountable
+one (5.3).
 
 The constructions are regexes over the input, which is a real limit: they read
 word order, not grammar. An unusual phrasing can miss one, and a loose match

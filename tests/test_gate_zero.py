@@ -499,6 +499,90 @@ class ConstructionTests(unittest.TestCase):
             re.compile(rule["regex"])  # must be a valid pattern
 
 
+class SentenceFrameTests(unittest.TestCase):
+    """2.7, 5.3 and 6.5 describe the shape of a clause, not a noun.
+
+    They are marked `frame`, which puts them in the first pass even when the
+    match is partial - otherwise the lexical gates answer first, and
+    `There's a post office in my town` comes back as a question about `post`.
+    """
+
+    def setUp(self):
+        self.logic = ArticleLogic()
+
+    def assertRule(self, text, article, rule_ref, name=None):
+        analysis = self.logic.analyze_input(text)
+        self.assertEqual(analysis["mode"], "lookup", f"{text!r} fell through")
+        self.assertEqual(analysis["result"]["article"], article, text)
+        self.assertEqual(analysis["result"]["rule_ref"], rule_ref, text)
+        if name:
+            self.assertEqual(analysis["source"], "construction:" + name, text)
+
+    def test_there_is_takes_a_singular(self):
+        self.assertRule("There's a post office in my town", "a / an", "2.7",
+                        "there_is_singular")
+        self.assertRule("Is there a bank nearby", "a / an", "2.7", "there_is_singular")
+
+    def test_there_are_takes_a_plural(self):
+        """The verb settles it, so this does not have to guess."""
+        self.assertRule("There are two train stations in Glasgow", "no article", "2.7",
+                        "there_are_plural")
+        self.assertRule("There are butterflies in my garden", "no article", "2.7",
+                        "there_are_plural")
+
+    def test_there_is_carries_the_uncountable_contrast(self):
+        result = self.logic.analyze_input("There's a post office in my town")["result"]
+        self.assertIn("uncountable", result["contrast"])
+
+    def test_a_contraction_is_not_a_possessive(self):
+        """`There's` is `there is`; only `Sarah's` blocks the slot."""
+        self.assertNotEqual(
+            self.logic.analyze_input("There's a post office in my town")["source"],
+            "determiner:possessive")
+        self.assertEqual(self.logic.analyze_input("Sarah's car")["source"],
+                         "determiner:possessive")
+
+    def test_exclamations(self):
+        self.assertRule("What a beautiful day", "a / an", "5.3", "exclamation_what_a")
+        analysis = self.logic.analyze_input("What terrible weather")
+        self.assertEqual(analysis["result"]["rule_ref"], "5.3")
+        self.assertIn("otherwise no article", analysis["result"]["article"])
+
+    def test_unique_roles(self):
+        self.assertRule("Julie was appointed headteacher of our school", "no article",
+                        "6.5", "unique_role")
+        self.assertRule("She was elected president", "no article", "6.5", "unique_role")
+        self.assertRule("He became king in 1781", "no article", "6.5", "unique_role")
+
+    def test_unique_role_allows_a_name_between_verb_and_role(self):
+        self.assertRule("We elected Amy director of the committee", "no article", "6.5")
+
+    def test_a_frame_outranks_an_adjunct(self):
+        """`as CEO last week` is about the role, not about `last week`."""
+        analysis = self.logic.analyze_input("Luke started working as CEO last week")
+        self.assertEqual(analysis["source"], "construction:unique_role")
+
+    def test_an_ordinary_job_still_reaches_the_questions(self):
+        """`Julie is a headteacher` is 5.2, which the tree handles."""
+        self.assertEqual(self.logic.analyze_input("Julie is a headteacher")["mode"],
+                         "question")
+
+    def test_frames_do_not_swallow_the_lexical_gates(self):
+        for text in ["They moved to the United Kingdom last year",
+                     "I listened to the radio last week", "next week", "the Smiths"]:
+            analysis = self.logic.analyze_input(text)
+            self.assertNotIn(analysis.get("source"),
+                             {"construction:there_is_singular",
+                              "construction:there_are_plural",
+                              "construction:unique_role"}, text)
+
+    def test_frame_rules_are_declared_in_the_data(self):
+        frames = {r["name"] for r in DATA["constructions"] if r.get("frame")}
+        self.assertEqual(frames, {"there_is_singular", "there_are_plural",
+                                  "exclamation_what_a", "exclamation_what",
+                                  "unique_role"})
+
+
 class TreeIntegrityTests(unittest.TestCase):
     def test_every_edge_points_at_a_real_node(self):
         for node_id, node in RAW_TREE.items():

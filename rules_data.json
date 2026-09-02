@@ -1730,6 +1730,75 @@
   },
   "constructions": [
     {
+      "name": "there_is_singular",
+      "regex": "\\b(there is|there's|there was|is there|was there)\\b",
+      "article": "a / an",
+      "rule_ref": "2.7",
+      "explanation": "<em>There is / there are</em> in the 'something exists' sense introduces something the listener does not yet know about, so a singular noun takes <em>a/an</em>.",
+      "examples": [
+        "There's a post office in my town.",
+        "Is there a bank nearby?"
+      ],
+      "contrast": "An uncountable noun after <em>there is</em> takes no article instead: <em>There is always traffic on this road.</em> And <em>there</em> can mean 'in a certain place', where no special rule applies: <em>There are the books that I lost!</em>",
+      "frame": true
+    },
+    {
+      "name": "there_are_plural",
+      "regex": "\\b(there are|there were|are there|were there)\\b",
+      "article": "no article",
+      "rule_ref": "2.7",
+      "explanation": "<em>There are</em> in the 'something exists' sense takes a plural noun, and it is normal to use a number or no article rather than an article.",
+      "examples": [
+        "There are two train stations in Glasgow.",
+        "There are butterflies in my garden.",
+        "There is always traffic on this road."
+      ],
+      "contrast": "<em>There</em> meaning 'in a certain place' is different: <em>There are the books that I lost!</em>",
+      "frame": true
+    },
+    {
+      "name": "exclamation_what_a",
+      "regex": "^what (a|an)\\b",
+      "article": "a / an",
+      "rule_ref": "5.3",
+      "explanation": "An exclamation with <em>what</em> and a singular countable noun takes <em>a/an</em>.",
+      "examples": [
+        "What a beautiful day!",
+        "What a party!",
+        "What a horrible taste!"
+      ],
+      "frame": true
+    },
+    {
+      "name": "exclamation_what",
+      "regex": "^what\\b",
+      "article": "a / an with a singular countable noun, otherwise no article",
+      "rule_ref": "5.3",
+      "explanation": "An exclamation with <em>what</em> takes <em>a/an</em> before a singular countable noun, and no article before a plural or uncountable one.",
+      "examples": [
+        "What a beautiful day!",
+        "What terrible weather!",
+        "What lovely shoes!",
+        "What luck!"
+      ],
+      "frame": true
+    },
+    {
+      "name": "unique_role",
+      "regex": "\\b(elect|elects|elected|appoint|appoints|appointed|become|becomes|became|crowned|made|as)\\s+(?:[a-z]+\\s+)?(?:a |an |the )?(captain|chairman|chairwoman|chair|ceo|cfo|cto|director|treasurer|king|queen|president|professor|chief|head|headteacher|principal|dean|ambassador|governor|mayor|pope|chancellor|secretary|manager|coach|prime minister|vice president|head teacher)\\b",
+      "article": "no article",
+      "rule_ref": "6.5",
+      "explanation": "A job that is the only one of its kind in an organisation takes no article after verbs such as <em>elect</em>, <em>appoint</em>, <em>become</em> and <em>be</em>, or after <em>as</em>.",
+      "examples": [
+        "Julie was appointed headteacher of our school.",
+        "She was elected president.",
+        "He became king in 1781.",
+        "Luke started working as CEO last week."
+      ],
+      "contrast": "An ordinary job takes <em>a/an</em>, and a role identified for the listener takes <em>the</em>: <em>Julie is a headteacher</em>, <em>Julie is the headteacher of our school</em>. (5.2)",
+      "frame": true
+    },
+    {
       "name": "in_the_next_last",
       "regex": "\\bin the (next|last)\\b.*\\b(week|weekend|month|year|night|morning|afternoon|evening|summer|winter|spring|autumn|fall|term|semester|decade|century|monday|tuesday|wednesday|thursday|friday|saturday|sunday|january|february|march|april|may|june|july|august|september|october|november|december)\\b",
       "article": "the",
@@ -2433,6 +2502,10 @@
       "word": "one — not a/an",
       "cls": "r-an"
     },
+    "countable": {
+      "word": "a / an — or none",
+      "cls": "r-an"
+    },
     "fixed": {
       "word": "memorized",
       "cls": "r-fixed"
@@ -2857,6 +2930,15 @@
     },
     {
       "p": "the Smiths"
+    },
+    {
+      "p": "There's a post office in my town"
+    },
+    {
+      "p": "What a beautiful day"
+    },
+    {
+      "p": "She was elected president"
     }
   ]
 }

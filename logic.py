@@ -340,7 +340,11 @@ class ArticleLogic:
             if not match:
                 continue
             covers_everything = match.start() == 0 and match.end() == len(subject.strip())
-            if whole_only != covers_everything:
+            # A frame rule describes the shape of the whole clause rather than
+            # an adjunct inside it, so it belongs in the first pass even when
+            # the match is partial.
+            first_pass = covers_everything or bool(rule.get("frame"))
+            if whole_only != first_pass:
                 continue
             result = _result(rule["article"], rule["explanation"], rule["rule_ref"])
             result["examples"] = rule.get("examples", [])
@@ -413,8 +417,13 @@ class ArticleLogic:
                     "source": "determiner:" + group,
                 }
 
-        # A possessive 's fills the same slot: "Sarah's car".
-        if re.match(r"^\s*\S+['’]s\s+\S+", str(text or "")):
+        # A possessive 's fills the same slot: "Sarah's car". Contractions are
+        # not possessives, though - "There's a post office" is "there is".
+        # the tokenizer keeps the clitic, so `There's` arrives as one token
+        stem = re.split(r"['’]", first)[0]
+        contraction = stem in {"there", "here", "it", "that", "what", "who",
+                               "he", "she", "let", "this", "how", "where"}
+        if not contraction and re.match(r"^\s*\S+['’]s\s+\S+", str(text or "")):
             return {
                 "focus_noun": " ".join(tokens[1:]) or tokens[0],
                 "result": _result(DETERMINERS["article"],
