@@ -7,8 +7,10 @@
       "determiners",
       "fixed_expressions",
       "noun_number",
+      "time_words",
       "lookup_table",
       "nationality_the",
+      "categories",
       "proper_noun_the"
     ]
   },
@@ -1726,6 +1728,263 @@
     "some_any_rule_ref": "Appendix 3",
     "possessive_s_note": "A possessive <em>'s</em> fills the same slot: <em>Sarah's car</em>."
   },
+  "categories": {
+    "languages": {
+      "article": "no article",
+      "rule_ref": "6.1.1",
+      "explanation": "Languages take no article: <em>She speaks Japanese</em>, <em>They're studying Spanish</em>.<br><br>Note that the word <em>language</em> itself is an ordinary noun: <em>the language I speak at home</em>, <em>a new language</em>.",
+      "unusual": "If the word is used in an unusual way it stops being an exception and the ordinary rules apply again: <em>the French that they speak in Montreal</em>, <em>a beautiful Spanish</em>, <em>the football they play in the USA</em>. (6.1.4)",
+      "words": [
+        "english",
+        "french",
+        "spanish",
+        "german",
+        "italian",
+        "portuguese",
+        "japanese",
+        "chinese",
+        "mandarin",
+        "cantonese",
+        "korean",
+        "arabic",
+        "russian",
+        "hindi",
+        "urdu",
+        "bengali",
+        "turkish",
+        "polish",
+        "dutch",
+        "swedish",
+        "norwegian",
+        "danish",
+        "finnish",
+        "greek",
+        "hebrew",
+        "thai",
+        "vietnamese",
+        "indonesian",
+        "swahili",
+        "latin",
+        "welsh",
+        "irish",
+        "catalan",
+        "basque",
+        "czech",
+        "hungarian",
+        "romanian",
+        "ukrainian",
+        "farsi",
+        "persian",
+        "tagalog",
+        "malay",
+        "punjabi",
+        "tamil",
+        "telugu",
+        "afrikaans",
+        "icelandic"
+      ]
+    },
+    "meals": {
+      "article": "no article",
+      "rule_ref": "6.1.2",
+      "explanation": "Meals take no article: <em>What shall we have for dinner?</em>, <em>I didn't eat breakfast</em>.",
+      "unusual": "A special occasion, or an adjective before the meal, brings the article back: <em>The lunch we had after the wedding</em>, <em>There will be a dinner for her birthday</em>, <em>an early supper</em>. (6.1.4)",
+      "words": [
+        "breakfast",
+        "lunch",
+        "dinner",
+        "supper",
+        "tea",
+        "brunch"
+      ]
+    },
+    "sports": {
+      "article": "no article",
+      "rule_ref": "6.1.3",
+      "explanation": "Sports and games take no article: <em>I don't like golf</em>, <em>He often plays tennis</em>, <em>John loves playing rugby</em>.",
+      "unusual": "If the word is used in an unusual way it stops being an exception and the ordinary rules apply again: <em>the French that they speak in Montreal</em>, <em>a beautiful Spanish</em>, <em>the football they play in the USA</em>. (6.1.4)",
+      "words": [
+        "football",
+        "soccer",
+        "tennis",
+        "golf",
+        "judo",
+        "karate",
+        "baseball",
+        "basketball",
+        "rugby",
+        "cricket",
+        "hockey",
+        "volleyball",
+        "badminton",
+        "chess",
+        "boxing",
+        "swimming",
+        "athletics",
+        "gymnastics",
+        "skiing",
+        "surfing",
+        "cycling",
+        "running",
+        "yoga",
+        "netball",
+        "squash",
+        "polo",
+        "rowing",
+        "sailing",
+        "wrestling",
+        "fencing",
+        "darts",
+        "snooker",
+        "bowling",
+        "taekwondo",
+        "rounders",
+        "handball"
+      ]
+    }
+  },
+  "time_words": {
+    "unusual": "A time word used in an unusual way - a particular one you both know - takes <em>the</em>: <em>Do you remember the Monday we met?</em>, <em>The June when we got married</em>. And <em>a</em> with a day means 'any': <em>Could we meet on a Monday?</em> (6.2.8)",
+    "groups": {
+      "months": {
+        "article": "no article",
+        "rule_ref": "6.2.1",
+        "explanation": "Months take no article. The tense of the sentence says which one you mean: <em>I'll see you in December</em> (next), <em>We met in December</em> (last).",
+        "words": [
+          "january",
+          "february",
+          "march",
+          "april",
+          "may",
+          "june",
+          "july",
+          "august",
+          "september",
+          "october",
+          "november",
+          "december"
+        ]
+      },
+      "days": {
+        "article": "no article",
+        "rule_ref": "6.2.2",
+        "explanation": "Days of the week take no article: <em>I'm meeting Julia on Monday</em>, <em>She started work last Wednesday</em>. A plural day means 'every': <em>I work on Mondays and Tuesdays</em>.",
+        "words": [
+          "monday",
+          "tuesday",
+          "wednesday",
+          "thursday",
+          "friday",
+          "saturday",
+          "sunday",
+          "mondays",
+          "tuesdays",
+          "wednesdays",
+          "thursdays",
+          "fridays",
+          "saturdays",
+          "sundays"
+        ]
+      },
+      "holidays": {
+        "article": "no article",
+        "rule_ref": "6.2.3",
+        "explanation": "Holidays and special days take no article: <em>on Christmas Day</em>, <em>during Ramadan</em>, <em>at Halloween</em>.",
+        "words": [
+          "christmas",
+          "christmas day",
+          "christmas eve",
+          "easter",
+          "halloween",
+          "thanksgiving",
+          "ramadan",
+          "eid",
+          "diwali",
+          "hanukkah",
+          "passover",
+          "new years eve",
+          "new years day",
+          "mothers day",
+          "fathers day",
+          "valentines day",
+          "independence day",
+          "boxing day",
+          "bonfire night"
+        ]
+      },
+      "seasons": {
+        "article": "either the or no article",
+        "rule_ref": "6.2.6",
+        "explanation": "Seasons take either <em>the</em> or no article: <em>She goes to Spain in summer</em>, <em>I don't go to the park in the winter</em>, <em>Autumn is my favourite season</em>.<br><br>With <em>fall</em> (US English) <em>the</em> is the more common choice.",
+        "words": [
+          "spring",
+          "summer",
+          "autumn",
+          "winter",
+          "fall"
+        ]
+      },
+      "periods": {
+        "article": "the",
+        "rule_ref": "6.2.7",
+        "explanation": "Historical periods take <em>the</em>: <em>during the Renaissance</em>, <em>in the Middle Ages</em>.",
+        "words": [
+          "renaissance",
+          "middle ages",
+          "enlightenment",
+          "industrial revolution",
+          "reformation",
+          "victorian era",
+          "cold war",
+          "great depression",
+          "stone age",
+          "bronze age",
+          "iron age",
+          "dark ages",
+          "belle epoque",
+          "jazz age"
+        ]
+      }
+    },
+    "patterns": {
+      "year": {
+        "regex": "^(1[0-9]{3}|20[0-9]{2})$",
+        "article": "no article",
+        "rule_ref": "6.2.7",
+        "explanation": "Years take no article: <em>She was born in 1991</em>, <em>This castle was built in 1672</em>."
+      },
+      "decade": {
+        "regex": "^([0-9]{4}s|[0-9]{2}s|twenties|thirties|forties|fifties|sixties|seventies|eighties|nineties)$",
+        "article": "the",
+        "rule_ref": "6.2.7",
+        "explanation": "Decades take <em>the</em>: <em>The Beatles were popular in the 1960s</em>, <em>I became interested in music in the eighties</em>."
+      },
+      "century": {
+        "regex": "(^|\\s)(\\d{1,2}(st|nd|rd|th)|first|second|third|fourth|fifth|sixth|seventh|eighth|ninth|tenth|eleventh|twelfth|thirteenth|fourteenth|fifteenth|sixteenth|seventeenth|eighteenth|nineteenth|twentieth|twenty.first)\\s+century$",
+        "article": "the",
+        "rule_ref": "6.2.7",
+        "explanation": "Centuries take <em>the</em>: <em>Shakespeare was born in the sixteenth century</em>."
+      },
+      "date_number_first": {
+        "regex": "^\\d{1,2}(st|nd|rd|th)?\\s+of\\s+(january|february|march|april|may|june|july|august|september|october|november|december)$",
+        "article": "the",
+        "rule_ref": "6.2.4",
+        "explanation": "A date with the number first takes <em>the</em> (most common in British English): <em>We got married on the 22nd of September</em>."
+      },
+      "date_number_second": {
+        "regex": "^(january|february|march|april|may|june|july|august|september|october|november|december)\\s+\\d{1,2}(st|nd|rd|th)?$",
+        "article": "no article",
+        "rule_ref": "6.2.4",
+        "explanation": "A date with the number second takes no article (most common in US English): <em>She met him on November 16th</em>."
+      },
+      "day_part": {
+        "regex": "^(monday|tuesday|wednesday|thursday|friday|saturday|sunday)\\s+(morning|afternoon|evening|night)$",
+        "article": "no article",
+        "rule_ref": "6.2.5",
+        "explanation": "A part of the day takes no article when you name the day with it: <em>On Wednesday night we went to the theatre</em>, <em>I met John on Friday morning</em>.<br><br>On its own it is different: <em>in the morning</em>, <em>at night</em> (4.12)."
+      }
+    }
+  },
   "proper_noun_the": {
     "article": "the",
     "rule_ref": "9.2.2",
@@ -1793,6 +2052,9 @@
   "nationality_the": {
     "article": "the",
     "rule_ref": "3.6",
+    "requires_prev": [
+      "the"
+    ],
     "examples": [
       "british",
       "english",
@@ -1919,6 +2181,10 @@
     },
     "context": {
       "word": "it depends",
+      "cls": "r-fixed"
+    },
+    "either": {
+      "word": "the — or none",
       "cls": "r-fixed"
     },
     "fixed": {
@@ -2306,6 +2572,27 @@
     },
     {
       "p": "each student"
+    },
+    {
+      "p": "She speaks Arabic"
+    },
+    {
+      "p": "rugby"
+    },
+    {
+      "p": "brunch"
+    },
+    {
+      "p": "in June"
+    },
+    {
+      "p": "the 1960s"
+    },
+    {
+      "p": "November 16th"
+    },
+    {
+      "p": "in summer"
     }
   ]
 }

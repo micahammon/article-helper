@@ -75,6 +75,8 @@ NATIONALITY_THE = _rules_data["nationality_the"]
 DETERMINERS = _rules_data["determiners"]
 DETERMINER_CONFLICT = _rules_data["determiner_conflict"]
 PHONETICS = _rules_data["phonetics"]
+CATEGORIES = _rules_data["categories"]
+TIME_WORDS = _rules_data["time_words"]
 SOURCE_SECTIONS = _rules_data["source_sections"]
 PATTERNS = _rules_data["patterns"]
 FORM_LABELS = _rules_data["form_labels"]
@@ -89,6 +91,8 @@ __all__ = [
     "DETERMINERS",
     "DETERMINER_CONFLICT",
     "PHONETICS",
+    "CATEGORIES",
+    "TIME_WORDS",
     "SOURCE_SECTIONS",
     "PATTERNS",
     "FORM_LABELS",

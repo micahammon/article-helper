@@ -50,8 +50,18 @@ Type a noun or phrase and the tool normalizes it (trims spaces, drops a leading
    When a guard fires, the answer is **`it depends`**: the card shows the fixed
    sense, the reading that applies otherwise, and a button into the questions.
    It does not guess.
-4. **Nationality adjectives** — `the French`, `the British`.
-5. **Names in the *the*-taking class** — plural names, `of`-constructions,
+4. **Time words** (Part 6.2) — months, days (`Mondays` = every), holidays,
+   seasons (either `the` or none), historical periods, plus patterns for years
+   (`1991`), decades (`the 1960s`, `the eighties`), centuries, dates in both
+   orders (`the 22nd of September` vs `November 16th`), and a part of the day
+   named with its day (`Wednesday night`).
+5. **Nationality adjectives** — `the French`, `the British`. This is the
+   *the + adjective* construction, so it needs the article in front: bare
+   `French` is a language, not a people.
+6. **Languages, meals and sports** (Part 6.1) — productive rules, not word
+   lists, so `Arabic`, `brunch` and `rugby` are covered without being
+   enumerated.
+7. **Names in the *the*-taking class** — plural names, `of`-constructions,
    rivers, seas, deserts, ranges, regions, hotels, museums, newspapers. Matched
    conservatively: a keyword only counts inside a capitalised name
    (`the Nile River`, not `a storm crossed the desert`), and an
@@ -83,6 +93,11 @@ rather than about facts you would have to already know:
   (`at school`) — the classic collision.
 - **Q5** — countable or not **in this use**, not as a property of the noun, so
   `coffee` / `a coffee` and `paper` / `a paper` route correctly.
+
+Categories and time words carry the book's **unusual use** contrast (6.1.4,
+6.2.8) alongside the answer: used in a different way the word stops being an
+exception, and the ordinary rules apply again — *the football they play in the
+USA*, *the Monday we met*.
 
 Every outcome — from Gate 0 or from the tree — names a form and cites the
 section of the source guide it comes from.
@@ -149,6 +164,9 @@ together, and no code change is needed to correct a rule or add a phrase.
 | Its label in the path trail | `decision_tree.<node>.short` |
 | An explanation or citation | the leaf's `why` and `rule_ref` |
 | A determiner that blocks articles | `determiners.groups` |
+| A language, meal or sport | `categories.<name>.words` |
+| A month, day, holiday, season, period | `time_words.groups.<name>.words` |
+| A date / year / decade pattern | `time_words.patterns` |
 | When a noun is only fixed in context | that entry's `conditions` |
 | A caveat shown alongside an answer | that entry's `note` |
 | An a/an pronunciation exception | `phonetics` |
@@ -193,17 +211,24 @@ python -m unittest discover -s tests -v
 - proper-noun keywords do not fire outside a capitalised name, while the real
   names still match;
 - `a/an` is chosen by sound: `a university`, `an hour`, `an MBA`, `a UFO`;
+- languages, meals and sports resolve productively, and `the French` (a people)
+  stays distinct from `French` (a language);
+- time words resolve, including both date orders and the decade/century split;
 - context-sensitive nouns defer rather than answer — `I bought a piano`,
   `a lovely dinner`, `the history of art` — while the fixed senses still
   answer, and every condition block actually has a trigger.
 
 ### Known Gaps
 
-The tool does not yet cover, though the book does: existential *there is/are*
-(2.7), exclamations (5.3), newspaper headlines (6.4), unique roles (6.5),
-languages/meals/sports as **productive** rules rather than word lists (6.1),
-time expressions (6.2), *next/last* (7.11), ordinals (7.12), *most* vs *the
-most* (7.8), *few/a few* (7.7), *a/an* vs *one* (7.9), and comparatives (7.13).
+Section 6 is now covered: languages, meals and sports as productive rules
+(6.1), and time words (6.2).
+
+Still missing, though the book has them: existential *there is/are* (2.7),
+exclamations (5.3), newspaper headlines (6.4), unique roles after *elect* /
+*appoint* / *become* (6.5), *next/last* with time expressions (7.11), ordinals
+(7.12), *most* vs *the most* (7.8), *few/a few* and *little/a little* (7.7),
+*a/an* vs *one* (7.9), comparatives (7.13), people's names (*the Smiths*,
+*a Mr Jones*, *a Picasso* — 9.4), and body-part constructions (4.7).
 
 The lookup table is now conditioned (26 of 49 entries), so context-sensitive
 nouns defer instead of guessing. What remains is coverage rather than

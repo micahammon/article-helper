@@ -312,6 +312,95 @@ class ConditionalLookupTests(unittest.TestCase):
         self.assertGreater(conditioned, 15, "most context-sensitive nouns should be conditioned")
 
 
+class ProductiveCategoryTests(unittest.TestCase):
+    """Languages, meals and sports are categories, not word lists.
+
+    Only French, lunch and tennis were listed before, so rugby, Arabic and
+    brunch fell through to the questions.
+    """
+
+    def setUp(self):
+        self.logic = ArticleLogic()
+
+    def assertCategory(self, text, source):
+        analysis = self.logic.analyze_input(text)
+        self.assertEqual(analysis["mode"], "lookup", f"{text!r} fell through")
+        self.assertEqual(analysis["result"]["article"], "no article", text)
+        self.assertEqual(analysis["source"], source, text)
+
+    def test_languages(self):
+        for text in ["Arabic", "Swahili", "She speaks Japanese", "They're studying Spanish"]:
+            self.assertCategory(text, "category:languages")
+
+    def test_meals(self):
+        for text in ["brunch", "supper", "tea"]:
+            self.assertCategory(text, "category:meals")
+
+    def test_sports(self):
+        for text in ["rugby", "judo", "He plays cricket", "baseball"]:
+            self.assertCategory(text, "category:sports")
+
+    def test_nationality_needs_the_in_front(self):
+        """`the French` is a people; bare `French` is a language."""
+        self.assertEqual(self.logic.analyze_input("the French")["source"], "nationality")
+        self.assertEqual(self.logic.analyze_input("the British")["source"], "nationality")
+        self.assertEqual(self.logic.analyze_input("French")["source"], "category:languages")
+        self.assertEqual(self.logic.analyze_input("She speaks French")["source"],
+                         "category:languages")
+
+    def test_categories_carry_the_unusual_use_contrast(self):
+        analysis = self.logic.analyze_input("rugby")
+        self.assertIn("unusual", analysis)
+        self.assertIn("6.1.4", analysis["unusual"])
+
+
+class TimeWordTests(unittest.TestCase):
+    def setUp(self):
+        self.logic = ArticleLogic()
+
+    def assertTime(self, text, article, source=None):
+        analysis = self.logic.analyze_input(text)
+        self.assertEqual(analysis["mode"], "lookup", f"{text!r} fell through")
+        self.assertEqual(analysis["result"]["article"], article, text)
+        self.assertIn(analysis["result"]["rule_ref"], DATA["source_sections"])
+        if source:
+            self.assertEqual(analysis["source"], source, text)
+
+    def test_months_days_holidays(self):
+        self.assertTime("in June", "no article", "time_words:months")
+        self.assertTime("Mondays", "no article", "time_words:days")
+        self.assertTime("Christmas Day", "no article", "time_words:holidays")
+        self.assertTime("Ramadan", "no article", "time_words:holidays")
+
+    def test_seasons_allow_either(self):
+        self.assertTime("in summer", "either the or no article", "time_words:seasons")
+
+    def test_years_decades_centuries(self):
+        self.assertTime("1991", "no article", "time_words:year")
+        self.assertTime("the 1960s", "the", "time_words:decade")
+        self.assertTime("the eighties", "the", "time_words:decade")
+        self.assertTime("the sixteenth century", "the", "time_words:century")
+
+    def test_historical_periods(self):
+        self.assertTime("the Renaissance", "the", "time_words:periods")
+        self.assertTime("the Middle Ages", "the", "time_words:periods")
+
+    def test_dates_depend_on_the_order(self):
+        """Number first takes `the`; number second takes none."""
+        self.assertTime("22nd of September", "the", "time_words:date_number_first")
+        self.assertTime("November 16th", "no article", "time_words:date_number_second")
+
+    def test_part_of_day_with_a_named_day(self):
+        self.assertTime("Wednesday night", "no article", "time_words:day_part")
+        # on its own it is the other way round, and stays a fixed expression
+        self.assertEqual(self.logic.analyze_input("in the morning")["result"]["article"], "the")
+
+    def test_time_words_carry_the_unusual_use_contrast(self):
+        analysis = self.logic.analyze_input("Mondays")
+        self.assertIn("unusual", analysis)
+        self.assertIn("6.2.8", analysis["unusual"])
+
+
 class TreeIntegrityTests(unittest.TestCase):
     def test_every_edge_points_at_a_real_node(self):
         for node_id, node in RAW_TREE.items():

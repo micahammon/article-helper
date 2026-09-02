@@ -8,6 +8,7 @@ import string
 
 # Import the data structures from our rules file
 from rules import (
+    CATEGORIES,
     DECISION_TREE,
     DETERMINER_CONFLICT,
     DETERMINERS,
@@ -18,6 +19,7 @@ from rules import (
     PATTERNS,
     PHONETICS,
     PROPER_NOUN_THE,
+    TIME_WORDS,
 )
 
 WORD_PATTERN = re.compile(r"[A-Za-z0-9]+(?:'[A-Za-z]+)?")
@@ -122,6 +124,16 @@ def _determiner_before(tokens, start, determiner_words):
             return None
         index -= 1
         steps += 1
+    return None
+
+
+def _find_in(tokens, words):
+    """The longest listed phrase present in the tokens, if any."""
+    for size in range(min(3, len(tokens)), 0, -1):
+        for start in range(0, len(tokens) - size + 1):
+            candidate = " ".join(tokens[start:start + size])
+            if candidate in words:
+                return candidate
     return None
 
 
@@ -298,6 +310,44 @@ class ArticleLogic:
         # rather than changing it (see the sports entries).
         return {"focus_noun": key, "result": entry, "source": "lookup"}
 
+    def check_time_words(self, normalized, tokens):
+        """Months, days, holidays, seasons, historical periods, and the
+        date / year / decade / century patterns of Part 6.2."""
+        for name, pattern in TIME_WORDS["patterns"].items():
+            if re.search(pattern["regex"], normalized, re.IGNORECASE):
+                return {
+                    "focus_noun": normalized,
+                    "result": _result(pattern["article"], pattern["explanation"],
+                                      pattern["rule_ref"]),
+                    "source": "time_words:" + name,
+                }
+
+        for name, group in TIME_WORDS["groups"].items():
+            key = normalized if normalized in group["words"] else _find_in(tokens, group["words"])
+            if key:
+                return {
+                    "focus_noun": key,
+                    "result": _result(group["article"], group["explanation"],
+                                      group["rule_ref"]),
+                    "source": "time_words:" + name,
+                    "unusual": TIME_WORDS["unusual"],
+                }
+        return None
+
+    def check_categories(self, normalized, tokens):
+        """Languages, meals and sports - productive rules, not word lists."""
+        for name, category in CATEGORIES.items():
+            key = normalized if normalized in category["words"] else _find_in(tokens, category["words"])
+            if key:
+                return {
+                    "focus_noun": key,
+                    "result": _result(category["article"], category["explanation"],
+                                      category["rule_ref"]),
+                    "source": "category:" + name,
+                    "unusual": category["unusual"],
+                }
+        return None
+
     def check_determiner(self, text):
         """
         Is the article slot already filled? ``my book``, ``this book``,
@@ -430,8 +480,20 @@ class ArticleLogic:
             matched, start, end = phrase_match
             return self._lookup_result(matched, tokens, (start, end))
 
-        # 4. Nationality adjective standing for a whole people.
-        if normalized in NATIONALITY_THE["examples"]:
+        # 3.5 Time words: months, days, holidays, seasons, periods, and the
+        #     date / year / decade / century patterns.
+        time_hit = self.check_time_words(normalized, tokens)
+        if time_hit:
+            return time_hit
+
+        # 4. Nationality adjective standing for a whole people. This is the
+        #    "the + adjective" construction, so it needs the article in front:
+        #    without it, `Spanish` is a language, not a people.
+        requires_prev = NATIONALITY_THE.get("requires_prev")
+        span = _span_of(tokens, normalized)
+        preceded_by_the = (span[1] is not None and span[0] > 0
+                           and tokens[span[0] - 1] in (requires_prev or []))
+        if normalized in NATIONALITY_THE["examples"] and (not requires_prev or preceded_by_the):
             return {
                 "focus_noun": normalized,
                 "result": _result(
@@ -441,6 +503,13 @@ class ArticleLogic:
                 ),
                 "source": "nationality",
             }
+
+        # 4.5 Productive categories: languages, meals, sports. These are rules
+        #     about a category, not a closed vocabulary, so `rugby`, `Arabic`
+        #     and `brunch` are covered without being listed individually.
+        category_hit = self.check_categories(normalized, tokens)
+        if category_hit:
+            return category_hit
 
         # 5. Names in the the-taking class.
         if self._is_the_taking_name(text, normalized, tokens):
@@ -472,13 +541,18 @@ class ArticleLogic:
 
         gate_zero = self.check_gate_zero(text)
         if gate_zero:
-            return {
+            answer = {
                 "mode": "lookup",
                 "focus_noun": gate_zero["focus_noun"],
                 "result": gate_zero["result"],
                 "source": gate_zero["source"],
                 "note": None,
             }
+            # the "unusual use" contrast (6.1.4 / 6.2.8) rides along with the
+            # answer rather than replacing it
+            if "unusual" in gate_zero:
+                answer["unusual"] = gate_zero["unusual"]
+            return answer
 
         tokens = _tokenize_words(_normalize_noun(text))
         note = None

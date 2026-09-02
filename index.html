@@ -394,6 +394,7 @@ function longestPhrase(tokens, map){
 /* article string -> form key */
 function formOf(article){
   var a = String(article).toLowerCase();
+  if(a.indexOf("either") === 0) return "either";
   if(a.indexOf("the") === 0) return "the";
   if(a.indexOf("a /") === 0 || a.indexOf("a/") === 0 || a.indexOf("an") === 0) return "an";
   return "zero";
@@ -435,12 +436,28 @@ function gate0(text){
     return lookupResult(key, tokens);
   }
 
-  /* 4. nationality adjective for a whole people */
+  /* 3.5 time words: months, days, holidays, seasons, periods, dates, years */
+  var timeHit = checkTimeWords(norm, tokens);
+  if(timeHit) return timeHit;
+
+  /* 4. nationality adjective for a whole people. This is the "the + adjective"
+        construction, so it needs the article in front - without it, `Spanish`
+        is a language, not a people. */
   var nat = D.nationality_the;
   if(nat.examples.indexOf(norm) !== -1){
-    return {form:formOf(nat.article), why:nat.explanation, ref:nat.rule_ref,
-            cat:"Gate 0 \u00b7 nationality adjective", match:norm};
+    var natSpan = spanOf(tokens, norm);
+    var need = nat.requires_prev;
+    var okPrev = !need || (natSpan[1] !== null && natSpan[0] > 0 &&
+                           need.indexOf(tokens[natSpan[0] - 1]) !== -1);
+    if(okPrev){
+      return {form:formOf(nat.article), why:nat.explanation, ref:nat.rule_ref,
+              cat:"Gate 0 \u00b7 nationality adjective", match:norm};
+    }
   }
+
+  /* 4.5 productive categories: languages, meals, sports */
+  var catHit = checkCategories(norm, tokens);
+  if(catHit) return catHit;
 
   /* 5. names in the the-taking class */
   if(isTheTakingName(text, norm)){
@@ -449,6 +466,60 @@ function gate0(text){
             cat:"Gate 0 \u00b7 name in the the-taking class", match:norm};
   }
 
+  return null;
+}
+
+/* the longest listed phrase present in the tokens */
+function findIn(tokens, words){
+  var size, start, candidate;
+  for(size = Math.min(3, tokens.length); size >= 1; size--){
+    for(start = 0; start + size <= tokens.length; start++){
+      candidate = tokens.slice(start, start + size).join(" ");
+      if(words.indexOf(candidate) !== -1) return candidate;
+    }
+  }
+  return null;
+}
+
+/* months, days, holidays, seasons, periods, and the date/year/decade patterns */
+function checkTimeWords(norm, tokens){
+  var T2 = D.time_words, name, p, g, key;
+  for(name in T2.patterns){
+    if(!Object.prototype.hasOwnProperty.call(T2.patterns, name)) continue;
+    p = T2.patterns[name];
+    if(new RegExp(p.regex, "i").test(norm)){
+      return {form:formOf(p.article), why:p.explanation, ref:p.rule_ref,
+              cat:"Gate 0 \u00b7 time expression", match:norm,
+              either:(p.article.indexOf("either") === 0)};
+    }
+  }
+  for(name in T2.groups){
+    if(!Object.prototype.hasOwnProperty.call(T2.groups, name)) continue;
+    g = T2.groups[name];
+    key = (g.words.indexOf(norm) !== -1) ? norm : findIn(tokens, g.words);
+    if(key){
+      return {form:formOf(g.article), why:g.explanation, ref:g.rule_ref,
+              cat:"Gate 0 \u00b7 " + name.replace(/s$/, ""), match:key,
+              either:(g.article.indexOf("either") === 0),
+              unusual:T2.unusual};
+    }
+  }
+  return null;
+}
+
+/* languages, meals and sports - productive rules, not word lists */
+function checkCategories(norm, tokens){
+  var name, c, key;
+  for(name in D.categories){
+    if(!Object.prototype.hasOwnProperty.call(D.categories, name)) continue;
+    c = D.categories[name];
+    key = (c.words.indexOf(norm) !== -1) ? norm : findIn(tokens, c.words);
+    if(key){
+      return {form:formOf(c.article), why:c.explanation, ref:c.rule_ref,
+              cat:"Gate 0 \u00b7 " + name.replace(/s$/, ""), match:key,
+              unusual:c.unusual};
+    }
+  }
   return null;
 }
 
@@ -753,7 +824,12 @@ function renderGate0(r){
          '<span class="ex">' + r.note.examples.map(esc).join(" \u00b7 ") + '</span>' +
          '</div></div></div>';
   }
-  if(r.fixed || r.blocked){
+  if(r.unusual){
+    h += '<div class="senses"><div class="sense">' +
+         '<span class="pill p-next">unusual use</span>' +
+         '<div class="lead">' + r.unusual + '</div></div></div>';
+  }
+  if(r.fixed || r.blocked || r.either){
     /* nothing to build: the phrase is already complete as typed, so echo it
        verbatim rather than through displayWord, which strips the apostrophe
        out of "Sarah's car" */
