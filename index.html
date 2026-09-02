@@ -395,6 +395,7 @@ function longestPhrase(tokens, map){
 function formOf(article){
   var a = String(article).toLowerCase();
   if(a.indexOf("either") === 0) return "either";
+  if(a === "one") return "one";
   if(a.indexOf("the") === 0) return "the";
   if(a.indexOf("a /") === 0 || a.indexOf("a/") === 0 || a.indexOf("an") === 0) return "an";
   return "zero";
@@ -408,7 +409,12 @@ function gate0(text){
   if(!norm && !tokens.length) return null;
   var key, e;
 
-  /* 0. the article slot may already be taken: my book, this book, each student.
+  /* 0. constructions whose match covers the whole input. First, because
+        `last summer` is Part 7.11 and not a season. */
+  var whole = checkConstructions(text, tokens, true);
+  if(whole) return whole;
+
+  /* 0.5 the article slot may already be taken: my book, this book, each student.
         That is not a zero-article answer - no article can go there at all. */
   var det = checkDeterminer(text, tokens);
   if(det) return det;
@@ -466,6 +472,34 @@ function gate0(text){
             cat:"Gate 0 \u00b7 name in the the-taking class", match:norm};
   }
 
+  /* last: a construction inside a longer sentence. An incidental match loses
+     to the gates above, which name a specific noun. */
+  var loose = checkConstructions(text, tokens, false);
+  if(loose) return loose;
+
+  return null;
+}
+
+/* Patterns where the shape of the phrase decides the article, not the noun.
+   Two passes: whole-input matches go first, loose matches last. */
+function checkConstructions(text, tokens, wholeOnly){
+  var phrase = tokens.join(" ");
+  if(!phrase) return null;
+  var i, rule, subject, m, covers;
+
+  for(i = 0; i < D.constructions.length; i++){
+    rule = D.constructions[i];
+    subject = rule.case_sensitive ? String(text || "") : phrase;
+    m = new RegExp(rule.regex, rule.case_sensitive ? "" : "i").exec(subject);
+    if(!m) continue;
+    covers = (m.index === 0 && m.index + m[0].length === subject.replace(/^\s+|\s+$/g, "").length);
+    if(wholeOnly !== covers) continue;
+    return {form:formOf(rule.article), why:rule.explanation, ref:rule.rule_ref,
+            cat:"Gate 0 \u00b7 construction", match:phrase,
+            construction:true,
+            either:(String(rule.article).indexOf("either") === 0),
+            examples:rule.examples || [], contrast:rule.contrast || null};
+  }
   return null;
 }
 
@@ -829,7 +863,20 @@ function renderGate0(r){
          '<span class="pill p-next">unusual use</span>' +
          '<div class="lead">' + r.unusual + '</div></div></div>';
   }
-  if(r.fixed || r.blocked || r.either){
+  if(r.construction && (r.examples.length || r.contrast)){
+    h += '<div class="senses">';
+    if(r.examples.length){
+      h += '<div class="sense"><span class="pill p-next">examples</span>' +
+           '<div class="lead"><span class="ex">' +
+           r.examples.map(esc).join(" \u00b7 ") + '</span></div></div>';
+    }
+    if(r.contrast){
+      h += '<div class="sense"><span class="pill p-next">but</span>' +
+           '<div class="lead">' + r.contrast + '</div></div>';
+    }
+    h += '</div>';
+  }
+  if(r.fixed || r.blocked || r.either || r.construction){
     /* nothing to build: the phrase is already complete as typed, so echo it
        verbatim rather than through displayWord, which strips the apostrophe
        out of "Sarah's car" */

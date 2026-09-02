@@ -7,6 +7,7 @@ an answer, so these tests assert that a form always comes back.
 """
 
 import json
+import re
 import unittest
 from pathlib import Path
 
@@ -399,6 +400,103 @@ class TimeWordTests(unittest.TestCase):
         analysis = self.logic.analyze_input("Mondays")
         self.assertIn("unusual", analysis)
         self.assertIn("6.2.8", analysis["unusual"])
+
+
+class ConstructionTests(unittest.TestCase):
+    """Rules where the shape of the phrase decides the article, not the noun."""
+
+    def setUp(self):
+        self.logic = ArticleLogic()
+
+    def assertRule(self, text, article, rule_ref, name=None):
+        analysis = self.logic.analyze_input(text)
+        self.assertEqual(analysis["mode"], "lookup", f"{text!r} fell through")
+        self.assertEqual(analysis["result"]["article"], article, text)
+        self.assertEqual(analysis["result"]["rule_ref"], rule_ref, text)
+        if name:
+            self.assertEqual(analysis["source"], "construction:" + name, text)
+
+    def test_next_last_with_time_expressions(self):
+        self.assertRule("next week", "no article", "7.11", "next_last_time_word")
+        self.assertRule("last summer", "no article", "7.11", "next_last_time_word")
+        self.assertRule("next Tuesday", "no article", "7.11", "next_last_time_word")
+
+    def test_next_last_as_ordinary_adjectives(self):
+        """`the next bus` is 2.4.4, not the 7.11 time rule."""
+        self.assertRule("the next bus", "the", "2.4.4", "next_last_adjective")
+        self.assertRule("the last chocolate", "the", "2.4.4", "next_last_adjective")
+
+    def test_in_the_next_changes_the_meaning(self):
+        self.assertRule("in the next year", "the", "7.11", "in_the_next_last")
+
+    def test_next_time_allows_either(self):
+        self.assertRule("next time", "either the or no article", "7.11")
+
+    def test_ordinals(self):
+        self.assertRule("second prize", "no article", "7.12", "ordinal_prize")
+        self.assertRule("first place", "no article", "7.12", "ordinal_prize")
+        self.assertRule("the first dress", "the", "7.12", "ordinal_noun")
+        self.assertRule("a second cup of coffee", "a / an", "7.12", "a_ordinal_one_more")
+
+    def test_comparative_pairs(self):
+        self.assertRule("The sunnier it is, the happier I am", "the", "7.13")
+        self.assertRule("The more work you do, the better your result", "the", "7.13")
+
+    def test_most_and_the_most(self):
+        self.assertRule("Most people like chocolate", "no article", "7.8", "most_noun")
+        self.assertRule("Most of the people in the class", "no article", "7.8", "most_of_the")
+        self.assertRule("the most intelligent student", "the", "7.8", "the_most")
+
+    def test_most_is_not_a_blocked_slot(self):
+        """7.8 gives `most` its own rule, so it must not be a determiner."""
+        self.assertNotIn("most", DATA["determiners"]["groups"]["quantifier"])
+
+    def test_bare_few_and_little(self):
+        self.assertRule("few problems", "no article", "7.7", "bare_few_little")
+        self.assertRule("little money", "no article", "7.7", "bare_few_little")
+        # `a few` keeps its own entry and its own meaning
+        self.assertEqual(self.logic.analyze_input("a few")["result"]["article"], "a / an")
+
+    def test_a_an_or_one(self):
+        self.assertRule("one of the students", "one", "7.9.1", "one_of_the")
+        self.assertRule("a hundred years old", "a / an", "7.9.1", "a_with_large_numbers")
+
+    def test_half(self):
+        self.assertRule("half an hour", "no article", "7.9.2", "half_zero")
+        self.assertRule("half past four", "no article", "7.9.2", "half_zero")
+        self.assertRule("two and a half hours", "a / an", "7.9.2", "and_a_half")
+
+    def test_body_parts_after_certain_verbs(self):
+        self.assertRule("She touched him on the arm", "the", "4.7")
+        self.assertRule("The criminal shot the policeman in the leg", "the", "4.7")
+
+    def test_peoples_names(self):
+        self.assertRule("the Smiths", "the", "9.4.2", "family_surname")
+        self.assertRule("A Mr Thompson called for you", "a / an", "9.4.3", "unknown_person")
+        self.assertRule("Mr Brown", "no article", "9.4.1", "titled_name")
+
+    def test_an_incidental_construction_does_not_hijack_the_answer(self):
+        """`last year` inside a sentence about a country must not win.
+
+        Constructions run in two passes: whole-input matches first, loose
+        matches only after the lexical gates.
+        """
+        analysis = self.logic.analyze_input("They moved to the United Kingdom last year")
+        self.assertEqual(analysis["focus_noun"], "united kingdom")
+        self.assertEqual(analysis["source"], "lookup")
+
+        analysis = self.logic.analyze_input("I listened to the radio last week")
+        self.assertEqual(analysis["source"], "lookup")
+
+    def test_every_construction_is_well_formed(self):
+        seen = set()
+        for rule in DATA["constructions"]:
+            self.assertNotIn(rule["name"], seen, "duplicate construction name")
+            seen.add(rule["name"])
+            self.assertIn(rule["rule_ref"], DATA["source_sections"], rule["name"])
+            self.assertTrue(rule["explanation"], rule["name"])
+            self.assertTrue(rule["examples"], rule["name"])
+            re.compile(rule["regex"])  # must be a valid pattern
 
 
 class TreeIntegrityTests(unittest.TestCase):

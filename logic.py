@@ -9,6 +9,7 @@ import string
 # Import the data structures from our rules file
 from rules import (
     CATEGORIES,
+    CONSTRUCTIONS,
     DECISION_TREE,
     DETERMINER_CONFLICT,
     DETERMINERS,
@@ -310,6 +311,48 @@ class ArticleLogic:
         # rather than changing it (see the sports entries).
         return {"focus_noun": key, "result": entry, "source": "lookup"}
 
+    def check_constructions(self, text, tokens, whole_only):
+        """
+        Patterns where the article follows from the shape of the phrase, not
+        from the noun: `next week`, `second prize`, `the more the better`,
+        `most people`, `half an hour`, `the Smiths`.
+
+        Matched against the tokens joined back together, which keeps a leading
+        `the` or `a` that `_normalize_noun` would strip - several of these rules
+        turn on exactly that word.
+
+        Run in two passes. With ``whole_only`` the match has to cover the entire
+        input, and that pass goes first, ahead of every lexical gate: `last
+        summer` is Part 7.11, not a season. The loose pass runs last, after the
+        lexical gates have had their say, because a construction sitting inside
+        a longer sentence is usually incidental - `They moved to the United
+        Kingdom last year` is a question about the United Kingdom, not about
+        `last year`.
+        """
+        phrase = " ".join(tokens)
+        if not phrase:
+            return None
+
+        for rule in CONSTRUCTIONS:
+            subject = str(text or "") if rule.get("case_sensitive") else phrase
+            flags = 0 if rule.get("case_sensitive") else re.IGNORECASE
+            match = re.search(rule["regex"], subject, flags)
+            if not match:
+                continue
+            covers_everything = match.start() == 0 and match.end() == len(subject.strip())
+            if whole_only != covers_everything:
+                continue
+            result = _result(rule["article"], rule["explanation"], rule["rule_ref"])
+            result["examples"] = rule.get("examples", [])
+            if rule.get("contrast"):
+                result["contrast"] = rule["contrast"]
+            return {
+                "focus_noun": phrase,
+                "result": result,
+                "source": "construction:" + rule["name"],
+            }
+        return None
+
     def check_time_words(self, normalized, tokens):
         """Months, days, holidays, seasons, historical periods, and the
         date / year / decade / century patterns of Part 6.2."""
@@ -442,9 +485,16 @@ class ArticleLogic:
         if not normalized and not tokens:
             return None
 
-        # 0. The article slot may already be taken. A possessive, demonstrative
-        #    or quantifier leaves no room for an article, so this is not a
-        #    zero-article answer - the question does not arise.
+        # 0. Constructions, where the shape of the phrase decides the article
+        #    rather than the noun in it. First, because `next week` must not be
+        #    answered as a season and `most people` is not a blocked slot.
+        construction = self.check_constructions(text, tokens, whole_only=True)
+        if construction:
+            return construction
+
+        # 0.5 The article slot may already be taken. A possessive, demonstrative
+        #     or quantifier leaves no room for an article, so this is not a
+        #     zero-article answer - the question does not arise.
         blocked = self.check_determiner(text)
         if blocked:
             return blocked
@@ -522,6 +572,13 @@ class ArticleLogic:
                 ),
                 "source": "proper_noun",
             }
+
+        # Last: a construction sitting inside a longer sentence. An incidental
+        # match loses to the lexical gates above, which name a specific noun -
+        # `They moved to the United Kingdom last year` is about the country.
+        loose = self.check_constructions(text, tokens, whole_only=False)
+        if loose:
+            return loose
 
         return None
 

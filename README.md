@@ -22,15 +22,24 @@ Type a noun or phrase and the tool normalizes it (trims spaces, drops a leading
 `a/an/the`, strips punctuation) and checks it against the data in
 [`rules_data.json`](rules_data.json), in strict precedence order:
 
-0. **Is the slot already taken?** A possessive, demonstrative or quantifier
+0. **Is this a construction?** Some rules turn on the shape of the phrase
+   rather than the noun in it: `next week` vs `the next bus`, `second prize`,
+   `a second cup of coffee`, `The more you do, the better`, `most people` vs
+   `the most intelligent`, `few problems`, `one of the students`,
+   `half an hour`, `she touched him on the arm`, `the Smiths`,
+   `a Mr Thompson`. These run in two passes — a match covering the whole input
+   goes first, ahead of everything; a match buried in a longer sentence goes
+   **last**, so `They moved to the United Kingdom last year` stays a question
+   about the country rather than about `last year`.
+1. **Is the slot already taken?** A possessive, demonstrative or quantifier
    leaves no room for an article: `my book`, `this book`, `each student`,
    `some water`, `Sarah's car`. The answer is **not** "no article" — the
    question does not arise, so these report `no article needed` and stop.
-1. **Fixed expressions** — `at night`, `by car`, `in the end`, `twice a week`.
+2. **Fixed expressions** — `at night`, `by car`, `in the end`, `twice a week`.
    Set phrases override every rule below them, so they are caught first. Each
    one resolves to a **specific form**, never to "it's memorized, good luck."
-2. **Noun + classifying number** — `Page 42`, `Platform 9`, `Question B`.
-3. **The lookup table** — nouns with fixed or idiosyncratic rules: proper nouns
+3. **Noun + classifying number** — `Page 42`, `Platform 9`, `Question B`.
+4. **The lookup table** — nouns with fixed or idiosyncratic rules: proper nouns
    (`the USA`), abstractions (`music`), systems (`the internet`). Matched on the
    longest phrase found anywhere in your input, so `I listened to the radio`
    finds `radio`.
@@ -50,18 +59,18 @@ Type a noun or phrase and the tool normalizes it (trims spaces, drops a leading
    When a guard fires, the answer is **`it depends`**: the card shows the fixed
    sense, the reading that applies otherwise, and a button into the questions.
    It does not guess.
-4. **Time words** (Part 6.2) — months, days (`Mondays` = every), holidays,
+5. **Time words** (Part 6.2) — months, days (`Mondays` = every), holidays,
    seasons (either `the` or none), historical periods, plus patterns for years
    (`1991`), decades (`the 1960s`, `the eighties`), centuries, dates in both
    orders (`the 22nd of September` vs `November 16th`), and a part of the day
    named with its day (`Wednesday night`).
-5. **Nationality adjectives** — `the French`, `the British`. This is the
+6. **Nationality adjectives** — `the French`, `the British`. This is the
    *the + adjective* construction, so it needs the article in front: bare
    `French` is a language, not a people.
-6. **Languages, meals and sports** (Part 6.1) — productive rules, not word
+7. **Languages, meals and sports** (Part 6.1) — productive rules, not word
    lists, so `Arabic`, `brunch` and `rugby` are covered without being
    enumerated.
-7. **Names in the *the*-taking class** — plural names, `of`-constructions,
+8. **Names in the *the*-taking class** — plural names, `of`-constructions,
    rivers, seas, deserts, ranges, regions, hotels, museums, newspapers. Matched
    conservatively: a keyword only counts inside a capitalised name
    (`the Nile River`, not `a storm crossed the desert`), and an
@@ -167,6 +176,7 @@ together, and no code change is needed to correct a rule or add a phrase.
 | A language, meal or sport | `categories.<name>.words` |
 | A month, day, holiday, season, period | `time_words.groups.<name>.words` |
 | A date / year / decade pattern | `time_words.patterns` |
+| A phrase-shape rule | `constructions` (ordered; first match wins) |
 | When a noun is only fixed in context | that entry's `conditions` |
 | A caveat shown alongside an answer | that entry's `note` |
 | An a/an pronunciation exception | `phonetics` |
@@ -214,21 +224,28 @@ python -m unittest discover -s tests -v
 - languages, meals and sports resolve productively, and `the French` (a people)
   stays distinct from `French` (a language);
 - time words resolve, including both date orders and the decade/century split;
+- every construction cites a real section and carries examples, `next week`
+  stays distinct from `the next bus`, and an incidental match inside a longer
+  sentence does not hijack the answer;
 - context-sensitive nouns defer rather than answer — `I bought a piano`,
   `a lovely dinner`, `the history of art` — while the fixed senses still
   answer, and every condition block actually has a trigger.
 
 ### Known Gaps
 
-Section 6 is now covered: languages, meals and sports as productive rules
-(6.1), and time words (6.2).
+Now covered: Section 6 (languages, meals, sports and time words), and the
+phrase-shape rules — *next/last* (7.11), ordinals (7.12), *most* (7.8),
+*few/little* (7.7), *a/an* vs *one* and *half* (7.9), comparatives (7.13),
+body parts (4.7) and people's names (9.4).
 
-Still missing, though the book has them: existential *there is/are* (2.7),
-exclamations (5.3), newspaper headlines (6.4), unique roles after *elect* /
-*appoint* / *become* (6.5), *next/last* with time expressions (7.11), ordinals
-(7.12), *most* vs *the most* (7.8), *few/a few* and *little/a little* (7.7),
-*a/an* vs *one* (7.9), comparatives (7.13), people's names (*the Smiths*,
-*a Mr Jones*, *a Picasso* — 9.4), and body-part constructions (4.7).
+Still missing, and deliberately so — these depend on sentence structure or
+register rather than on the noun, so they need a different mechanism than Gate
+0: existential *there is/are* (2.7), exclamations (5.3), newspaper headlines
+(6.4), and unique roles after *elect* / *appoint* / *become* (6.5).
+
+The constructions are regexes over the input, which is a real limit: they read
+word order, not grammar. An unusual phrasing can miss one, and a loose match
+inside a long sentence is only ever a fallback.
 
 The lookup table is now conditioned (26 of 49 entries), so context-sensitive
 nouns defer instead of guessing. What remains is coverage rather than

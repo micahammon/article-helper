@@ -4,6 +4,7 @@
     "source": "Seonaid Beckwith, 'A' and 'The' Explained — see docs/",
     "note": "Gate 0 is matched automatically in this order: determiners, fixed_expressions, noun_number, lookup_table, nationality_the, proper_noun_the. The decision_tree is only entered on a Gate 0 miss.",
     "gate_zero_order": [
+      "constructions",
       "determiners",
       "fixed_expressions",
       "noun_number",
@@ -1716,8 +1717,7 @@
         "much",
         "many",
         "several",
-        "enough",
-        "most"
+        "enough"
       ],
       "some_any": [
         "some",
@@ -1728,6 +1728,248 @@
     "some_any_rule_ref": "Appendix 3",
     "possessive_s_note": "A possessive <em>'s</em> fills the same slot: <em>Sarah's car</em>."
   },
+  "constructions": [
+    {
+      "name": "in_the_next_last",
+      "regex": "\\bin the (next|last)\\b.*\\b(week|weekend|month|year|night|morning|afternoon|evening|summer|winter|spring|autumn|fall|term|semester|decade|century|monday|tuesday|wednesday|thursday|friday|saturday|sunday|january|february|march|april|may|june|july|august|september|october|november|december)\\b",
+      "article": "the",
+      "rule_ref": "7.11",
+      "explanation": "<em>In the next / last</em> + a time word takes <em>the</em>, and means a stretch running from now: <em>in the next year</em> is 'between now and a year from now', which is different from <em>next year</em>.",
+      "examples": [
+        "I'll finish my thesis in the next year.",
+        "I lost my credit card sometime in the last week."
+      ]
+    },
+    {
+      "name": "next_last_time",
+      "regex": "\\b(next|last) time\\b",
+      "article": "either the or no article",
+      "rule_ref": "7.11",
+      "explanation": "With <em>next time</em> and <em>last time</em> either <em>the</em> or no article works.",
+      "examples": [
+        "(The) next time we go out, I'll bring my umbrella.",
+        "(The) last time I saw her, she looked really tired."
+      ]
+    },
+    {
+      "name": "next_last_time_word",
+      "regex": "\\b(next|last) (week|weekend|month|year|night|morning|afternoon|evening|summer|winter|spring|autumn|fall|term|semester|decade|century|monday|tuesday|wednesday|thursday|friday|saturday|sunday|january|february|march|april|may|june|july|august|september|october|november|december)\\b",
+      "article": "no article",
+      "rule_ref": "7.11",
+      "explanation": "<em>Next</em> and <em>last</em> with a time expression take no article, even though they usually take <em>the</em> as adjectives (2.4.4).",
+      "examples": [
+        "I'm going to visit my brother next week.",
+        "I saw David last week.",
+        "I went on holiday to Bolivia last summer."
+      ],
+      "contrast": "With an ordinary noun they do take <em>the</em>: <em>We'll get on the next bus</em>, <em>He ate the last chocolate</em>."
+    },
+    {
+      "name": "ordinal_prize",
+      "regex": "\\b(first|second|third|fourth|fifth|sixth|seventh|eighth|ninth|tenth|eleventh|twelfth) (prize|place)\\b",
+      "article": "no article",
+      "rule_ref": "7.12",
+      "explanation": "<em>First prize</em> and <em>second place</em> in races and competitions are fixed expressions and take no article.",
+      "examples": [
+        "Lucy came in first place.",
+        "I won second prize!"
+      ]
+    },
+    {
+      "name": "ordering_ideas",
+      "regex": "^(first|second|third|finally)$",
+      "article": "no article",
+      "rule_ref": "7.12",
+      "explanation": "Used alone to put ideas in order, an ordinal takes no article.",
+      "examples": [
+        "First, you mix the flour. Second, you add the water."
+      ]
+    },
+    {
+      "name": "a_ordinal_one_more",
+      "regex": "\\b(a|an) (first|second|third|fourth|fifth|sixth|seventh|eighth|ninth|tenth|eleventh|twelfth) [a-z]+\\b",
+      "article": "a / an",
+      "rule_ref": "7.12",
+      "explanation": "<em>A/an</em> with an ordinal means 'one more', not 'the Nth one in a row'. Less common than <em>the</em>.",
+      "examples": [
+        "Would you like a second cup of coffee?",
+        "We missed two buses, but thankfully a third bus came along."
+      ]
+    },
+    {
+      "name": "next_last_adjective",
+      "regex": "\\b(next|last) [a-z]+\\b",
+      "article": "the",
+      "rule_ref": "2.4.4",
+      "explanation": "As ordinary adjectives, <em>next</em> and <em>last</em> take <em>the</em>, because they identify which one you mean.",
+      "examples": [
+        "We'll get on the next bus.",
+        "I can't believe he ate the last chocolate!"
+      ],
+      "contrast": "With a time expression they take no article instead: <em>next week</em>, <em>last summer</em>. (7.11)"
+    },
+    {
+      "name": "ordinal_noun",
+      "regex": "\\b(first|second|third|fourth|fifth|sixth|seventh|eighth|ninth|tenth|eleventh|twelfth) [a-z]+\\b",
+      "article": "the",
+      "rule_ref": "7.12",
+      "explanation": "An ordinal takes <em>the</em> when it makes clear which one you mean.",
+      "examples": [
+        "She bought the first dress she found.",
+        "I'd like the third cake on the shelf."
+      ],
+      "contrast": "<em>A/an</em> is possible when it does not identify which one, meaning 'one more': <em>Would you like a second cup of coffee?</em>"
+    },
+    {
+      "name": "comparative_pair",
+      "regex": "^the (more|less|better|worse|[a-z]+er)\\b.*\\bthe (more|less|better|worse|[a-z]+er)\\b.*$",
+      "article": "the",
+      "rule_ref": "7.13",
+      "explanation": "The <em>the + comparative, the + comparative</em> structure says that two things change together. Both halves take <em>the</em>.",
+      "examples": [
+        "The sunnier it is, the happier I am.",
+        "The more work you do, the better your result will be.",
+        "The hotter the curry, the better!"
+      ]
+    },
+    {
+      "name": "the_most",
+      "regex": "\\bthe most\\b",
+      "article": "the",
+      "rule_ref": "7.8",
+      "explanation": "<em>The most</em> is part of a superlative with a long adjective, and implies a comparison (2.4.5). With a noun it means 'the largest number of'.",
+      "examples": [
+        "Lucy is the most intelligent student in the class.",
+        "James has the most books of the people in the class."
+      ]
+    },
+    {
+      "name": "most_of_the",
+      "regex": "\\bmost of the\\b",
+      "article": "no article",
+      "rule_ref": "7.8",
+      "explanation": "<em>Most</em> itself takes no article. <em>Most of the</em> + noun keeps the same meaning as bare <em>most</em>, and needs <em>the</em> because that noun is specific.",
+      "examples": [
+        "Most of the people in the class like cake.",
+        "Most of the cats in London wear collars."
+      ]
+    },
+    {
+      "name": "most_noun",
+      "regex": "^most [a-z]+",
+      "article": "no article",
+      "rule_ref": "7.8",
+      "explanation": "<em>Most</em> before a noun means 'almost all' or 'very many', and takes no article.",
+      "examples": [
+        "Most people like chocolate.",
+        "Most children drink milk."
+      ]
+    },
+    {
+      "name": "bare_few_little",
+      "regex": "^(few|little|lots of)\\b",
+      "article": "no article",
+      "rule_ref": "7.7",
+      "explanation": "Bare <em>few</em> and <em>little</em> take no article and mean 'almost none' - noticeably less than <em>a few</em> and <em>a little</em>, which mean 'a small amount, but enough'.",
+      "examples": [
+        "Sorry, I have little money. I really can't afford to go out.",
+        "There have been few problems with the new system, thankfully!"
+      ],
+      "contrast": "Compare <em>I have a little money, enough for the cinema</em> with <em>I have little money</em>. With something unwanted, the bare form is positive: <em>there is little crime in my town</em>."
+    },
+    {
+      "name": "one_of_the",
+      "regex": "\\bone of (the|these|those)\\b",
+      "article": "one",
+      "rule_ref": "7.9.1",
+      "explanation": "Use <em>one</em>, not <em>a/an</em>, before <em>of the</em>, <em>of these</em> or <em>of those</em>.",
+      "examples": [
+        "One of the students cheated in the exam.",
+        "I think Madonna lives in one of these houses."
+      ]
+    },
+    {
+      "name": "a_with_large_numbers",
+      "regex": "\\b(a|an|one) (hundred|thousand|million|billion|quarter|third)\\b",
+      "article": "a / an",
+      "rule_ref": "7.9.1",
+      "explanation": "<em>A/an</em> is the normal choice before <em>hundred</em>, <em>thousand</em>, <em>million</em> and fractions like <em>third</em> and <em>quarter</em>. <em>One</em> is possible but emphasises the number.",
+      "examples": [
+        "My great-aunt is a hundred years old.",
+        "It cost a thousand pounds.",
+        "About a quarter of the earth's surface is covered by land."
+      ]
+    },
+    {
+      "name": "and_a_half",
+      "regex": "\\b(and a half|a [a-z]+ and a half)\\b",
+      "article": "a / an",
+      "rule_ref": "7.9.2",
+      "explanation": "After a number, <em>half</em> takes <em>a</em>: <em>two and a half hours</em>. The same applies after a word saying how much or how long, and that word must also take <em>a</em>.",
+      "examples": [
+        "It took two and a half hours to get to the airport.",
+        "We were in Paris for a week and a half."
+      ]
+    },
+    {
+      "name": "half_zero",
+      "regex": "\\bhalf (of|past|an|a)\\b",
+      "article": "no article",
+      "rule_ref": "7.9.2",
+      "explanation": "<em>Half</em> normally takes no article of its own, and <em>one</em> is not used with it.",
+      "examples": [
+        "Could I have half of the pizza, please?",
+        "It's half past four.",
+        "We walked along the beach for about half an hour."
+      ]
+    },
+    {
+      "name": "body_part_after_verb",
+      "regex": "\\b(touch|touched|touches|shoot|shot|shoots|take|took|takes|pull|pulled|pulls|hit|hits|kick|kicked|kicks|pat|patted|pats|grab|grabbed|grabs|hold|held|holds|kiss|kissed|kisses|punch|punched|bite|bit)\\b.*\\b(on|in|by) the (head|arm|arms|leg|legs|face|shoulder|shoulders|hand|hands|back|nose|ear|ears|knee|knees|chest|neck|foot|feet|wrist|elbow|cheek|forehead|hair|stomach)\\b",
+      "article": "the",
+      "rule_ref": "4.7",
+      "explanation": "After certain verbs - <em>touch, shoot, take, pull, hit, kick, pat, grab, hold, kiss</em> - a part of the body takes <em>the</em> after a preposition. It is almost a fixed phrase.",
+      "examples": [
+        "She touched him on the arm.",
+        "The criminal shot the policeman in the leg."
+      ],
+      "contrast": "Normally a body part takes a possessive instead: <em>I've hurt my leg</em>, <em>He broke his arm</em>."
+    },
+    {
+      "name": "family_surname",
+      "regex": "^the [A-Z][a-z]+s$",
+      "article": "the",
+      "rule_ref": "9.4.2",
+      "explanation": "<em>The</em> + surname + <em>s</em> means that family.",
+      "examples": [
+        "The Smiths are coming to dinner.",
+        "We've been invited on holiday with the Blacks."
+      ],
+      "case_sensitive": true
+    },
+    {
+      "name": "unknown_person",
+      "regex": "\\b(a|an) (mr|mrs|ms|miss|dr|doctor) [a-z]+\\b",
+      "article": "a / an",
+      "rule_ref": "9.4.3",
+      "explanation": "<em>A/an</em> before a name says you do not know the person, or are uncertain who they are.",
+      "examples": [
+        "A Mr Thompson called for you.",
+        "There's a Jane Green at the door."
+      ]
+    },
+    {
+      "name": "titled_name",
+      "regex": "^(mr|mrs|ms|miss|dr|doctor|professor|president|captain) [a-z]+",
+      "article": "no article",
+      "rule_ref": "9.4.1",
+      "explanation": "People's names take no article, including a title used with the name, and family words like <em>Mum</em> and <em>Grandpa</em>.",
+      "examples": [
+        "This is Mr Brown.",
+        "Aunt Mary and Uncle David have invited us to lunch."
+      ]
+    }
+  ],
   "categories": {
     "languages": {
       "article": "no article",
@@ -2187,6 +2429,10 @@
       "word": "the — or none",
       "cls": "r-fixed"
     },
+    "one": {
+      "word": "one — not a/an",
+      "cls": "r-an"
+    },
     "fixed": {
       "word": "memorized",
       "cls": "r-fixed"
@@ -2593,6 +2839,24 @@
     },
     {
       "p": "in summer"
+    },
+    {
+      "p": "next week"
+    },
+    {
+      "p": "the next bus"
+    },
+    {
+      "p": "second prize"
+    },
+    {
+      "p": "Most people like chocolate"
+    },
+    {
+      "p": "half an hour"
+    },
+    {
+      "p": "the Smiths"
     }
   ]
 }
