@@ -100,6 +100,22 @@ def _infer_focus_noun(tokens):
     return ""
 
 
+#: how long an input can be and still be read as a bare noun phrase
+_NOUN_PHRASE_LIMIT = 4
+
+#: a verb anywhere means the input is a sentence, not a noun phrase
+_VERB_HINTS = {
+    "is", "are", "was", "were", "am", "be", "been", "being", "have", "has",
+    "had", "do", "does", "did", "go", "goes", "went", "like", "likes", "liked",
+    "want", "wants", "need", "needs", "think", "thinks", "said", "say", "says",
+    "saw", "see", "sees", "bought", "buy", "buys", "take", "takes", "took",
+    "get", "gets", "got", "make", "makes", "made", "come", "comes", "came",
+    "play", "plays", "played", "eat", "eats", "ate", "live", "lives", "lived",
+    "work", "works", "worked", "study", "studies", "studied", "speak",
+    "speaks", "spoke", "read", "reads", "write", "writes", "wrote", "gave",
+    "give", "gives", "put", "puts", "know", "knows", "knew", "found", "find",
+}
+
 #: words that end the search for a determiner sitting in front of a noun
 _LOOKBACK_BOUNDARY = {
     "on", "in", "at", "to", "by", "for", "of", "with", "from", "into", "onto",
@@ -339,6 +355,13 @@ class ArticleLogic:
             match = re.search(rule["regex"], subject, flags)
             if not match:
                 continue
+            # Some shapes are too generic to trust over a name the tool already
+            # knows: `the Netherlands` fits "the + capitalised word + s" as
+            # neatly as `the Smiths` does.
+            if rule.get("not_if_known"):
+                normalized = _normalize_noun(text)
+                if normalized in LOOKUP_TABLE or normalized in PROPER_NOUN_THE["named"]:
+                    continue
             covers_everything = match.start() == 0 and match.end() == len(subject.strip())
             # A frame rule describes the shape of the whole clause rather than
             # an adjunct inside it, so it belongs in the first pass even when
@@ -400,9 +423,19 @@ class ArticleLogic:
         Is the article slot already filled? ``my book``, ``this book``,
         ``each student`` and ``some water`` admit no article at all, which is a
         different answer from "no article" - and the tree has no way to say so.
+
+        This only looks at the *first* word, so it can only speak for an input
+        that is a bare noun phrase. In a whole sentence the leading determiner
+        governs the subject, not necessarily the noun being asked about: `My
+        mother is a teacher` was answering "no article needed" about `my
+        mother` when the question is plainly about `a teacher`. So a sentence
+        is left to the other gates.
         """
         tokens = _tokenize_words(text)
         if not tokens:
+            return None
+
+        if len(tokens) > _NOUN_PHRASE_LIMIT or any(t in _VERB_HINTS for t in tokens):
             return None
 
         first = tokens[0]

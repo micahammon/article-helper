@@ -580,7 +580,72 @@ class SentenceFrameTests(unittest.TestCase):
         frames = {r["name"] for r in DATA["constructions"] if r.get("frame")}
         self.assertEqual(frames, {"there_is_singular", "there_are_plural",
                                   "exclamation_what_a", "exclamation_what",
-                                  "unique_role"})
+                                  "unique_role",
+                                  # `most` governs its noun phrase, so it
+                                  # outranks the lexical gates too
+                                  "the_most", "most_of_the", "most_noun"})
+
+
+class LearnerSentenceTests(unittest.TestCase):
+    """Regressions found by tracing real learner sentences (see trace.py).
+
+    All three came from the same blind spot: a gate that works on a bare noun
+    phrase behaving badly once the input is a whole sentence.
+    """
+
+    def setUp(self):
+        self.logic = ArticleLogic()
+
+    def test_a_leading_determiner_does_not_answer_for_a_whole_sentence(self):
+        """`My mother is a teacher` is a question about `a teacher`.
+
+        The determiner gate only reads the first word, so on a sentence it was
+        reporting a blocked slot for the subject.
+        """
+        analysis = self.logic.analyze_input("My mother is a teacher.")
+        self.assertNotEqual(analysis.get("source"), "determiner:possessive")
+        self.assertEqual(analysis["mode"], "question")
+
+        analysis = self.logic.analyze_input("I read my book every night")
+        self.assertNotEqual(analysis.get("source"), "determiner:possessive")
+
+    def test_a_bare_noun_phrase_still_blocks(self):
+        for phrase, group in [("my book", "possessive"), ("my new book", "possessive"),
+                              ("each student", "quantifier"), ("those cars", "demonstrative"),
+                              ("some water", "some_any"), ("Sarah's car", "possessive")]:
+            analysis = self.logic.analyze_input(phrase)
+            self.assertEqual(analysis["source"], "determiner:" + group, phrase)
+
+    def test_most_outranks_the_lexical_gates(self):
+        """`The most people think that English is hard` was answered as a language."""
+        analysis = self.logic.analyze_input("The most people think that English is hard.")
+        self.assertEqual(analysis["source"], "construction:the_most")
+        self.assertEqual(analysis["result"]["rule_ref"], "7.8")
+
+    def test_bare_few_matches_mid_sentence(self):
+        """The rule was anchored, so it only fired when `few` started the input."""
+        analysis = self.logic.analyze_input("I have few friends here.")
+        self.assertEqual(analysis["source"], "construction:bare_few_little")
+        self.assertEqual(analysis["result"]["article"], "no article")
+
+    def test_a_known_name_beats_the_family_surname_shape(self):
+        """`the Netherlands` fits "the + capitalised word + s" as neatly as
+        `the Smiths`, and was being answered as a family."""
+        for place in ["the Netherlands", "the Alps", "the Philippines", "the Andes"]:
+            analysis = self.logic.analyze_input(place)
+            self.assertNotEqual(analysis["source"], "construction:family_surname", place)
+            self.assertEqual(analysis["result"]["rule_ref"], "9.2.2", place)
+
+        for family in ["the Smiths", "the Blacks"]:
+            analysis = self.logic.analyze_input(family)
+            self.assertEqual(analysis["source"], "construction:family_surname", family)
+
+    def test_a_few_is_still_the_other_meaning(self):
+        """`a few` must not be swallowed by the unanchored bare-few rule."""
+        for phrase in ["I have a few friends here.", "I have a little money"]:
+            analysis = self.logic.analyze_input(phrase)
+            self.assertEqual(analysis["source"], "fixed_expression", phrase)
+            self.assertEqual(analysis["result"]["article"], "a / an", phrase)
 
 
 class TreeIntegrityTests(unittest.TestCase):

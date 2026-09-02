@@ -1910,7 +1910,8 @@
       "examples": [
         "Lucy is the most intelligent student in the class.",
         "James has the most books of the people in the class."
-      ]
+      ],
+      "frame": true
     },
     {
       "name": "most_of_the",
@@ -1921,7 +1922,8 @@
       "examples": [
         "Most of the people in the class like cake.",
         "Most of the cats in London wear collars."
-      ]
+      ],
+      "frame": true
     },
     {
       "name": "most_noun",
@@ -1932,11 +1934,12 @@
       "examples": [
         "Most people like chocolate.",
         "Most children drink milk."
-      ]
+      ],
+      "frame": true
     },
     {
       "name": "bare_few_little",
-      "regex": "^(few|little|lots of)\\b",
+      "regex": "\\b(few|little|lots of)\\b",
       "article": "no article",
       "rule_ref": "7.7",
       "explanation": "Bare <em>few</em> and <em>little</em> take no article and mean 'almost none' - noticeably less than <em>a few</em> and <em>a little</em>, which mean 'a small amount, but enough'.",
@@ -2014,7 +2017,8 @@
         "The Smiths are coming to dinner.",
         "We've been invited on holiday with the Blacks."
       ],
-      "case_sensitive": true
+      "case_sensitive": true,
+      "not_if_known": true
     },
     {
       "name": "unknown_person",

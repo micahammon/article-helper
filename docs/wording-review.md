@@ -159,11 +159,11 @@ TEXT SHOWN TO THE STUDENT
 
 ==============================================================================
 INPUT   "My mother is a teacher."
-focus   mother is a teacher
+focus   teacher
 
 GATE 0
   miss constructions (whole input + frames)   
-  HIT  determiners (slot already taken)       possessive  <-- ANSWERED HERE
+  miss determiners (slot already taken)       
   miss fixed expressions                      
   miss noun + classifying number              
   miss time words                             
@@ -173,15 +173,12 @@ GATE 0
   miss name in the the-taking class           
   miss constructions (inside a sentence)      
 
-OUTCOME  no article needed
-source   determiner:possessive
+OUTCOME  no Gate 0 match - the learner is asked the questions
 
-TEXT SHOWN TO THE STUDENT
-  headline: no article needed
-  body:   The slot before the noun is already filled. English allows only one
-            determiner there, so an article is neither needed nor possible: *my book*,
-            never *the my book*. This is not a zero-article rule — the question simply
-            does not arise.
+FIRST QUESTION (q2)
+  Is it a proper noun — a name?
+    [ ] Yes
+    [ ] No
 
 ==============================================================================
 INPUT   "I don't like the coffee."
@@ -402,38 +399,34 @@ TEXT SHOWN TO THE STUDENT
 
 ==============================================================================
 INPUT   "The most people think that English is hard."
-focus   english
+focus   the most people think that english is hard
 
 GATE 0
-  miss constructions (whole input + frames)   
+  HIT  constructions (whole input + frames)   the_most  <-- ANSWERED HERE
   miss determiners (slot already taken)       
   miss fixed expressions                      
   miss noun + classifying number              
   miss time words                             
   miss lookup table                           
   miss nationality adjective                  
-  HIT  categories (language / meal / sport)   languages  <-- ANSWERED HERE
+  HIT  categories (language / meal / sport)   languages  (would match, but a gate above answered first)
   miss name in the the-taking class           
-  HIT  constructions (inside a sentence)      the_most  (would match, but a gate above answered first)
+  miss constructions (inside a sentence)      
 
-OUTCOME  — no article —
-source   category:languages
-rule     6.1.1  Languages
+OUTCOME  the
+source   construction:the_most
+rule     7.8  Most and the most
 
 TEXT SHOWN TO THE STUDENT
-  headline: — no article —
-  body:   Languages take no article: *She speaks Japanese*, *They're studying
-            Spanish*.
-            Note that the word *language* itself is an ordinary noun: *the language I
-            speak at home*, *a new language*.
-  unusual:  If the word is used in an unusual way it stops being an exception and the
-  unusual:  ordinary rules apply again: *the French that they speak in Montreal*, *a
-  unusual:  beautiful Spanish*, *the football they play in the USA*. (6.1.4)
-  built:    english
+  headline: the
+  body:   *The most* is part of a superlative with a long adjective, and implies a
+            comparison (2.4.5). With a noun it means 'the largest number of'.
+  examples: Lucy is the most intelligent student in the class. / James has the most books of the people in the class.
+  built:    the the most people think that english is hard
 
 ==============================================================================
 INPUT   "I have few friends here."
-focus   here
+focus   i have few friends here
 
 GATE 0
   miss constructions (whole input + frames)   
@@ -445,14 +438,21 @@ GATE 0
   miss nationality adjective                  
   miss categories (language / meal / sport)   
   miss name in the the-taking class           
-  miss constructions (inside a sentence)      
+  HIT  constructions (inside a sentence)      bare_few_little  <-- ANSWERED HERE
 
-OUTCOME  no Gate 0 match - the learner is asked the questions
+OUTCOME  — no article —
+source   construction:bare_few_little
+rule     7.7  A little, and little, a few and few
 
-FIRST QUESTION (q2)
-  Is it a proper noun — a name?
-    [ ] Yes
-    [ ] No
+TEXT SHOWN TO THE STUDENT
+  headline: — no article —
+  body:   Bare *few* and *little* take no article and mean 'almost none' - noticeably
+            less than *a few* and *a little*, which mean 'a small amount, but enough'.
+  examples: Sorry, I have little money. I really can't afford to go out. / There have been few problems with the new system, thankfully!
+  but:      Compare *I have a little money, enough for the cinema* with *I have little
+  but:      money*. With something unwanted, the bare form is positive: *there is little
+  but:      crime in my town*.
+  built:    i have few friends here
 
 ==============================================================================
 INPUT   "She is the best student in the class."

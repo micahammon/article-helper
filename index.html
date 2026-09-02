@@ -495,6 +495,14 @@ function checkConstructions(text, tokens, wholeOnly){
     subject = rule.case_sensitive ? String(text || "") : phrase;
     m = new RegExp(rule.regex, rule.case_sensitive ? "" : "i").exec(subject);
     if(!m) continue;
+    /* too generic to trust over a name the tool already knows: `the
+       Netherlands` fits "the + capitalised word + s" as neatly as `the
+       Smiths` does */
+    if(rule.not_if_known){
+      var known = normalize(text);
+      if(Object.prototype.hasOwnProperty.call(D.lookup_table, known) ||
+         D.proper_noun_the.named.indexOf(known) !== -1) continue;
+    }
     covers = (m.index === 0 && m.index + m[0].length === subject.replace(/^\s+|\s+$/g, "").length);
     /* a frame rule describes the shape of the whole clause rather than an
        adjunct inside it, so it belongs in the first pass even when partial */
@@ -654,9 +662,30 @@ function lookupResult(key, tokens){
           cat:"Gate 0 \u00b7 listed noun", match:key, note:e.note || null};
 }
 
-/* The article slot is already filled. */
+/* how long an input can be and still read as a bare noun phrase, and the verbs
+   that mark it as a sentence instead */
+var NOUN_PHRASE_LIMIT = 4;
+var VERB_HINTS = ["is","are","was","were","am","be","been","being","have","has",
+  "had","do","does","did","go","goes","went","like","likes","liked","want",
+  "wants","need","needs","think","thinks","said","say","says","saw","see",
+  "sees","bought","buy","buys","take","takes","took","get","gets","got","make",
+  "makes","made","come","comes","came","play","plays","played","eat","eats",
+  "ate","live","lives","lived","work","works","worked","study","studies",
+  "studied","speak","speaks","spoke","read","reads","write","writes","wrote",
+  "gave","give","gives","put","puts","know","knows","knew","found","find"];
+
+/* The article slot is already filled.
+
+   Only looks at the first word, so it can only speak for a bare noun phrase.
+   In a sentence the leading determiner governs the subject, not necessarily
+   the noun being asked about - "My mother is a teacher" was answering about
+   `my mother` when the question is plainly about `a teacher`. */
 function checkDeterminer(text, tokens){
   if(!tokens.length) return null;
+  if(tokens.length > NOUN_PHRASE_LIMIT) return null;
+  for(var v = 0; v < tokens.length; v++){
+    if(VERB_HINTS.indexOf(tokens[v]) !== -1) return null;
+  }
   var det = D.determiners, first = tokens[0], group, words;
 
   for(group in det.groups){
