@@ -9,11 +9,13 @@ import string
 # Import the data structures from our rules file
 from rules import (
     DECISION_TREE,
+    DETERMINERS,
     ENTRY_NODE,
     FIXED_EXPRESSIONS,
     LOOKUP_TABLE,
     NATIONALITY_THE,
     PATTERNS,
+    PHONETICS,
     PROPER_NOUN_THE,
 )
 
@@ -98,6 +100,64 @@ def _result(article, explanation, rule_ref):
     return {"article": article, "explanation": explanation, "rule_ref": rule_ref}
 
 
+def _cased_tokens(text):
+    """Word tokens with their original capitalisation preserved."""
+    if text is None:
+        return []
+    return WORD_PATTERN.findall(str(text))
+
+
+def _is_capitalised(token):
+    return bool(token) and token[0].isupper()
+
+
+def choose_a_or_an(word):
+    """
+    Pick ``a`` or ``an`` by the sound the word starts with, not the letter.
+
+    Spelling alone gives "an university" and "a hour"; the rules and exception
+    lists live in PHONETICS so they can be corrected without touching code.
+    """
+    if not word:
+        return "a"
+
+    raw = str(word).strip()
+    bare = raw.strip(string.punctuation)
+    if not bare:
+        return "a"
+    low = bare.lower()
+
+    # An acronym pronounced as a word follows the word, not its letters.
+    if low in PHONETICS["word_acronyms"]["words"]:
+        return "an" if low[0] in "aeiou" else "a"
+
+    # Read as letters when it opens with a run of capitals ("MBA", "FBI"), or
+    # with a single capital that is not the start of an ordinary word ("X-ray").
+    leading_caps = re.match(r"^[A-Z]+", bare)
+    if leading_caps:
+        run = leading_caps.group(0)
+        rest = bare[len(run):]
+        if len(run) > 1 or not rest[:1].islower():
+            vowel_letters = PHONETICS["initialisms"]["vowel_sounding_letters"]
+            return "an" if run[0] in vowel_letters else "a"
+
+    consonant_sound = PHONETICS["vowel_letter_consonant_sound"]
+    if low in consonant_sound["words"]:
+        return consonant_sound["article"]
+    for prefix in consonant_sound["prefixes"]:
+        if low.startswith(prefix):
+            return consonant_sound["article"]
+
+    vowel_sound = PHONETICS["consonant_letter_vowel_sound"]
+    if low in vowel_sound["words"]:
+        return vowel_sound["article"]
+    for prefix in vowel_sound["prefixes"]:
+        if low.startswith(prefix):
+            return vowel_sound["article"]
+
+    return "an" if low[0] in "aeiou" else "a"
+
+
 class ArticleLogic:
     """
     Manages the logic flow for determining the correct English article.
@@ -126,6 +186,87 @@ class ArticleLogic:
 
         return LOOKUP_TABLE.get(normalized)
 
+    def check_determiner(self, text):
+        """
+        Is the article slot already filled? ``my book``, ``this book``,
+        ``each student`` and ``some water`` admit no article at all, which is a
+        different answer from "no article" - and the tree has no way to say so.
+        """
+        tokens = _tokenize_words(text)
+        if not tokens:
+            return None
+
+        first = tokens[0]
+        for group, words in DETERMINERS["groups"].items():
+            if first in words:
+                ref = (DETERMINERS["some_any_rule_ref"]
+                       if group == "some_any" else DETERMINERS["rule_ref"])
+                return {
+                    "focus_noun": " ".join(tokens[1:]) or first,
+                    "result": _result(DETERMINERS["article"],
+                                      DETERMINERS["explanation"], ref),
+                    "source": "determiner:" + group,
+                }
+
+        # A possessive 's fills the same slot: "Sarah's car".
+        if re.match(r"^\s*\S+['’]s\s+\S+", str(text or "")):
+            return {
+                "focus_noun": " ".join(tokens[1:]) or tokens[0],
+                "result": _result(DETERMINERS["article"],
+                                  DETERMINERS["explanation"], DETERMINERS["rule_ref"]),
+                "source": "determiner:possessive",
+            }
+
+        return None
+
+    def _is_the_taking_name(self, text, normalized, tokens):
+        """
+        A the-taking name, checked conservatively.
+
+        The previous version matched a bare keyword anywhere in the input, so
+        "We booked a hotel room" and "A storm crossed the desert" both came back
+        as proper names, and any capitalised sentence containing "of" matched
+        too ("I drank a cup of coffee"). A keyword now only counts inside a
+        capitalised name, and an of-construction needs a capital on each side.
+        """
+        named = PROPER_NOUN_THE["named"]
+        if normalized in named:
+            return True
+
+        cased = _cased_tokens(text)
+        lowered = [t.lower() for t in cased]
+
+        # A listed name, but only where it is actually capitalised.
+        for index, token in enumerate(lowered):
+            if token in named and _is_capitalised(cased[index]):
+                return True
+
+        # A keyword only counts as part of a capitalised name: "the Nile River",
+        # "the Red Sea" - not "a storm crossed the desert".
+        for index, token in enumerate(lowered):
+            if token not in PROPER_NOUN_THE["keywords"]:
+                continue
+            if not _is_capitalised(cased[index]):
+                continue
+            neighbours = []
+            if index > 0:
+                neighbours.append(cased[index - 1])
+            if index + 1 < len(cased):
+                neighbours.append(cased[index + 1])
+            if any(_is_capitalised(n) for n in neighbours):
+                return True
+
+        # An of-construction needs a capitalised word on each side:
+        # "the Republic of Ireland", not "a cup of coffee".
+        if PROPER_NOUN_THE.get("contains_of"):
+            for index, token in enumerate(lowered):
+                if token != "of" or index == 0 or index + 1 >= len(cased):
+                    continue
+                if _is_capitalised(cased[index - 1]) and _is_capitalised(cased[index + 1]):
+                    return True
+
+        return False
+
     def check_gate_zero(self, text):
         """
         Gate 0: everything that can be decided from the noun alone, before any
@@ -138,6 +279,13 @@ class ArticleLogic:
         tokens = _tokenize_words(text)
         if not normalized and not tokens:
             return None
+
+        # 0. The article slot may already be taken. A possessive, demonstrative
+        #    or quantifier leaves no room for an article, so this is not a
+        #    zero-article answer - the question does not arise.
+        blocked = self.check_determiner(text)
+        if blocked:
+            return blocked
 
         # 1. Fixed expressions outrank every rule below them.
         match = _find_phrase(tokens, FIXED_EXPRESSIONS)
@@ -188,15 +336,7 @@ class ArticleLogic:
             }
 
         # 5. Names in the the-taking class.
-        token_set = set(tokens)
-        hit = normalized in PROPER_NOUN_THE["named"]
-        if not hit:
-            hit = bool(token_set.intersection(PROPER_NOUN_THE["named"]))
-        if not hit:
-            hit = bool(token_set.intersection(PROPER_NOUN_THE["keywords"]))
-        if not hit and PROPER_NOUN_THE.get("contains_of"):
-            hit = "of" in token_set and any(char.isupper() for char in str(text))
-        if hit:
+        if self._is_the_taking_name(text, normalized, tokens):
             return {
                 "focus_noun": normalized,
                 "result": _result(

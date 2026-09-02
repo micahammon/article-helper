@@ -72,6 +72,9 @@ LOOKUP_TABLE = _rules_data["lookup_table"]
 FIXED_EXPRESSIONS = _rules_data["fixed_expressions"]
 PROPER_NOUN_THE = _rules_data["proper_noun_the"]
 NATIONALITY_THE = _rules_data["nationality_the"]
+DETERMINERS = _rules_data["determiners"]
+PHONETICS = _rules_data["phonetics"]
+SOURCE_SECTIONS = _rules_data["source_sections"]
 PATTERNS = _rules_data["patterns"]
 FORM_LABELS = _rules_data["form_labels"]
 ENTRY_NODE = _rules_data.get("meta", {}).get("entry_node", "q2")
@@ -82,6 +85,9 @@ __all__ = [
     "FIXED_EXPRESSIONS",
     "PROPER_NOUN_THE",
     "NATIONALITY_THE",
+    "DETERMINERS",
+    "PHONETICS",
+    "SOURCE_SECTIONS",
     "PATTERNS",
     "FORM_LABELS",
     "ENTRY_NODE",

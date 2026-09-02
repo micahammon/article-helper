@@ -2,7 +2,150 @@
   "meta": {
     "entry_node": "q2",
     "source": "Seonaid Beckwith, 'A' and 'The' Explained — see docs/",
-    "note": "Gate 0 (fixed_expressions, lookup_table, proper_noun_the, nationality_the, patterns) is matched automatically. The decision_tree is only entered on a Gate 0 miss."
+    "note": "Gate 0 is matched automatically in this order: determiners, fixed_expressions, noun_number, lookup_table, nationality_the, proper_noun_the. The decision_tree is only entered on a Gate 0 miss.",
+    "gate_zero_order": [
+      "determiners",
+      "fixed_expressions",
+      "noun_number",
+      "lookup_table",
+      "nationality_the",
+      "proper_noun_the"
+    ]
+  },
+  "source_sections": {
+    "2": "Known And Unknown",
+    "2.1": "Explanation",
+    "2.1.1": "Particular and general",
+    "2.1.2": "Known and unknown",
+    "2.2": "The listener's surroundings",
+    "2.3": "Larger situation / general knowledge / unique things",
+    "2.4": "Information in the rest of the sentence",
+    "2.4.1": "Relative clauses",
+    "2.4.2": "Prepositional phrases",
+    "2.4.3": "Of-phrases",
+    "2.4.4": "Certain adjectives",
+    "2.4.5": "Superlatives",
+    "2.5": "Something we've already talked about",
+    "2.6": "We've talked about something connected",
+    "2.7": "There is / there are",
+    "3": "Specific And General",
+    "3.1": "Using 'no article' + plural / uncountable nouns to generalise",
+    "3.2": "Difficulties with choosing specific or general",
+    "3.2.1": "Pre- and post-modification",
+    "3.3": "Using a/an + singular countable nouns to generalise",
+    "3.4": "The with singular countable nouns to talk about groups of people",
+    "3.5": "The with adjectives to talk about groups of people",
+    "3.6": "Using the to generalise about nationalities",
+    "4": "Using The To Talk About Abstract Ideas",
+    "4.1": "The with entertainment and recreation",
+    "4.10": "The with geographical expressions",
+    "4.11": "The with weather",
+    "4.12": "The with certain time words",
+    "4.13": "The with grammatical expressions",
+    "4.14": "Other words with the",
+    "4.15": "Words which are not like this",
+    "4.2": "The with shops and other businesses",
+    "4.3": "The with musical instruments",
+    "4.4": "The with transport",
+    "4.5": "The with communication and media",
+    "4.6": "The with inventions",
+    "4.7": "The with parts of the body",
+    "4.8": "The with plants and animals",
+    "4.9": "The with dances",
+    "5": "Using 'A/An' To Talk About Members Of Categories",
+    "5.1": "Explanation",
+    "5.1.1": "Using one member of a category to generalise",
+    "5.1.2": "Using one member of a category to mean 'it doesn't matter which'",
+    "5.2": "Classifying and describing people or things",
+    "5.3": "Exclamations",
+    "6": "Words That Generally Have 'No Article'",
+    "6.1": "Languages, meals and sports",
+    "6.1.1": "Languages",
+    "6.1.2": "Meals",
+    "6.1.3": "Sports",
+    "6.1.4": "Using these words in an unusual way",
+    "6.2": "Time Words",
+    "6.2.1": "Months",
+    "6.2.2": "Days of the week",
+    "6.2.3": "Holidays and special days",
+    "6.2.4": "Dates",
+    "6.2.5": "Parts of the day",
+    "6.2.6": "Seasons",
+    "6.2.7": "Years, decades, centuries and historical periods",
+    "6.2.8": "Using these words in an unusual way",
+    "6.3": "Nouns followed by a classifying letter or number",
+    "6.4": "Newspaper headlines",
+    "6.5": "Unique roles",
+    "6.6": "Fact is",
+    "7": "Special Cases And Difficulties",
+    "7.1": "Noun adjuncts",
+    "7.10": "Using a/an instead of per",
+    "7.11": "Next and last with time expressions",
+    "7.12": "First / second / third",
+    "7.13": "The with comparatives",
+    "7.2": "Using a/an with uncountable nouns",
+    "7.3": "Institutions (church, university, school etc.)",
+    "7.4": "Bed / home / work / town",
+    "7.4.1": "Bed",
+    "7.4.2": "Home",
+    "7.4.3": "Work (used as a noun)",
+    "7.4.4": "Town",
+    "7.5": "Illnesses",
+    "7.6": "Acronyms and initialisms",
+    "7.6.1": "Initialisms",
+    "7.6.2": "Acronyms",
+    "7.7": "A little, and little, a few and few",
+    "7.8": "Most and the most",
+    "7.9": "A/an or one?",
+    "7.9.1": "Choosing a/an or one",
+    "7.9.2": "A/an and one with half",
+    "8": "Idioms And Fixed Expressions",
+    "8.1": "Prepositional phrases",
+    "8.2": "Idioms",
+    "8.3": "Parallel structures",
+    "9": "Proper Nouns",
+    "9.1": "Hints about proper nouns",
+    "9.2": "Geographical names",
+    "9.2.1": "'No article' (geographical names)",
+    "9.2.2": "The (geographical names)",
+    "9.3": "Places in a city",
+    "9.3.1": "'No article' (places in a city)",
+    "9.3.2": "The (places in a city)",
+    "9.3.3": "Either 'no article' or the",
+    "9.4": "People's names",
+    "9.4.1": "'No article' (people's names)",
+    "9.4.2": "The (people's names)",
+    "9.4.3": "A/an (people's names)",
+    "Appendix 1": "Pronunciation",
+    "Appendix 2": "Countable and uncountable nouns",
+    "Appendix 3": "Some / Any / 'No article'"
+  },
+  "lookup_ref_corrections": {
+    "netherlands": {
+      "was": "9.2.1",
+      "now": "9.2.2",
+      "why": "9.2.1 is the 'No article' subsection; a the-taking name belongs to 9.2.2."
+    },
+    "philippines": {
+      "was": "9.2.1",
+      "now": "9.2.2",
+      "why": "9.2.1 is the 'No article' subsection; a the-taking name belongs to 9.2.2."
+    },
+    "the hague": {
+      "was": "9.2.1",
+      "now": "9.2.2",
+      "why": "9.2.1 is the 'No article' subsection; a the-taking name belongs to 9.2.2."
+    },
+    "united kingdom": {
+      "was": "9.2.1",
+      "now": "9.2.2",
+      "why": "9.2.1 is the 'No article' subsection; a the-taking name belongs to 9.2.2."
+    },
+    "usa": {
+      "was": "9.2.1",
+      "now": "9.2.2",
+      "why": "9.2.1 is the 'No article' subsection; a the-taking name belongs to 9.2.2."
+    }
   },
   "lookup_table": {
     "cinema": {
@@ -183,27 +326,27 @@
     "usa": {
       "article": "the",
       "explanation": "Plural proper nouns like 'the United States of America' take 'the'.",
-      "rule_ref": "9.2.1"
+      "rule_ref": "9.2.2"
     },
     "united kingdom": {
       "article": "the",
       "explanation": "Proper nouns signifying a collection of states (kingdom, republic) take 'the'.",
-      "rule_ref": "9.2.1"
+      "rule_ref": "9.2.2"
     },
     "netherlands": {
       "article": "the",
       "explanation": "Plural proper nouns like 'the Netherlands' take 'the'.",
-      "rule_ref": "9.2.1"
+      "rule_ref": "9.2.2"
     },
     "philippines": {
       "article": "the",
       "explanation": "Plural proper nouns like 'the Philippines' take 'the'.",
-      "rule_ref": "9.2.1"
+      "rule_ref": "9.2.2"
     },
     "the hague": {
       "article": "the",
       "explanation": "'The Hague' is an exception where 'The' is part of the city's official name.",
-      "rule_ref": "9.2.1"
+      "rule_ref": "9.2.2"
     },
     "nile river": {
       "article": "the",
@@ -255,571 +398,685 @@
     "go to school": {
       "article": "no article",
       "group": "zero",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+      "rule_ref": "7.3",
+      "explanation": "An institution named for its activity rather than its building takes no article: <em>at school</em> means studying, <em>at the school</em> means standing in the building."
     },
     "at school": {
       "article": "no article",
       "group": "zero",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+      "rule_ref": "7.3",
+      "explanation": "An institution named for its activity rather than its building takes no article: <em>at school</em> means studying, <em>at the school</em> means standing in the building."
     },
     "to school": {
       "article": "no article",
       "group": "zero",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+      "rule_ref": "7.3",
+      "explanation": "An institution named for its activity rather than its building takes no article: <em>at school</em> means studying, <em>at the school</em> means standing in the building."
     },
     "in school": {
       "article": "no article",
       "group": "zero",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+      "rule_ref": "7.3",
+      "explanation": "An institution named for its activity rather than its building takes no article: <em>at school</em> means studying, <em>at the school</em> means standing in the building."
     },
     "go to church": {
       "article": "no article",
       "group": "zero",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+      "rule_ref": "7.3",
+      "explanation": "An institution named for its activity rather than its building takes no article: <em>at school</em> means studying, <em>at the school</em> means standing in the building."
     },
     "at church": {
       "article": "no article",
       "group": "zero",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+      "rule_ref": "7.3",
+      "explanation": "An institution named for its activity rather than its building takes no article: <em>at school</em> means studying, <em>at the school</em> means standing in the building."
     },
     "to church": {
       "article": "no article",
       "group": "zero",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+      "rule_ref": "7.3",
+      "explanation": "An institution named for its activity rather than its building takes no article: <em>at school</em> means studying, <em>at the school</em> means standing in the building."
     },
     "in class": {
       "article": "no article",
       "group": "zero",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+      "rule_ref": "7.3",
+      "explanation": "An institution named for its activity rather than its building takes no article: <em>at school</em> means studying, <em>at the school</em> means standing in the building."
     },
     "to class": {
       "article": "no article",
       "group": "zero",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+      "rule_ref": "7.3",
+      "explanation": "An institution named for its activity rather than its building takes no article: <em>at school</em> means studying, <em>at the school</em> means standing in the building."
     },
     "in prison": {
       "article": "no article",
       "group": "zero",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+      "rule_ref": "7.3",
+      "explanation": "An institution named for its activity rather than its building takes no article: <em>at school</em> means studying, <em>at the school</em> means standing in the building."
     },
     "to prison": {
       "article": "no article",
       "group": "zero",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+      "rule_ref": "7.3",
+      "explanation": "An institution named for its activity rather than its building takes no article: <em>at school</em> means studying, <em>at the school</em> means standing in the building."
     },
     "in hospital": {
       "article": "no article",
       "group": "zero",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+      "rule_ref": "7.3",
+      "explanation": "An institution named for its activity rather than its building takes no article: <em>at school</em> means studying, <em>at the school</em> means standing in the building."
     },
     "to hospital": {
       "article": "no article",
       "group": "zero",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+      "rule_ref": "7.3",
+      "explanation": "An institution named for its activity rather than its building takes no article: <em>at school</em> means studying, <em>at the school</em> means standing in the building."
     },
-    "at work": {
+    "at university": {
       "article": "no article",
       "group": "zero",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
-    },
-    "to work": {
-      "article": "no article",
-      "group": "zero",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
-    },
-    "go to work": {
-      "article": "no article",
-      "group": "zero",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
-    },
-    "in bed": {
-      "article": "no article",
-      "group": "zero",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
-    },
-    "to bed": {
-      "article": "no article",
-      "group": "zero",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
-    },
-    "go to bed": {
-      "article": "no article",
-      "group": "zero",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+      "rule_ref": "7.3",
+      "explanation": "An institution named for its activity rather than its building takes no article: <em>at school</em> means studying, <em>at the school</em> means standing in the building."
     },
     "at sea": {
       "article": "no article",
       "group": "zero",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+      "rule_ref": "7.3",
+      "explanation": "An institution named for its activity rather than its building takes no article: <em>at school</em> means studying, <em>at the school</em> means standing in the building."
     },
     "in court": {
       "article": "no article",
       "group": "zero",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+      "rule_ref": "7.3",
+      "explanation": "An institution named for its activity rather than its building takes no article: <em>at school</em> means studying, <em>at the school</em> means standing in the building."
     },
     "to court": {
       "article": "no article",
       "group": "zero",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+      "rule_ref": "7.3",
+      "explanation": "An institution named for its activity rather than its building takes no article: <em>at school</em> means studying, <em>at the school</em> means standing in the building."
+    },
+    "in bed": {
+      "article": "no article",
+      "group": "zero",
+      "rule_ref": "7.4.1",
+      "explanation": "<em>Bed</em> as a state rather than an object: <em>go to bed</em>, <em>in bed</em>. The physical object follows ordinary rules — <em>I bought a bed</em>."
+    },
+    "to bed": {
+      "article": "no article",
+      "group": "zero",
+      "rule_ref": "7.4.1",
+      "explanation": "<em>Bed</em> as a state rather than an object: <em>go to bed</em>, <em>in bed</em>. The physical object follows ordinary rules — <em>I bought a bed</em>."
+    },
+    "go to bed": {
+      "article": "no article",
+      "group": "zero",
+      "rule_ref": "7.4.1",
+      "explanation": "<em>Bed</em> as a state rather than an object: <em>go to bed</em>, <em>in bed</em>. The physical object follows ordinary rules — <em>I bought a bed</em>."
     },
     "at home": {
       "article": "no article",
       "group": "zero",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+      "rule_ref": "7.4.2",
+      "explanation": "<em>Home</em> takes no article in these movement and location phrases."
     },
     "go home": {
       "article": "no article",
       "group": "zero",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+      "rule_ref": "7.4.2",
+      "explanation": "<em>Home</em> takes no article in these movement and location phrases."
     },
-    "by car": {
+    "at work": {
       "article": "no article",
       "group": "zero",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+      "rule_ref": "7.4.3",
+      "explanation": "<em>Work</em> meaning the place of employment: <em>at work</em>, <em>go to work</em>. A particular job or task follows ordinary rules."
     },
-    "by bus": {
+    "to work": {
       "article": "no article",
       "group": "zero",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+      "rule_ref": "7.4.3",
+      "explanation": "<em>Work</em> meaning the place of employment: <em>at work</em>, <em>go to work</em>. A particular job or task follows ordinary rules."
     },
-    "by train": {
+    "go to work": {
       "article": "no article",
       "group": "zero",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+      "rule_ref": "7.4.3",
+      "explanation": "<em>Work</em> meaning the place of employment: <em>at work</em>, <em>go to work</em>. A particular job or task follows ordinary rules."
     },
-    "by plane": {
+    "in town": {
       "article": "no article",
       "group": "zero",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+      "rule_ref": "7.4.4",
+      "explanation": "<em>Town</em> takes no article when it means the nearby town in general."
     },
-    "by bike": {
+    "to town": {
       "article": "no article",
       "group": "zero",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
-    },
-    "by boat": {
-      "article": "no article",
-      "group": "zero",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
-    },
-    "by taxi": {
-      "article": "no article",
-      "group": "zero",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
-    },
-    "on foot": {
-      "article": "no article",
-      "group": "zero",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+      "rule_ref": "7.4.4",
+      "explanation": "<em>Town</em> takes no article when it means the nearby town in general."
     },
     "have breakfast": {
       "article": "no article",
       "group": "zero",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+      "rule_ref": "6.1.2",
+      "explanation": "Meals take no article when named as the meal itself: <em>have lunch</em>, <em>for dinner</em>. A particular occasion can take one — <em>a dinner to remember</em>."
     },
     "have lunch": {
       "article": "no article",
       "group": "zero",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+      "rule_ref": "6.1.2",
+      "explanation": "Meals take no article when named as the meal itself: <em>have lunch</em>, <em>for dinner</em>. A particular occasion can take one — <em>a dinner to remember</em>."
     },
     "have dinner": {
       "article": "no article",
       "group": "zero",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+      "rule_ref": "6.1.2",
+      "explanation": "Meals take no article when named as the meal itself: <em>have lunch</em>, <em>for dinner</em>. A particular occasion can take one — <em>a dinner to remember</em>."
     },
-    "at night": {
+    "for breakfast": {
       "article": "no article",
       "group": "zero",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+      "rule_ref": "6.1.2",
+      "explanation": "Meals take no article when named as the meal itself: <em>have lunch</em>, <em>for dinner</em>. A particular occasion can take one — <em>a dinner to remember</em>."
     },
-    "at noon": {
+    "for lunch": {
       "article": "no article",
       "group": "zero",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+      "rule_ref": "6.1.2",
+      "explanation": "Meals take no article when named as the meal itself: <em>have lunch</em>, <em>for dinner</em>. A particular occasion can take one — <em>a dinner to remember</em>."
     },
-    "at midnight": {
+    "for dinner": {
       "article": "no article",
       "group": "zero",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
-    },
-    "at dawn": {
-      "article": "no article",
-      "group": "zero",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
-    },
-    "at dusk": {
-      "article": "no article",
-      "group": "zero",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+      "rule_ref": "6.1.2",
+      "explanation": "Meals take no article when named as the meal itself: <em>have lunch</em>, <em>for dinner</em>. A particular occasion can take one — <em>a dinner to remember</em>."
     },
     "on monday": {
       "article": "no article",
       "group": "zero",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+      "rule_ref": "6.2.2",
+      "explanation": "Days of the week take no article after <em>on</em>."
     },
     "on tuesday": {
       "article": "no article",
       "group": "zero",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+      "rule_ref": "6.2.2",
+      "explanation": "Days of the week take no article after <em>on</em>."
     },
     "on wednesday": {
       "article": "no article",
       "group": "zero",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+      "rule_ref": "6.2.2",
+      "explanation": "Days of the week take no article after <em>on</em>."
     },
     "on thursday": {
       "article": "no article",
       "group": "zero",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+      "rule_ref": "6.2.2",
+      "explanation": "Days of the week take no article after <em>on</em>."
     },
     "on friday": {
       "article": "no article",
       "group": "zero",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+      "rule_ref": "6.2.2",
+      "explanation": "Days of the week take no article after <em>on</em>."
     },
     "on saturday": {
       "article": "no article",
       "group": "zero",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+      "rule_ref": "6.2.2",
+      "explanation": "Days of the week take no article after <em>on</em>."
     },
     "on sunday": {
       "article": "no article",
       "group": "zero",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+      "rule_ref": "6.2.2",
+      "explanation": "Days of the week take no article after <em>on</em>."
     },
-    "in trouble": {
+    "at night": {
       "article": "no article",
       "group": "zero",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+      "rule_ref": "6.2.5",
+      "explanation": "Parts of the day: <em>at night</em> takes no article, while <em>in the morning</em> takes <em>the</em>. The split is arbitrary and has to be learned."
     },
-    "on time": {
+    "at noon": {
       "article": "no article",
       "group": "zero",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+      "rule_ref": "6.2.5",
+      "explanation": "Parts of the day: <em>at night</em> takes no article, while <em>in the morning</em> takes <em>the</em>. The split is arbitrary and has to be learned."
     },
-    "at last": {
+    "at midnight": {
       "article": "no article",
       "group": "zero",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+      "rule_ref": "6.2.5",
+      "explanation": "Parts of the day: <em>at night</em> takes no article, while <em>in the morning</em> takes <em>the</em>. The split is arbitrary and has to be learned."
     },
-    "take place": {
+    "at dawn": {
       "article": "no article",
       "group": "zero",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+      "rule_ref": "6.2.5",
+      "explanation": "Parts of the day: <em>at night</em> takes no article, while <em>in the morning</em> takes <em>the</em>. The split is arbitrary and has to be learned."
     },
-    "hand in hand": {
+    "at dusk": {
       "article": "no article",
       "group": "zero",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+      "rule_ref": "6.2.5",
+      "explanation": "Parts of the day: <em>at night</em> takes no article, while <em>in the morning</em> takes <em>the</em>. The split is arbitrary and has to be learned."
     },
-    "side by side": {
+    "by car": {
       "article": "no article",
       "group": "zero",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+      "rule_ref": "8.1",
+      "explanation": "A prepositional phrase that behaves as a fixed unit."
     },
-    "at first": {
+    "by bus": {
       "article": "no article",
       "group": "zero",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+      "rule_ref": "8.1",
+      "explanation": "A prepositional phrase that behaves as a fixed unit."
+    },
+    "by train": {
+      "article": "no article",
+      "group": "zero",
+      "rule_ref": "8.1",
+      "explanation": "A prepositional phrase that behaves as a fixed unit."
+    },
+    "by plane": {
+      "article": "no article",
+      "group": "zero",
+      "rule_ref": "8.1",
+      "explanation": "A prepositional phrase that behaves as a fixed unit."
+    },
+    "by bike": {
+      "article": "no article",
+      "group": "zero",
+      "rule_ref": "8.1",
+      "explanation": "A prepositional phrase that behaves as a fixed unit."
+    },
+    "by boat": {
+      "article": "no article",
+      "group": "zero",
+      "rule_ref": "8.1",
+      "explanation": "A prepositional phrase that behaves as a fixed unit."
+    },
+    "by taxi": {
+      "article": "no article",
+      "group": "zero",
+      "rule_ref": "8.1",
+      "explanation": "A prepositional phrase that behaves as a fixed unit."
+    },
+    "on foot": {
+      "article": "no article",
+      "group": "zero",
+      "rule_ref": "8.1",
+      "explanation": "A prepositional phrase that behaves as a fixed unit."
     },
     "by heart": {
       "article": "no article",
       "group": "zero",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+      "rule_ref": "8.1",
+      "explanation": "A prepositional phrase that behaves as a fixed unit."
     },
-    "in fact": {
+    "on time": {
       "article": "no article",
       "group": "zero",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+      "rule_ref": "8.1",
+      "explanation": "A prepositional phrase that behaves as a fixed unit."
+    },
+    "in time": {
+      "article": "no article",
+      "group": "zero",
+      "rule_ref": "8.1",
+      "explanation": "A prepositional phrase that behaves as a fixed unit."
     },
     "on purpose": {
       "article": "no article",
       "group": "zero",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+      "rule_ref": "8.1",
+      "explanation": "A prepositional phrase that behaves as a fixed unit."
+    },
+    "in trouble": {
+      "article": "no article",
+      "group": "zero",
+      "rule_ref": "8.1",
+      "explanation": "A prepositional phrase that behaves as a fixed unit."
     },
     "in charge of": {
       "article": "no article",
       "group": "zero",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+      "rule_ref": "8.1",
+      "explanation": "A prepositional phrase that behaves as a fixed unit."
     },
     "out of date": {
       "article": "no article",
       "group": "zero",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+      "rule_ref": "8.1",
+      "explanation": "A prepositional phrase that behaves as a fixed unit."
     },
-    "during the week": {
-      "article": "the",
-      "group": "the",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the <em>the</em> group. The article is part of the expression, not a live choice."
+    "in fact": {
+      "article": "no article",
+      "group": "zero",
+      "rule_ref": "8.1",
+      "explanation": "A prepositional phrase that behaves as a fixed unit."
     },
-    "during the day": {
-      "article": "the",
-      "group": "the",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the <em>the</em> group. The article is part of the expression, not a live choice."
+    "at first": {
+      "article": "no article",
+      "group": "zero",
+      "rule_ref": "8.1",
+      "explanation": "A prepositional phrase that behaves as a fixed unit."
+    },
+    "at last": {
+      "article": "no article",
+      "group": "zero",
+      "rule_ref": "8.1",
+      "explanation": "A prepositional phrase that behaves as a fixed unit."
+    },
+    "by mistake": {
+      "article": "no article",
+      "group": "zero",
+      "rule_ref": "8.1",
+      "explanation": "A prepositional phrase that behaves as a fixed unit."
+    },
+    "in danger": {
+      "article": "no article",
+      "group": "zero",
+      "rule_ref": "8.1",
+      "explanation": "A prepositional phrase that behaves as a fixed unit."
+    },
+    "take place": {
+      "article": "no article",
+      "group": "zero",
+      "rule_ref": "8.2",
+      "explanation": "An idiom. The article is part of the expression, not a live choice — there is no rule to recover here."
+    },
+    "catch fire": {
+      "article": "no article",
+      "group": "zero",
+      "rule_ref": "8.2",
+      "explanation": "An idiom. The article is part of the expression, not a live choice — there is no rule to recover here."
+    },
+    "make progress": {
+      "article": "no article",
+      "group": "zero",
+      "rule_ref": "8.2",
+      "explanation": "An idiom. The article is part of the expression, not a live choice — there is no rule to recover here."
+    },
+    "give way": {
+      "article": "no article",
+      "group": "zero",
+      "rule_ref": "8.2",
+      "explanation": "An idiom. The article is part of the expression, not a live choice — there is no rule to recover here."
+    },
+    "hand in hand": {
+      "article": "no article",
+      "group": "zero",
+      "rule_ref": "8.3",
+      "explanation": "A parallel structure. Both nouns drop the article: <em>hand in hand</em>, <em>side by side</em>."
+    },
+    "side by side": {
+      "article": "no article",
+      "group": "zero",
+      "rule_ref": "8.3",
+      "explanation": "A parallel structure. Both nouns drop the article: <em>hand in hand</em>, <em>side by side</em>."
+    },
+    "face to face": {
+      "article": "no article",
+      "group": "zero",
+      "rule_ref": "8.3",
+      "explanation": "A parallel structure. Both nouns drop the article: <em>hand in hand</em>, <em>side by side</em>."
+    },
+    "from beginning to end": {
+      "article": "no article",
+      "group": "zero",
+      "rule_ref": "8.3",
+      "explanation": "A parallel structure. Both nouns drop the article: <em>hand in hand</em>, <em>side by side</em>."
+    },
+    "day by day": {
+      "article": "no article",
+      "group": "zero",
+      "rule_ref": "8.3",
+      "explanation": "A parallel structure. Both nouns drop the article: <em>hand in hand</em>, <em>side by side</em>."
+    },
+    "step by step": {
+      "article": "no article",
+      "group": "zero",
+      "rule_ref": "8.3",
+      "explanation": "A parallel structure. Both nouns drop the article: <em>hand in hand</em>, <em>side by side</em>."
+    },
+    "little by little": {
+      "article": "no article",
+      "group": "zero",
+      "rule_ref": "8.3",
+      "explanation": "A parallel structure. Both nouns drop the article: <em>hand in hand</em>, <em>side by side</em>."
     },
     "in the morning": {
       "article": "the",
       "group": "the",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the <em>the</em> group. The article is part of the expression, not a live choice."
+      "rule_ref": "6.2.5",
+      "explanation": "Parts of the day: <em>at night</em> takes no article, while <em>in the morning</em> takes <em>the</em>. The split is arbitrary and has to be learned."
     },
     "in the afternoon": {
       "article": "the",
       "group": "the",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the <em>the</em> group. The article is part of the expression, not a live choice."
+      "rule_ref": "6.2.5",
+      "explanation": "Parts of the day: <em>at night</em> takes no article, while <em>in the morning</em> takes <em>the</em>. The split is arbitrary and has to be learned."
     },
     "in the evening": {
       "article": "the",
       "group": "the",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the <em>the</em> group. The article is part of the expression, not a live choice."
+      "rule_ref": "6.2.5",
+      "explanation": "Parts of the day: <em>at night</em> takes no article, while <em>in the morning</em> takes <em>the</em>. The split is arbitrary and has to be learned."
     },
-    "at the moment": {
+    "during the day": {
       "article": "the",
       "group": "the",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the <em>the</em> group. The article is part of the expression, not a live choice."
+      "rule_ref": "6.2.5",
+      "explanation": "Parts of the day: <em>at night</em> takes no article, while <em>in the morning</em> takes <em>the</em>. The split is arbitrary and has to be learned."
     },
-    "play the piano": {
+    "during the week": {
       "article": "the",
       "group": "the",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the <em>the</em> group. The article is part of the expression, not a live choice."
-    },
-    "play the guitar": {
-      "article": "the",
-      "group": "the",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the <em>the</em> group. The article is part of the expression, not a live choice."
-    },
-    "play the violin": {
-      "article": "the",
-      "group": "the",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the <em>the</em> group. The article is part of the expression, not a live choice."
-    },
-    "on the radio": {
-      "article": "the",
-      "group": "the",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the <em>the</em> group. The article is part of the expression, not a live choice."
-    },
-    "in the end": {
-      "article": "the",
-      "group": "the",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the <em>the</em> group. The article is part of the expression, not a live choice."
-    },
-    "by the way": {
-      "article": "the",
-      "group": "the",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the <em>the</em> group. The article is part of the expression, not a live choice."
-    },
-    "all the time": {
-      "article": "the",
-      "group": "the",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the <em>the</em> group. The article is part of the expression, not a live choice."
-    },
-    "on the whole": {
-      "article": "the",
-      "group": "the",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the <em>the</em> group. The article is part of the expression, not a live choice."
-    },
-    "in the meantime": {
-      "article": "the",
-      "group": "the",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the <em>the</em> group. The article is part of the expression, not a live choice."
-    },
-    "at the same time": {
-      "article": "the",
-      "group": "the",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the <em>the</em> group. The article is part of the expression, not a live choice."
-    },
-    "on the other hand": {
-      "article": "the",
-      "group": "the",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the <em>the</em> group. The article is part of the expression, not a live choice."
+      "rule_ref": "6.2",
+      "explanation": "A time expression with a fixed article."
     },
     "the day after tomorrow": {
       "article": "the",
       "group": "the",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the <em>the</em> group. The article is part of the expression, not a live choice."
+      "rule_ref": "6.2",
+      "explanation": "A time expression with a fixed article."
     },
     "the day before yesterday": {
       "article": "the",
       "group": "the",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the <em>the</em> group. The article is part of the expression, not a live choice."
+      "rule_ref": "6.2",
+      "explanation": "A time expression with a fixed article."
+    },
+    "play the piano": {
+      "article": "the",
+      "group": "the",
+      "rule_ref": "4.3",
+      "explanation": "Musical instruments take <em>the</em> after <em>play</em>."
+    },
+    "play the guitar": {
+      "article": "the",
+      "group": "the",
+      "rule_ref": "4.3",
+      "explanation": "Musical instruments take <em>the</em> after <em>play</em>."
+    },
+    "play the violin": {
+      "article": "the",
+      "group": "the",
+      "rule_ref": "4.3",
+      "explanation": "Musical instruments take <em>the</em> after <em>play</em>."
+    },
+    "on the radio": {
+      "article": "the",
+      "group": "the",
+      "rule_ref": "4.5",
+      "explanation": "Communication and broadcast media take <em>the</em>: <em>on the radio</em>."
+    },
+    "at the moment": {
+      "article": "the",
+      "group": "the",
+      "rule_ref": "8.2",
+      "explanation": "An idiom. The article is part of the expression, not a live choice — there is no rule to recover here."
+    },
+    "in the end": {
+      "article": "the",
+      "group": "the",
+      "rule_ref": "8.2",
+      "explanation": "An idiom. The article is part of the expression, not a live choice — there is no rule to recover here."
+    },
+    "by the way": {
+      "article": "the",
+      "group": "the",
+      "rule_ref": "8.2",
+      "explanation": "An idiom. The article is part of the expression, not a live choice — there is no rule to recover here."
+    },
+    "all the time": {
+      "article": "the",
+      "group": "the",
+      "rule_ref": "8.2",
+      "explanation": "An idiom. The article is part of the expression, not a live choice — there is no rule to recover here."
+    },
+    "on the whole": {
+      "article": "the",
+      "group": "the",
+      "rule_ref": "8.2",
+      "explanation": "An idiom. The article is part of the expression, not a live choice — there is no rule to recover here."
+    },
+    "in the meantime": {
+      "article": "the",
+      "group": "the",
+      "rule_ref": "8.2",
+      "explanation": "An idiom. The article is part of the expression, not a live choice — there is no rule to recover here."
+    },
+    "at the same time": {
+      "article": "the",
+      "group": "the",
+      "rule_ref": "8.2",
+      "explanation": "An idiom. The article is part of the expression, not a live choice — there is no rule to recover here."
+    },
+    "on the other hand": {
+      "article": "the",
+      "group": "the",
+      "rule_ref": "8.2",
+      "explanation": "An idiom. The article is part of the expression, not a live choice — there is no rule to recover here."
     },
     "twice a week": {
       "article": "a / an",
       "group": "a_an",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the <em>a/an</em> group. The article is part of the expression, not a live choice."
+      "rule_ref": "7.10",
+      "explanation": "<em>A/an</em> used to mean <em>per</em> in a rate: <em>twice a week</em>, <em>$5 a kilo</em>."
     },
     "once a week": {
       "article": "a / an",
       "group": "a_an",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the <em>a/an</em> group. The article is part of the expression, not a live choice."
+      "rule_ref": "7.10",
+      "explanation": "<em>A/an</em> used to mean <em>per</em> in a rate: <em>twice a week</em>, <em>$5 a kilo</em>."
     },
     "three times a week": {
       "article": "a / an",
       "group": "a_an",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the <em>a/an</em> group. The article is part of the expression, not a live choice."
+      "rule_ref": "7.10",
+      "explanation": "<em>A/an</em> used to mean <em>per</em> in a rate: <em>twice a week</em>, <em>$5 a kilo</em>."
     },
     "50 a night": {
       "article": "a / an",
       "group": "a_an",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the <em>a/an</em> group. The article is part of the expression, not a live choice."
+      "rule_ref": "7.10",
+      "explanation": "<em>A/an</em> used to mean <em>per</em> in a rate: <em>twice a week</em>, <em>$5 a kilo</em>."
+    },
+    "once a day": {
+      "article": "a / an",
+      "group": "a_an",
+      "rule_ref": "7.10",
+      "explanation": "<em>A/an</em> used to mean <em>per</em> in a rate: <em>twice a week</em>, <em>$5 a kilo</em>."
+    },
+    "twice a month": {
+      "article": "a / an",
+      "group": "a_an",
+      "rule_ref": "7.10",
+      "explanation": "<em>A/an</em> used to mean <em>per</em> in a rate: <em>twice a week</em>, <em>$5 a kilo</em>."
     },
     "a lot of": {
       "article": "a / an",
       "group": "a_an",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the <em>a/an</em> group. The article is part of the expression, not a live choice."
+      "rule_ref": "7.7",
+      "explanation": "A quantifying expression built on <em>a</em>: <em>a few</em> and <em>a little</em> mean 'some', while bare <em>few</em> and <em>little</em> mean 'not many/much'."
     },
     "a few": {
       "article": "a / an",
       "group": "a_an",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the <em>a/an</em> group. The article is part of the expression, not a live choice."
+      "rule_ref": "7.7",
+      "explanation": "A quantifying expression built on <em>a</em>: <em>a few</em> and <em>a little</em> mean 'some', while bare <em>few</em> and <em>little</em> mean 'not many/much'."
     },
     "a little": {
       "article": "a / an",
       "group": "a_an",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the <em>a/an</em> group. The article is part of the expression, not a live choice."
+      "rule_ref": "7.7",
+      "explanation": "A quantifying expression built on <em>a</em>: <em>a few</em> and <em>a little</em> mean 'some', while bare <em>few</em> and <em>little</em> mean 'not many/much'."
     },
     "in a hurry": {
       "article": "a / an",
       "group": "a_an",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the <em>a/an</em> group. The article is part of the expression, not a live choice."
+      "rule_ref": "8.2",
+      "explanation": "An idiom. The article is part of the expression, not a live choice — there is no rule to recover here."
     },
     "as a result": {
       "article": "a / an",
       "group": "a_an",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the <em>a/an</em> group. The article is part of the expression, not a live choice."
+      "rule_ref": "8.2",
+      "explanation": "An idiom. The article is part of the expression, not a live choice — there is no rule to recover here."
     },
     "all of a sudden": {
       "article": "a / an",
       "group": "a_an",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the <em>a/an</em> group. The article is part of the expression, not a live choice."
+      "rule_ref": "8.2",
+      "explanation": "An idiom. The article is part of the expression, not a live choice — there is no rule to recover here."
     },
     "a couple of": {
       "article": "a / an",
       "group": "a_an",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the <em>a/an</em> group. The article is part of the expression, not a live choice."
+      "rule_ref": "8.2",
+      "explanation": "An idiom. The article is part of the expression, not a live choice — there is no rule to recover here."
     },
     "in a moment": {
       "article": "a / an",
       "group": "a_an",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the <em>a/an</em> group. The article is part of the expression, not a live choice."
+      "rule_ref": "8.2",
+      "explanation": "An idiom. The article is part of the expression, not a live choice — there is no rule to recover here."
     },
     "have a good time": {
       "article": "a / an",
       "group": "a_an",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the <em>a/an</em> group. The article is part of the expression, not a live choice."
+      "rule_ref": "8.2",
+      "explanation": "An idiom. The article is part of the expression, not a live choice — there is no rule to recover here."
     },
     "as a matter of fact": {
       "article": "a / an",
       "group": "a_an",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the <em>a/an</em> group. The article is part of the expression, not a live choice."
+      "rule_ref": "8.2",
+      "explanation": "An idiom. The article is part of the expression, not a live choice — there is no rule to recover here."
     },
     "at a loss": {
       "article": "a / an",
       "group": "a_an",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the <em>a/an</em> group. The article is part of the expression, not a live choice."
+      "rule_ref": "8.2",
+      "explanation": "An idiom. The article is part of the expression, not a live choice — there is no rule to recover here."
     },
     "in a row": {
       "article": "a / an",
       "group": "a_an",
-      "rule_ref": "7.5",
-      "explanation": "A set phrase in the <em>a/an</em> group. The article is part of the expression, not a live choice."
+      "rule_ref": "8.2",
+      "explanation": "An idiom. The article is part of the expression, not a live choice — there is no rule to recover here."
     }
   },
   "fixed_reference": {
     "title": "Gate 0 · fixed expressions",
-    "note": "Checked automatically before any question is asked. Set phrases override every rule below, so they get caught first. There is no rule to recover here — the form is memorized as a unit.",
+    "note": "Checked automatically before any question is asked. Set phrases override every rule below, so they get caught first. Each one carries the section it comes from.",
     "groups": [
       {
         "form": "zero",
@@ -838,17 +1095,38 @@
           "to prison",
           "in hospital",
           "to hospital",
-          "at work",
-          "to work",
-          "go to work",
-          "in bed",
-          "to bed",
-          "go to bed",
+          "at university",
           "at sea",
           "in court",
           "to court",
+          "in bed",
+          "to bed",
+          "go to bed",
           "at home",
           "go home",
+          "at work",
+          "to work",
+          "go to work",
+          "in town",
+          "to town",
+          "have breakfast",
+          "have lunch",
+          "have dinner",
+          "for breakfast",
+          "for lunch",
+          "for dinner",
+          "on monday",
+          "on tuesday",
+          "on wednesday",
+          "on thursday",
+          "on friday",
+          "on saturday",
+          "on sunday",
+          "at night",
+          "at noon",
+          "at midnight",
+          "at dawn",
+          "at dusk",
           "by car",
           "by bus",
           "by train",
@@ -857,58 +1135,54 @@
           "by boat",
           "by taxi",
           "on foot",
-          "have breakfast",
-          "have lunch",
-          "have dinner",
-          "at night",
-          "at noon",
-          "at midnight",
-          "at dawn",
-          "at dusk",
-          "on Monday",
-          "on Tuesday",
-          "on Wednesday",
-          "on Thursday",
-          "on Friday",
-          "on Saturday",
-          "on Sunday",
-          "in trouble",
+          "by heart",
           "on time",
+          "in time",
+          "on purpose",
+          "in trouble",
+          "in charge of",
+          "out of date",
+          "in fact",
+          "at first",
           "at last",
+          "by mistake",
+          "in danger",
           "take place",
+          "catch fire",
+          "make progress",
+          "give way",
           "hand in hand",
           "side by side",
-          "at first",
-          "by heart",
-          "in fact",
-          "on purpose",
-          "in charge of",
-          "out of date"
+          "face to face",
+          "from beginning to end",
+          "day by day",
+          "step by step",
+          "little by little"
         ]
       },
       {
         "form": "the",
         "label": "The",
         "items": [
-          "during the week",
-          "during the day",
           "in the morning",
           "in the afternoon",
           "in the evening",
-          "at the moment",
+          "during the day",
+          "during the week",
+          "the day after tomorrow",
+          "the day before yesterday",
           "play the piano",
           "play the guitar",
           "play the violin",
           "on the radio",
+          "at the moment",
           "in the end",
           "by the way",
           "all the time",
           "on the whole",
           "in the meantime",
           "at the same time",
-          "on the other hand",
-          "the day after tomorrow",
-          "the day before yesterday"
+          "on the other hand"
         ]
       },
       {
@@ -919,6 +1193,8 @@
           "once a week",
           "three times a week",
           "50 a night",
+          "once a day",
+          "twice a month",
           "a lot of",
           "a few",
           "a little",
@@ -935,7 +1211,54 @@
       }
     ]
   },
+  "determiners": {
+    "article": "no article needed",
+    "result": "blocked",
+    "rule_ref": null,
+    "explanation": "The slot before the noun is already filled. English allows only one determiner there, so an article is neither needed nor possible: <em>my book</em>, never <em>the my book</em>. This is not a zero-article rule — the question simply does not arise.",
+    "groups": {
+      "possessive": [
+        "my",
+        "your",
+        "his",
+        "her",
+        "its",
+        "our",
+        "their",
+        "whose"
+      ],
+      "demonstrative": [
+        "this",
+        "that",
+        "these",
+        "those"
+      ],
+      "quantifier": [
+        "each",
+        "every",
+        "either",
+        "neither",
+        "both",
+        "all",
+        "another",
+        "much",
+        "many",
+        "several",
+        "enough",
+        "most"
+      ],
+      "some_any": [
+        "some",
+        "any",
+        "no"
+      ]
+    },
+    "some_any_rule_ref": "Appendix 3",
+    "possessive_s_note": "A possessive <em>'s</em> fills the same slot: <em>Sarah's car</em>."
+  },
   "proper_noun_the": {
+    "article": "the",
+    "rule_ref": "9.2.2",
     "named": [
       "alps",
       "andes",
@@ -970,8 +1293,7 @@
       "ritz",
       "kremlin",
       "vatican",
-      "guardian",
-      "times"
+      "guardian"
     ],
     "keywords": [
       "river",
@@ -984,20 +1306,23 @@
       "channel",
       "republic",
       "kingdom",
-      "states",
       "mountains",
       "islands",
       "museum",
       "hotel",
       "theatre",
-      "theater"
+      "theater",
+      "times",
+      "post"
     ],
     "contains_of": true,
-    "article": "the",
-    "rule_ref": "9.2.1",
-    "explanation": "Plural names, <em>of</em>-constructions, rivers, seas, oceans, deserts, mountain ranges, regions, hotels, museums, theatres and newspapers take <em>the</em>. This is a closed list — learn it as one group."
+    "requires_capital": true,
+    "explanation": "Plural names, <em>of</em>-constructions, rivers, seas, oceans, deserts, mountain ranges, regions, hotels, museums, theatres and newspapers take <em>the</em>. This is a closed list — learn it as one group.",
+    "matching_note": "A keyword only counts inside a capitalised name (<em>the Nile River</em>, not <em>a storm crossed the desert</em>), and an <em>of</em>-construction needs a capitalised word on each side (<em>the Republic of Ireland</em>, not <em>a cup of coffee</em>)."
   },
   "nationality_the": {
+    "article": "the",
+    "rule_ref": "3.6",
     "examples": [
       "british",
       "english",
@@ -1016,9 +1341,82 @@
       "finnish",
       "polish"
     ],
-    "article": "the",
-    "rule_ref": "3.6",
-    "explanation": "Nationality adjectives ending in <em>-ish</em>, <em>-ch</em> or <em>-ese</em> take <em>the</em> when they mean the people of that country as a whole: <em>the British</em>, <em>the French</em>, <em>the Chinese</em>. The plural noun form takes no article: <em>Germans</em>, <em>Kenyans</em>."
+    "explanation": "Nationality adjectives ending in <em>-ish</em>, <em>-ch</em> or <em>-ese</em> take <em>the</em> when they mean the people of that country as a whole: <em>the British</em>, <em>the French</em>. The plural noun form takes no article: <em>Germans</em>, <em>Kenyans</em>."
+  },
+  "phonetics": {
+    "rule_ref": "Appendix 1",
+    "note": "<em>A</em> or <em>an</em> is chosen by the sound the next word starts with, not by the letter.",
+    "vowel_letter_consonant_sound": {
+      "prefixes": [
+        "uni",
+        "use",
+        "usu",
+        "eu",
+        "ubiq",
+        "utili",
+        "unan"
+      ],
+      "words": [
+        "university",
+        "universe",
+        "user",
+        "useful",
+        "usual",
+        "european",
+        "euro",
+        "unit",
+        "union",
+        "unique",
+        "unicorn",
+        "uniform",
+        "one",
+        "once"
+      ],
+      "article": "a",
+      "why": "Starts with a vowel letter but a consonant sound: <em>a university</em>, <em>a European</em>, <em>a one-way street</em>."
+    },
+    "consonant_letter_vowel_sound": {
+      "prefixes": [
+        "hour",
+        "honest",
+        "honour",
+        "honor",
+        "heir"
+      ],
+      "words": [
+        "hour",
+        "hourly",
+        "honest",
+        "honesty",
+        "honour",
+        "honourable",
+        "honor",
+        "honorable",
+        "heir",
+        "heiress"
+      ],
+      "article": "an",
+      "why": "A silent <em>h</em> leaves a vowel sound: <em>an hour</em>, <em>an honest answer</em>."
+    },
+    "initialisms": {
+      "vowel_sounding_letters": "AEFHILMNORSX",
+      "rule_ref": "7.6.1",
+      "why": "An initialism is read letter by letter, so the letter's own name decides: <em>an MBA</em> (em), <em>an FBI agent</em> (ef), <em>a UFO</em> (you)."
+    },
+    "word_acronyms": {
+      "words": [
+        "nasa",
+        "nato",
+        "unesco",
+        "unicef",
+        "opec",
+        "laser",
+        "radar",
+        "scuba"
+      ],
+      "rule_ref": "7.6.2",
+      "why": "An acronym pronounced as a word follows the word's sound, not its letters: <em>a NASA engineer</em>."
+    }
   },
   "patterns": {
     "noun_number": {
@@ -1044,6 +1442,10 @@
     "zero": {
       "word": "— no article —",
       "cls": "r-zero"
+    },
+    "blocked": {
+      "word": "no article needed",
+      "cls": "r-fixed"
     },
     "fixed": {
       "word": "memorized",
@@ -1088,13 +1490,13 @@
     "outPropThe": {
       "out": "the",
       "cat": "Question 2a · name in the the-taking class",
-      "rule_ref": "9.2.1",
+      "rule_ref": "9.2.2",
       "why": "Plural names, <em>of</em>-constructions, rivers, seas, oceans, deserts, mountain ranges, regions, hotels, museums, theaters and newspapers take <em>the</em>. This is a closed list — learn it as one."
     },
     "outPropZero": {
       "out": "zero",
       "cat": "Question 2a · ordinary name",
-      "rule_ref": "9.1",
+      "rule_ref": "9.2.1",
       "why": "People, cities, single countries, single mountains, streets, continents, languages and companies take no article. Also titles used with a name: <em>President Sánchez</em>, <em>Doctor Ruiz</em> — but <em>the president</em> on its own is a role noun and routes to 4g."
     },
     "q3": {
@@ -1168,7 +1570,7 @@
       "out": "the",
       "cat": "Question 3a · the species",
       "rule_ref": "3.4",
-      "why": "Names the class as a single entity. Formal and mostly scientific: <em>The blue whale is endangered.</em> Note this reading is only reachable from Question 3 — if you route a generic through the later questions instead, you'll never arrive here."
+      "why": "Names the class as a single entity. Formal and mostly scientific: <em>The blue whale is endangered.</em> It does not work with every predicate — <em>The tiger is endangered</em> is fine, <em>The tiger is everywhere</em> is not. Note this reading is only reachable from Question 3."
     },
     "q4": {
       "short": "can the listener identify it?",
@@ -1222,25 +1624,25 @@
     "out4a": {
       "out": "the",
       "cat": "4a · specified by the sentence",
-      "rule_ref": "2.2",
-      "why": "A relative clause or an <em>of</em>-phrase narrows the noun to one referent, so the identification happens inside the sentence itself. The most mechanically detectable of the seven, which is why it's checked first."
+      "rule_ref": "2.4",
+      "why": "A relative clause (2.4.1), a prepositional phrase (2.4.2) or an <em>of</em>-phrase (2.4.3) narrows the noun to one referent, so the identification happens inside the sentence itself.<br><br>Careful: a modifier alone is not enough. It has to make the referent <em>identifiable</em>. <em>I met a woman who speaks Icelandic</em> keeps <em>a</em>, because the clause describes her rather than picking out which woman is meant."
     },
     "out4b": {
       "out": "the",
       "cat": "4b · superlative, ordinal or uniqueness word",
-      "rule_ref": "2.4",
+      "rule_ref": "2.4.5",
       "why": "<em>Best, first, only, same, next, last, main</em> all entail that there's exactly one, so <em>the</em> follows automatically."
     },
     "out4c": {
       "out": "the",
       "cat": "4c · second mention",
-      "rule_ref": "2.1",
+      "rule_ref": "2.5",
       "why": "The classic <em>a</em> → <em>the</em> switch. First mention introduces, second mention points back."
     },
     "out4d": {
       "out": "the",
       "cat": "4d · inferable from what we mentioned",
-      "rule_ref": "2.1",
+      "rule_ref": "2.6",
       "why": "Part-whole and possession relations license this without any prior mention of the noun itself. A car has one engine, a room has one ceiling, so naming the whole makes the part identifiable."
     },
     "out4e": {
@@ -1271,7 +1673,7 @@
     "out4f": {
       "out": "the",
       "cat": "4f · only one in our shared community",
-      "rule_ref": "2.5",
+      "rule_ref": "2.2",
       "why": "No specific one has been mentioned, and none needs to be. <em>I'm at the mall</em> doesn't identify which mall — it relies on your listener not needing to ask. This still holds for a mall neither of you has ever visited, because what's required is that the question <em>which one?</em> doesn't arise, not that a particular referent exists."
     },
     "outActivityZero": {
@@ -1283,7 +1685,7 @@
     "out4g": {
       "out": "the",
       "cat": "4g · a role that belongs to something",
-      "rule_ref": "2.6",
+      "rule_ref": "2.3",
       "why": "Role nouns are inherently <em>of</em> something: government of a country, capital of a country, manager of a team. The article is licensed because the noun carries an implicit slot that context fills — and the slot can stay unfilled out loud. <em>What should the government do?</em> works between an American and a Spaniard discussing neither country, because it means <em>the government of whatever situation we're discussing</em>. Unique relative to an argument, not unique in the world."
     },
     "q5": {
@@ -1319,7 +1721,7 @@
       "out": "zero",
       "cat": "Question 5 · indefinite plural",
       "rule_ref": "2.1.2",
-      "why": "The plural counterpart of <em>a</em>. English has no plural indefinite article, so the slot stays empty. Add <em>some</em> if you need to signal quantity."
+      "why": "The plural counterpart of <em>a</em>. English has no plural indefinite article, so the slot stays empty. Add <em>some</em> if you need to signal quantity (Appendix 3)."
     },
     "out5zNc": {
       "out": "zero",
@@ -1415,6 +1817,12 @@
     },
     {
       "p": "the French"
+    },
+    {
+      "p": "my book"
+    },
+    {
+      "p": "each student"
     }
   ]
 }

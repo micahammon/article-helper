@@ -10,7 +10,7 @@ import json
 import unittest
 from pathlib import Path
 
-from logic import ArticleLogic
+from logic import ArticleLogic, choose_a_or_an
 from rules import DECISION_TREE, ENTRY_NODE
 
 DATA = json.loads((Path(__file__).resolve().parents[1] / "rules_data.json").read_text(encoding="utf-8"))
@@ -90,11 +90,132 @@ class GateZeroTests(unittest.TestCase):
             (Path(__file__).resolve().parents[1] / "rules_data.classic.json").read_text(encoding="utf-8")
         )["lookup_table"]
         self.assertEqual(len(original), 49)
+        corrections = DATA["lookup_ref_corrections"]
         for key, entry in original.items():
             self.assertIn(key, DATA["lookup_table"], f"lost lookup entry {key!r}")
             kept = DATA["lookup_table"][key]
-            self.assertEqual(kept["article"], entry["article"])
-            self.assertEqual(kept["rule_ref"], entry["rule_ref"])
+            self.assertEqual(kept["article"], entry["article"], f"{key!r} changed article")
+            if key in corrections:
+                # A deliberate, recorded fix - not drift.
+                self.assertEqual(corrections[key]["was"], entry["rule_ref"])
+                self.assertEqual(corrections[key]["now"], kept["rule_ref"])
+            else:
+                self.assertEqual(kept["rule_ref"], entry["rule_ref"], f"{key!r} ref drifted")
+
+    def test_corrected_lookup_refs_are_all_the_same_misfiling(self):
+        """Only the 9.2.1 -> 9.2.2 fix is allowed to change an inherited ref."""
+        for key, fix in DATA["lookup_ref_corrections"].items():
+            self.assertEqual((fix["was"], fix["now"]), ("9.2.1", "9.2.2"), key)
+            self.assertEqual(DATA["lookup_table"][key]["article"], "the", key)
+
+
+class CitationTests(unittest.TestCase):
+    """Every rule_ref must name a real section of the source book.
+
+    The previous build stamped all 94 fixed expressions with 7.5, which is the
+    Illnesses section, and pointed the proper-noun rule at 9.2.1, which is the
+    'No article' subsection. Both passed the old test, because it only checked
+    that a reference was present.
+    """
+
+    def refs(self):
+        found = []
+        for phrase, entry in DATA["fixed_expressions"].items():
+            found.append(("fixed:" + phrase, entry["rule_ref"]))
+        for node_id, node in RAW_TREE.items():
+            if node.get("rule_ref"):
+                found.append(("tree:" + node_id, node["rule_ref"]))
+        for key in ("proper_noun_the", "nationality_the"):
+            found.append((key, DATA[key]["rule_ref"]))
+        for key, pattern in DATA["patterns"].items():
+            found.append(("pattern:" + key, pattern["rule_ref"]))
+        found.append(("determiners.some_any", DATA["determiners"]["some_any_rule_ref"]))
+        found.append(("phonetics", DATA["phonetics"]["rule_ref"]))
+        return found
+
+    def test_every_reference_names_a_real_section(self):
+        sections = DATA["source_sections"]
+        for where, ref in self.refs():
+            self.assertIn(ref, sections, f"{where} cites {ref!r}, which is not a section")
+
+    def test_fixed_expressions_are_not_all_one_section(self):
+        refs = {e["rule_ref"] for e in DATA["fixed_expressions"].values()}
+        self.assertGreater(len(refs), 5, "idioms from many families share one reference")
+        self.assertNotIn("7.5", refs, "7.5 is Illnesses, not fixed expressions")
+
+    def test_proper_nouns_cite_the_the_subsection(self):
+        self.assertEqual(DATA["proper_noun_the"]["rule_ref"], "9.2.2")
+        self.assertIn("The", DATA["source_sections"]["9.2.2"])
+        self.assertIn("No article", DATA["source_sections"]["9.2.1"])
+
+
+class DeterminerGateTests(unittest.TestCase):
+    def setUp(self):
+        self.logic = ArticleLogic()
+
+    def test_determiners_block_rather_than_return_zero(self):
+        for phrase in ["my book", "this book", "those cars", "each student",
+                       "every student", "either answer", "some water",
+                       "any questions", "no reason", "Sarah's car"]:
+            analysis = self.logic.analyze_input(phrase)
+            self.assertEqual(analysis["mode"], "lookup", f"{phrase!r} reached the tree")
+            self.assertEqual(analysis["result"]["article"], "no article needed",
+                             f"{phrase!r} did not report a blocked slot")
+            self.assertTrue(analysis["source"].startswith("determiner:"))
+
+    def test_blocked_is_distinct_from_zero(self):
+        blocked = self.logic.analyze_input("my book")["result"]["article"]
+        zero = self.logic.analyze_input("at school")["result"]["article"]
+        self.assertNotEqual(blocked, zero)
+
+    def test_an_ordinary_article_phrase_is_not_blocked(self):
+        self.assertEqual(self.logic.analyze_input("a book")["mode"], "question")
+
+
+class ProperNounPrecisionTests(unittest.TestCase):
+    def setUp(self):
+        self.logic = ArticleLogic()
+
+    def test_keywords_do_not_fire_outside_a_name(self):
+        for phrase in ["We booked a hotel room", "A storm crossed the desert",
+                       "I drank a cup of coffee", "a hotel", "the desert",
+                       "I read the post", "we swam in the sea"]:
+            analysis = self.logic.analyze_input(phrase)
+            self.assertNotEqual(analysis.get("source"), "proper_noun",
+                                f"{phrase!r} was treated as a proper name")
+
+    def test_real_names_still_match(self):
+        for phrase in ["the Netherlands", "the Nile", "the Nile River", "the Alps",
+                       "the Sahara", "the Guardian", "the Republic of Ireland",
+                       "the Mediterranean", "the United Kingdom"]:
+            analysis = self.logic.analyze_input(phrase)
+            self.assertEqual(analysis["mode"], "lookup", f"{phrase!r} stopped matching")
+            self.assertEqual(analysis["result"]["article"], "the")
+
+
+class PhoneticArticleTests(unittest.TestCase):
+    def test_vowel_letter_consonant_sound(self):
+        for word in ["university", "European", "unit", "useful", "one", "unicorn"]:
+            self.assertEqual(choose_a_or_an(word), "a", f"expected 'a {word}'")
+
+    def test_consonant_letter_vowel_sound(self):
+        for word in ["hour", "honest", "heir", "honour"]:
+            self.assertEqual(choose_a_or_an(word), "an", f"expected 'an {word}'")
+
+    def test_initialisms_use_the_letter_name(self):
+        self.assertEqual(choose_a_or_an("MBA"), "an")
+        self.assertEqual(choose_a_or_an("FBI"), "an")
+        self.assertEqual(choose_a_or_an("X-ray"), "an")
+        self.assertEqual(choose_a_or_an("UFO"), "a")
+        self.assertEqual(choose_a_or_an("BBC"), "a")
+
+    def test_word_acronyms_follow_the_word(self):
+        self.assertEqual(choose_a_or_an("NASA"), "a")
+
+    def test_ordinary_words_still_work(self):
+        self.assertEqual(choose_a_or_an("apple"), "an")
+        self.assertEqual(choose_a_or_an("dog"), "a")
+        self.assertEqual(choose_a_or_an("umbrella"), "an")
 
 
 class TreeIntegrityTests(unittest.TestCase):

@@ -22,6 +22,10 @@ Type a noun or phrase and the tool normalizes it (trims spaces, drops a leading
 `a/an/the`, strips punctuation) and checks it against the data in
 [`rules_data.json`](rules_data.json), in strict precedence order:
 
+0. **Is the slot already taken?** A possessive, demonstrative or quantifier
+   leaves no room for an article: `my book`, `this book`, `each student`,
+   `some water`, `Sarah's car`. The answer is **not** "no article" — the
+   question does not arise, so these report `no article needed` and stop.
 1. **Fixed expressions** — `at night`, `by car`, `in the end`, `twice a week`.
    Set phrases override every rule below them, so they are caught first. Each
    one resolves to a **specific form**, never to "it's memorized, good luck."
@@ -32,7 +36,15 @@ Type a noun or phrase and the tool normalizes it (trims spaces, drops a leading
    finds `radio`.
 4. **Nationality adjectives** — `the French`, `the British`.
 5. **Names in the *the*-taking class** — plural names, `of`-constructions,
-   rivers, seas, deserts, ranges, regions, hotels, museums, newspapers.
+   rivers, seas, deserts, ranges, regions, hotels, museums, newspapers. Matched
+   conservatively: a keyword only counts inside a capitalised name
+   (`the Nile River`, not `a storm crossed the desert`), and an
+   `of`-construction needs a capital on each side (`the Republic of Ireland`,
+   not `a cup of coffee`).
+
+When the answer is `a/an`, the form is chosen by **sound, not spelling** —
+`a university`, `an hour`, `an MBA`, `a UFO`, `an X-ray`. The exception lists
+and the letter-name rule for initialisms live in `phonetics` in the JSON.
 
 A **noun-noun pair** (`bus station`) is handled here too: the first noun works
 like an adjective, so the tool re-runs itself on the second noun and says so.
@@ -120,6 +132,18 @@ together, and no code change is needed to correct a rule or add a phrase.
 | A question's wording | `decision_tree.<node>.q`, `.note`, `.opts[].label` |
 | Its label in the path trail | `decision_tree.<node>.short` |
 | An explanation or citation | the leaf's `why` and `rule_ref` |
+| A determiner that blocks articles | `determiners.groups` |
+| An a/an pronunciation exception | `phonetics` |
+
+**Citations are validated, not trusted.** `source_sections` holds the book's
+real contents, and the build refuses to write a `rule_ref` that is not in it.
+This is not hypothetical: an earlier version stamped all 94 fixed expressions
+with `7.5`, which is the *Illnesses* section, and pointed the proper-noun rule
+at `9.2.1`, which is the *'No article'* subsection — the opposite of what it
+was claiming. Both passed the tests of the day, because those only checked that
+a reference was **present**. Five inherited lookup entries had the same `9.2.1`
+misfiling; the fixes are recorded in `lookup_ref_corrections` so a deliberate
+correction stays distinguishable from drift.
 
 The map view and the path trail are both generated from this file, so neither
 can drift from the logic it documents. `tests/test_gate_zero.py` enforces the
@@ -143,7 +167,28 @@ python -m unittest discover -s tests -v
   tree are not shadowed by Gate 0;
 - every Gate 0 rule carries its own `article` and `rule_ref`, and the answer
   follows the data when that value is changed — so a hardcoded form fails the
-  suite instead of going unnoticed.
+  suite instead of going unnoticed;
+- every citation names a real section of the book, and the fixed expressions are
+  not all filed under one;
+- determiners block rather than returning zero, and `blocked` stays distinct
+  from `no article`;
+- proper-noun keywords do not fire outside a capitalised name, while the real
+  names still match;
+- `a/an` is chosen by sound: `a university`, `an hour`, `an MBA`, `a UFO`.
+
+### Known Gaps
+
+The tool does not yet cover, though the book does: existential *there is/are*
+(2.7), exclamations (5.3), newspaper headlines (6.4), unique roles (6.5),
+languages/meals/sports as **productive** rules rather than word lists (6.1),
+time expressions (6.2), *next/last* (7.11), ordinals (7.12), *most* vs *the
+most* (7.8), *few/a few* (7.7), *a/an* vs *one* (7.9), and comparatives (7.13).
+
+A deeper issue remains in `lookup_table`: entries such as `piano`, `bed`,
+`history` and `work` are context-sensitive but stored as unconditional answers,
+and the table matches a word anywhere in the input. So `I bought a piano` still
+answers `the`. Conditioning those entries is the next structural change, and it
+should come before any new words are added to the table.
 
 ### Deploying
 

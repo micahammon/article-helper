@@ -328,6 +328,49 @@ function tokenize(s){
   return t ? t.split(" ") : [];
 }
 
+/* word tokens with their original capitalisation kept */
+function casedTokens(s){
+  var m = String(s == null ? "" : s).match(/[A-Za-z0-9]+(?:'[A-Za-z]+)?/g);
+  return m || [];
+}
+function isCap(t){ return !!t && t[0] >= "A" && t[0] <= "Z"; }
+
+/* a or an by sound, not spelling: the lists live in the JSON */
+function chooseAOrAn(word){
+  if(!word) return "a";
+  var bare = String(word).replace(/^[^A-Za-z0-9]+|[^A-Za-z0-9]+$/g, "");
+  if(!bare) return "a";
+  var low = bare.toLowerCase(), P = D.phonetics, i;
+
+  if(P.word_acronyms.words.indexOf(low) !== -1){
+    return "aeiou".indexOf(low.charAt(0)) !== -1 ? "an" : "a";
+  }
+
+  /* a leading run of capitals is read as letters: MBA, FBI, X-ray */
+  var run = bare.match(/^[A-Z]+/);
+  if(run){
+    var rest = bare.slice(run[0].length);
+    var nextIsLower = rest.length > 0 && rest[0] >= "a" && rest[0] <= "z";
+    if(run[0].length > 1 || !nextIsLower){
+      return P.initialisms.vowel_sounding_letters.indexOf(run[0].charAt(0)) !== -1 ? "an" : "a";
+    }
+  }
+
+  var cs = P.vowel_letter_consonant_sound;
+  if(cs.words.indexOf(low) !== -1) return cs.article;
+  for(i = 0; i < cs.prefixes.length; i++){
+    if(low.indexOf(cs.prefixes[i]) === 0) return cs.article;
+  }
+
+  var vs = P.consonant_letter_vowel_sound;
+  if(vs.words.indexOf(low) !== -1) return vs.article;
+  for(i = 0; i < vs.prefixes.length; i++){
+    if(low.indexOf(vs.prefixes[i]) === 0) return vs.article;
+  }
+
+  return "aeiou".indexOf(low.charAt(0)) !== -1 ? "an" : "a";
+}
+
 /* longest n-gram in tokens that exists as a key of map */
 function longestPhrase(tokens, map){
   var max = Math.min(tokens.length, 5), n, i, key;
@@ -355,6 +398,11 @@ function gate0(text){
   var tokens = tokenize(text);
   if(!norm && !tokens.length) return null;
   var key, e;
+
+  /* 0. the article slot may already be taken: my book, this book, each student.
+        That is not a zero-article answer - no article can go there at all. */
+  var det = checkDeterminer(text, tokens);
+  if(det) return det;
 
   /* 1. fixed expressions win over everything */
   key = longestPhrase(tokens, D.fixed_expressions) ||
@@ -389,21 +437,70 @@ function gate0(text){
   }
 
   /* 5. names in the the-taking class */
-  var pn = D.proper_noun_the, i;
-  var hit = pn.named.indexOf(norm) !== -1;
-  if(!hit) for(i = 0; i < pn.named.length; i++){
-    if(tokens.indexOf(pn.named[i]) !== -1){ hit = true; break; }
-  }
-  if(!hit) for(i = 0; i < pn.keywords.length; i++){
-    if(tokens.indexOf(pn.keywords[i]) !== -1){ hit = true; break; }
-  }
-  if(!hit && pn.contains_of && tokens.indexOf("of") !== -1 && /[A-Z]/.test(String(text))) hit = true;
-  if(hit){
+  if(isTheTakingName(text, norm)){
+    var pn = D.proper_noun_the;
     return {form:formOf(pn.article), why:pn.explanation, ref:pn.rule_ref,
             cat:"Gate 0 \u00b7 name in the the-taking class", match:norm};
   }
 
   return null;
+}
+
+/* The article slot is already filled. */
+function checkDeterminer(text, tokens){
+  if(!tokens.length) return null;
+  var det = D.determiners, first = tokens[0], group, words;
+
+  for(group in det.groups){
+    if(!Object.prototype.hasOwnProperty.call(det.groups, group)) continue;
+    words = det.groups[group];
+    if(words.indexOf(first) !== -1){
+      return {form:"blocked", why:det.explanation, blocked:true,
+              ref:(group === "some_any" ? det.some_any_rule_ref : det.rule_ref),
+              cat:"Gate 0 \u00b7 the slot is already taken",
+              match:tokens.slice(1).join(" ") || first};
+    }
+  }
+
+  /* a possessive 's fills the same slot: Sarah's car */
+  if(/^\s*\S+['\u2019]s\s+\S+/.test(String(text || ""))){
+    return {form:"blocked", why:det.explanation, blocked:true, ref:det.rule_ref,
+            cat:"Gate 0 \u00b7 the slot is already taken",
+            match:tokens.slice(1).join(" ") || tokens[0]};
+  }
+  return null;
+}
+
+/* A the-taking name, checked conservatively: a keyword only counts inside a
+   capitalised name, and an of-construction needs a capital on each side. */
+function isTheTakingName(text, norm){
+  var pn = D.proper_noun_the;
+  if(pn.named.indexOf(norm) !== -1) return true;
+
+  var cased = casedTokens(text), i, j, t, neighbours;
+  var lowered = cased.map(function(x){ return x.toLowerCase(); });
+
+  for(i = 0; i < lowered.length; i++){
+    if(pn.named.indexOf(lowered[i]) !== -1 && isCap(cased[i])) return true;
+  }
+
+  for(i = 0; i < lowered.length; i++){
+    t = lowered[i];
+    if(pn.keywords.indexOf(t) === -1 || !isCap(cased[i])) continue;
+    neighbours = [];
+    if(i > 0) neighbours.push(cased[i - 1]);
+    if(i + 1 < cased.length) neighbours.push(cased[i + 1]);
+    for(j = 0; j < neighbours.length; j++){
+      if(isCap(neighbours[j])) return true;
+    }
+  }
+
+  if(pn.contains_of){
+    for(i = 1; i + 1 < cased.length; i++){
+      if(lowered[i] === "of" && isCap(cased[i - 1]) && isCap(cased[i + 1])) return true;
+    }
+  }
+  return false;
 }
 
 /* ---------------- entry point ---------------- */
@@ -498,7 +595,7 @@ function renderQuestion(n){
 function buildPhrase(form, word){
   if(!word) return "";
   if(form === "the") return "the " + word;
-  if(form === "an")  return (/^[aeiou]/i.test(word) ? "an " : "a ") + word;
+  if(form === "an")  return chooseAOrAn(word) + " " + word;
   return word;
 }
 
@@ -548,8 +645,11 @@ function renderGate0(r){
   var h = '<p class="form">' + f.word + '</p>' +
           '<p class="cat">' + r.cat + '</p>' +
           '<p class="why">' + r.why + '</p>';
-  if(r.fixed){
-    h += '<p class="built">' + esc(r.match) + '</p>';
+  if(r.fixed || r.blocked){
+    /* nothing to build: the phrase is already complete as typed, so echo it
+       verbatim rather than through displayWord, which strips the apostrophe
+       out of "Sarah's car" */
+    h += '<p class="built">' + esc(String(phrase.value).trim() || r.match) + '</p>';
   }else{
     /* prefer what the user actually typed, so capitalisation survives */
     var typed = displayWord(phrase.value);
