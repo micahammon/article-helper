@@ -228,6 +228,14 @@ body{
 .refgroup{margin-bottom:18px}
 .refgroup h4{margin:0;font-size:13px;font-weight:600;color:var(--muted);
   display:flex;align-items:center;gap:8px}
+.senses{margin-top:16px;border-top:1px solid var(--rule)}
+.senses .sense{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--rule);
+  align-items:flex-start;font-size:14px}
+.senses .sense:last-child{border-bottom:0}
+.senses .lead{flex:1 1 auto}
+.senses .lead b{font-weight:600}
+.senses .ex{font-family:var(--serif);font-style:italic;color:var(--muted);
+  display:block;margin-top:3px}
 @media (max-width:560px){ .reflist{columns:1} }
 </style>
 </head>
@@ -420,13 +428,11 @@ function gate0(text){
             cat:"Gate 0 \u00b7 noun with a classifying number", match:norm};
   }
 
-  /* 3. the lookup table, direct then longest phrase */
+  /* 3. the lookup table, direct then longest phrase - subject to conditions */
   key = Object.prototype.hasOwnProperty.call(D.lookup_table, norm) ? norm
       : longestPhrase(tokens, D.lookup_table);
   if(key){
-    e = D.lookup_table[key];
-    return {form:formOf(e.article), why:e.explanation, ref:e.rule_ref,
-            cat:"Gate 0 \u00b7 listed noun", match:key};
+    return lookupResult(key, tokens);
   }
 
   /* 4. nationality adjective for a whole people */
@@ -444,6 +450,98 @@ function gate0(text){
   }
 
   return null;
+}
+
+/* ---- the lookup table, but only where the fixed sense actually holds ---- */
+
+var LOOKBACK_BOUNDARY = ["on","in","at","to","by","for","of","with","from","into",
+  "onto","about","over","under","and","or","but","that","who","which","than"];
+var LOOKBACK_LIMIT = 4;
+
+function spanOf(tokens, phrase){
+  var parts = phrase.split(" "), i, j, ok;
+  for(i = 0; i + parts.length <= tokens.length; i++){
+    ok = true;
+    for(j = 0; j < parts.length; j++){
+      if(tokens[i + j] !== parts[j]){ ok = false; break; }
+    }
+    if(ok) return [i, i + parts.length];
+  }
+  return [0, null];
+}
+
+/* the determiner governing a noun, looking past any adjectives between them */
+function determinerBefore(tokens, start, words){
+  var i = start - 1, steps = 0, t;
+  while(i >= 0 && steps < LOOKBACK_LIMIT){
+    t = tokens[i];
+    if(words.indexOf(t) !== -1) return t;
+    if(LOOKBACK_BOUNDARY.indexOf(t) !== -1) return null;
+    i--; steps++;
+  }
+  return null;
+}
+
+function lookupResult(key, tokens){
+  var e = D.lookup_table[key];
+  var cond = e.conditions || null;
+  var span = spanOf(tokens, key);
+  var start = span[0], end = span[1];
+  var following = (end !== null && end < tokens.length) ? tokens[end] : null;
+  var forms = D.determiner_conflict.determiner_forms;
+
+  function deferred(reason, why){
+    return {form:"context", context:true, reason:reason, why:why,
+            ref:(cond && cond.contrast_rule_ref) || e.rule_ref,
+            cat:"Gate 0 \u00b7 depends on the sentence", match:key,
+            fixed:null,
+            fixedSense:{article:e.article, why:e.explanation, ref:e.rule_ref},
+            sense:cond ? cond.sense : null,
+            examples:(cond && cond.examples) || []};
+  }
+
+  /* 1. a determiner already in front of the noun */
+  var words = Object.keys(forms), g;
+  for(g in D.determiners.groups){
+    if(Object.prototype.hasOwnProperty.call(D.determiners.groups, g)){
+      words = words.concat(D.determiners.groups[g]);
+    }
+  }
+  var governing = determinerBefore(tokens, start, words);
+  if(governing){
+    for(g in D.determiners.groups){
+      if(!Object.prototype.hasOwnProperty.call(D.determiners.groups, g)) continue;
+      if(D.determiners.groups[g].indexOf(governing) !== -1){
+        return {form:"blocked", blocked:true, why:D.determiners.explanation,
+                ref:(g === "some_any" ? D.determiners.some_any_rule_ref : D.determiners.rule_ref),
+                cat:"Gate 0 \u00b7 the slot is already taken", match:key};
+      }
+    }
+    if(forms[governing] && forms[governing] !== e.article){
+      return deferred("determiner_conflict", D.determiner_conflict.explanation);
+    }
+  }
+
+  /* 2. the entry's own conditions */
+  if(cond){
+    var prev = start > 0 ? tokens[start - 1] : null;
+    if(cond.requires_prev && cond.requires_prev.indexOf(prev) === -1){
+      return deferred("missing_required_word", cond.contrast);
+    }
+    if(cond.blocked_by_next && cond.blocked_by_next.indexOf(following) !== -1){
+      return deferred("blocked_by_following_word", cond.contrast);
+    }
+    if(cond.requires_any){
+      var found = false, i;
+      for(i = 0; i < cond.requires_any.length; i++){
+        if(tokens.indexOf(cond.requires_any[i]) !== -1){ found = true; break; }
+      }
+      if(!found) return deferred("missing_required_word", cond.contrast);
+    }
+  }
+
+  return {form:formOf(e.article), why:e.explanation, ref:e.rule_ref,
+          cat:"Gate 0 \u00b7 listed noun", match:key, note:e.note || null};
 }
 
 /* The article slot is already filled. */
@@ -627,7 +725,9 @@ function renderGate0(r){
 
   var badge = document.createElement("div");
   badge.className = "gate0 g-hit";
-  badge.textContent = "Gate 0 \u2014 matched \u201c" + r.match + "\u201d before any question";
+  badge.textContent = r.context
+    ? "Gate 0 \u2014 \u201c" + r.match + "\u201d has more than one reading"
+    : "Gate 0 \u2014 matched \u201c" + r.match + "\u201d before any question";
   stage.appendChild(badge);
 
   if(r.adjunct){
@@ -639,12 +739,20 @@ function renderGate0(r){
     stage.appendChild(nc);
   }
 
+  if(r.context){ renderContext(r); return; }
+
   var f = FORM[r.form];
   var card = document.createElement("div");
   card.className = "result " + f.cls;
   var h = '<p class="form">' + f.word + '</p>' +
           '<p class="cat">' + r.cat + '</p>' +
           '<p class="why">' + r.why + '</p>';
+  if(r.note){
+    h += '<div class="senses"><div class="sense">' +
+         '<span class="pill p-next">but</span><div class="lead">' + r.note.text +
+         '<span class="ex">' + r.note.examples.map(esc).join(" \u00b7 ") + '</span>' +
+         '</div></div></div>';
+  }
   if(r.fixed || r.blocked){
     /* nothing to build: the phrase is already complete as typed, so echo it
        verbatim rather than through displayWord, which strips the apostrophe
@@ -659,6 +767,46 @@ function renderGate0(r){
   if(r.ref) h += '<span class="ref">Rule ' + esc(r.ref) + '</span>';
   card.innerHTML = h;
   stage.appendChild(card);
+}
+
+/* Two readings, and no guess between them. Shows the fixed sense, the sense
+   that applies otherwise, and a way into the questions. */
+function renderContext(r){
+  var f = FORM.context;
+  var card = document.createElement("div");
+  card.className = "result " + f.cls;
+
+  var fixedForm = FORM[formOf(r.fixedSense.article)];
+  var h = '<p class="form">' + f.word + '</p>' +
+          '<p class="cat">' + r.cat + '</p>' +
+          '<p class="why">' + r.why + '</p>' +
+          '<div class="senses">' +
+            '<div class="sense"><span class="pill ' + fixedForm.cls.replace("r-","p-") + '">' +
+              fixedForm.word + '</span><div class="lead"><b>' +
+              (r.sense ? esc(r.sense) : "the fixed sense") + '</b><span class="ex">' +
+              r.fixedSense.why + '</span></div></div>';
+
+  if(r.examples && r.examples.length){
+    h += '<div class="sense"><span class="pill p-next">otherwise</span>' +
+         '<div class="lead"><b>ordinary rules apply</b><span class="ex">' +
+         r.examples.map(function(x){ return esc(x); }).join(" \u00b7 ") +
+         '</span></div></div>';
+  }
+  h += '</div>';
+  if(r.ref) h += '<span class="ref">Rule ' + esc(r.ref) + '</span>';
+  card.innerHTML = h;
+  stage.appendChild(card);
+
+  var go = document.createElement("button");
+  go.className = "btn";
+  go.style.marginTop = "14px";
+  go.textContent = "Work it out with the questions";
+  go.addEventListener("click", function(){
+    hist = []; cur = entry; pendingNote = null;
+    render();
+    stage.scrollIntoView({block:"nearest", behavior:"smooth"});
+  });
+  stage.appendChild(go);
 }
 
 function renderTrail(){

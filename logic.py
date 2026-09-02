@@ -9,6 +9,7 @@ import string
 # Import the data structures from our rules file
 from rules import (
     DECISION_TREE,
+    DETERMINER_CONFLICT,
     DETERMINERS,
     ENTRY_NODE,
     FIXED_EXPRESSIONS,
@@ -94,6 +95,43 @@ def _infer_focus_noun(tokens):
         return filtered[-1]
 
     return ""
+
+
+#: words that end the search for a determiner sitting in front of a noun
+_LOOKBACK_BOUNDARY = {
+    "on", "in", "at", "to", "by", "for", "of", "with", "from", "into", "onto",
+    "about", "over", "under", "and", "or", "but", "that", "who", "which", "than",
+}
+_LOOKBACK_LIMIT = 4
+
+
+def _determiner_before(tokens, start, determiner_words):
+    """
+    The determiner governing a noun, looking past any adjectives in between.
+
+    Checking only the immediately preceding token misses `a lovely dinner`,
+    where an adjective hides the article that decides the reading.
+    """
+    index = start - 1
+    steps = 0
+    while index >= 0 and steps < _LOOKBACK_LIMIT:
+        token = tokens[index]
+        if token in determiner_words:
+            return token
+        if token in _LOOKBACK_BOUNDARY:
+            return None
+        index -= 1
+        steps += 1
+    return None
+
+
+def _span_of(tokens, phrase):
+    """Where a normalized phrase sits in the token list, if it does."""
+    parts = phrase.split()
+    for start in range(0, len(tokens) - len(parts) + 1):
+        if tokens[start:start + len(parts)] == parts:
+            return start, start + len(parts)
+    return 0, None
 
 
 def _result(article, explanation, rule_ref):
@@ -185,6 +223,80 @@ class ArticleLogic:
             return None
 
         return LOOKUP_TABLE.get(normalized)
+
+    def _lookup_result(self, key, tokens, span):
+        """
+        Answer from the lookup table, but only where the entry's fixed sense
+        actually holds. Two guards, in order:
+
+        1. A determiner already in front of the noun that disagrees with the
+           entry's article means the writer is using the other sense
+           (`I bought a piano`, `the history of art`).
+        2. The entry's own `conditions` - a required construction, a required
+           preceding word, or a following word that voids the fixed sense.
+
+        Neither guard guesses: both hand back `context_required`, which shows
+        the fixed sense and its contrast and then defers to the questions.
+        """
+        entry = dict(LOOKUP_TABLE[key])
+        conditions = entry.get("conditions")
+        start, end = span
+        previous = tokens[start - 1] if start > 0 else None
+        following = tokens[end] if end is not None and end < len(tokens) else None
+
+        def deferred(reason, why):
+            result = {
+                # a string, not None: app.py calls .startswith on this
+                "article": "it depends",
+                "result": "context_required",
+                "reason": reason,
+                "fixed_sense": {"article": entry["article"],
+                                "explanation": entry["explanation"],
+                                "rule_ref": entry["rule_ref"]},
+                "explanation": why,
+                "rule_ref": (conditions or {}).get("contrast_rule_ref") or entry["rule_ref"],
+            }
+            if conditions:
+                result["sense"] = conditions.get("sense")
+                result["contrast"] = conditions.get("contrast")
+                result["examples"] = conditions.get("examples", [])
+            return {"focus_noun": key, "result": result, "source": "context_required"}
+
+        # 1. A determiner in front of the noun, looking past any adjectives.
+        forms = DETERMINER_CONFLICT["determiner_forms"]
+        governing_words = set(forms)
+        for _words in DETERMINERS["groups"].values():
+            governing_words.update(_words)
+        governing = _determiner_before(tokens, start, governing_words)
+
+        if governing:
+            for group, words in DETERMINERS["groups"].items():
+                if governing in words:
+                    return {
+                        "focus_noun": key,
+                        "result": _result(DETERMINERS["article"],
+                                          DETERMINERS["explanation"],
+                                          DETERMINERS["some_any_rule_ref"]
+                                          if group == "some_any" else DETERMINERS["rule_ref"]),
+                        "source": "determiner:" + group,
+                    }
+            if governing in forms and forms[governing] != entry["article"]:
+                return deferred("determiner_conflict",
+                                DETERMINER_CONFLICT["explanation"])
+
+        # 2. The entry's own conditions.
+        if conditions:
+            if "requires_prev" in conditions and previous not in conditions["requires_prev"]:
+                return deferred("missing_required_word", conditions["contrast"])
+            if "blocked_by_next" in conditions and following in conditions["blocked_by_next"]:
+                return deferred("blocked_by_following_word", conditions["contrast"])
+            if "requires_any" in conditions and not set(tokens) & set(conditions["requires_any"]):
+                return deferred("missing_required_word", conditions["contrast"])
+
+        entry.pop("conditions", None)
+        # `note` is informational: it rides along with a successful answer
+        # rather than changing it (see the sports entries).
+        return {"focus_noun": key, "result": entry, "source": "lookup"}
 
     def check_determiner(self, text):
         """
@@ -308,20 +420,15 @@ class ArticleLogic:
             }
 
         # 3. The lookup table: exact normalized form, then longest phrase.
+        #    Both go through the same conditions, so a noun that is only fixed
+        #    inside a particular construction cannot answer outside it.
         if normalized in LOOKUP_TABLE:
-            return {
-                "focus_noun": normalized,
-                "result": dict(LOOKUP_TABLE[normalized]),
-                "source": "lookup",
-            }
+            span = _span_of(tokens, normalized)
+            return self._lookup_result(normalized, tokens, span)
         phrase_match = _find_lookup_phrase(tokens)
         if phrase_match:
-            matched = phrase_match[0]
-            return {
-                "focus_noun": matched,
-                "result": dict(LOOKUP_TABLE[matched]),
-                "source": "lookup",
-            }
+            matched, start, end = phrase_match
+            return self._lookup_result(matched, tokens, (start, end))
 
         # 4. Nationality adjective standing for a whole people.
         if normalized in NATIONALITY_THE["examples"]:

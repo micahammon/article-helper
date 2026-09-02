@@ -218,6 +218,100 @@ class PhoneticArticleTests(unittest.TestCase):
         self.assertEqual(choose_a_or_an("umbrella"), "an")
 
 
+class ConditionalLookupTests(unittest.TestCase):
+    """The lookup table used to answer unconditionally on a word match.
+
+    `I bought a piano` came back as *the*, `They bought a bed` as *no article*,
+    and `She studies the history of art` as *no article* - all confidently
+    wrong, because the entry's fixed sense did not apply.
+    """
+
+    def setUp(self):
+        self.logic = ArticleLogic()
+
+    def assertDefers(self, text, reason=None):
+        result = self.logic.analyze_input(text)["result"]
+        self.assertIsNotNone(result, f"{text!r} produced no result")
+        self.assertEqual(result.get("result"), "context_required",
+                         f"{text!r} answered {result.get('article')!r} instead of deferring")
+        self.assertIn("fixed_sense", result)
+        if reason:
+            self.assertEqual(result["reason"], reason)
+        return result
+
+    def assertAnswers(self, text, article):
+        analysis = self.logic.analyze_input(text)
+        self.assertEqual(analysis["mode"], "lookup", f"{text!r} did not answer")
+        self.assertEqual(analysis["result"]["article"], article, f"wrong form for {text!r}")
+
+    def test_the_three_reported_failures(self):
+        self.assertDefers("I bought a piano", "determiner_conflict")
+        self.assertDefers("They bought a bed", "determiner_conflict")
+        self.assertDefers("She studies the history of art", "determiner_conflict")
+
+    def test_a_conflicting_article_defers(self):
+        for text in ["an opera", "I saw an opera", "a radio", "a cinema near my house"]:
+            self.assertDefers(text, "determiner_conflict")
+
+    def test_an_adjective_does_not_hide_the_determiner(self):
+        """`a lovely dinner` must still see the `a`."""
+        self.assertDefers("We had a lovely dinner", "determiner_conflict")
+        self.assertDefers("a beautiful piano", "determiner_conflict")
+        self.assertDefers("The lunch they served was cold", "determiner_conflict")
+
+    def test_missing_construction_defers(self):
+        self.assertDefers("piano", "missing_required_word")
+        self.assertDefers("radio", "missing_required_word")
+        self.assertDefers("poor people", "missing_required_word")
+
+    def test_following_word_can_void_the_fixed_sense(self):
+        self.assertDefers("music of Bach", "blocked_by_following_word")
+
+    def test_the_fixed_sense_still_answers(self):
+        self.assertAnswers("I play piano", "the")
+        self.assertAnswers("go to the cinema", "the")
+        self.assertAnswers("listen to the radio", "the")
+        self.assertAnswers("the elderly", "the")
+        self.assertAnswers("tennis", "no article")
+        self.assertAnswers("music", "no article")
+
+    def test_unconditional_entries_are_untouched(self):
+        for text, article in [("the USA", "the"), ("the sun", "the"),
+                              ("the Netherlands", "the"), ("the police", "the"),
+                              ("the internet", "the"), ("mount fuji", "no article")]:
+            self.assertAnswers(text, article)
+
+    def test_deferred_results_carry_both_readings(self):
+        result = self.assertDefers("I bought a piano")
+        self.assertEqual(result["fixed_sense"]["article"], "the")
+        self.assertTrue(result["fixed_sense"]["explanation"])
+        self.assertTrue(result["examples"], "a deferred result should show a contrast")
+        self.assertIn(result["rule_ref"], DATA["source_sections"])
+
+    def test_deferred_article_is_a_string(self):
+        """app.py calls .startswith on it, so None would crash the desktop app."""
+        result = self.assertDefers("I bought a piano")
+        self.assertIsInstance(result["article"], str)
+
+    def test_every_condition_is_well_formed(self):
+        known = {"sense", "contrast", "examples", "contrast_rule_ref",
+                 "requires_any", "requires_prev", "blocked_by_next"}
+        conditioned = 0
+        for word, entry in DATA["lookup_table"].items():
+            cond = entry.get("conditions")
+            if not cond:
+                continue
+            conditioned += 1
+            self.assertTrue(set(cond) <= known, f"{word} has unknown keys: {set(cond) - known}")
+            self.assertTrue(cond["sense"], word)
+            self.assertTrue(cond["contrast"], word)
+            self.assertIn(cond["contrast_rule_ref"], DATA["source_sections"], word)
+            self.assertTrue(
+                any(k in cond for k in ("requires_any", "requires_prev", "blocked_by_next")),
+                f"{word} has a condition block that never fires")
+        self.assertGreater(conditioned, 15, "most context-sensitive nouns should be conditioned")
+
+
 class TreeIntegrityTests(unittest.TestCase):
     def test_every_edge_points_at_a_real_node(self):
         for node_id, node in RAW_TREE.items():

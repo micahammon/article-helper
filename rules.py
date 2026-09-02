@@ -73,6 +73,7 @@ FIXED_EXPRESSIONS = _rules_data["fixed_expressions"]
 PROPER_NOUN_THE = _rules_data["proper_noun_the"]
 NATIONALITY_THE = _rules_data["nationality_the"]
 DETERMINERS = _rules_data["determiners"]
+DETERMINER_CONFLICT = _rules_data["determiner_conflict"]
 PHONETICS = _rules_data["phonetics"]
 SOURCE_SECTIONS = _rules_data["source_sections"]
 PATTERNS = _rules_data["patterns"]
@@ -86,6 +87,7 @@ __all__ = [
     "PROPER_NOUN_THE",
     "NATIONALITY_THE",
     "DETERMINERS",
+    "DETERMINER_CONFLICT",
     "PHONETICS",
     "SOURCE_SECTIONS",
     "PATTERNS",

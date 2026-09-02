@@ -34,6 +34,22 @@ Type a noun or phrase and the tool normalizes it (trims spaces, drops a leading
    (`the USA`), abstractions (`music`), systems (`the internet`). Matched on the
    longest phrase found anywhere in your input, so `I listened to the radio`
    finds `radio`.
+
+   Most of these nouns are only fixed **inside a particular construction**, so
+   the entries carry conditions and the tool refuses to answer outside them.
+   Two guards run before any lookup answer:
+
+   - **A determiner already in front of the noun that disagrees with the entry.**
+     `piano` is fixed as *play the piano*, so `I bought a piano` is the other
+     sense and the fixed rule does not apply. The check looks past adjectives,
+     so `a lovely dinner` still sees the `a`.
+   - **The entry's own conditions** — a required construction (`play` for
+     instruments), a required preceding word (`the` for `the elderly`), or a
+     following word that voids the fixed sense (`of` in `the history of art`).
+
+   When a guard fires, the answer is **`it depends`**: the card shows the fixed
+   sense, the reading that applies otherwise, and a button into the questions.
+   It does not guess.
 4. **Nationality adjectives** — `the French`, `the British`.
 5. **Names in the *the*-taking class** — plural names, `of`-constructions,
    rivers, seas, deserts, ranges, regions, hotels, museums, newspapers. Matched
@@ -133,6 +149,8 @@ together, and no code change is needed to correct a rule or add a phrase.
 | Its label in the path trail | `decision_tree.<node>.short` |
 | An explanation or citation | the leaf's `why` and `rule_ref` |
 | A determiner that blocks articles | `determiners.groups` |
+| When a noun is only fixed in context | that entry's `conditions` |
+| A caveat shown alongside an answer | that entry's `note` |
 | An a/an pronunciation exception | `phonetics` |
 
 **Citations are validated, not trusted.** `source_sections` holds the book's
@@ -174,7 +192,10 @@ python -m unittest discover -s tests -v
   from `no article`;
 - proper-noun keywords do not fire outside a capitalised name, while the real
   names still match;
-- `a/an` is chosen by sound: `a university`, `an hour`, `an MBA`, `a UFO`.
+- `a/an` is chosen by sound: `a university`, `an hour`, `an MBA`, `a UFO`;
+- context-sensitive nouns defer rather than answer — `I bought a piano`,
+  `a lovely dinner`, `the history of art` — while the fixed senses still
+  answer, and every condition block actually has a trigger.
 
 ### Known Gaps
 
@@ -184,11 +205,11 @@ languages/meals/sports as **productive** rules rather than word lists (6.1),
 time expressions (6.2), *next/last* (7.11), ordinals (7.12), *most* vs *the
 most* (7.8), *few/a few* (7.7), *a/an* vs *one* (7.9), and comparatives (7.13).
 
-A deeper issue remains in `lookup_table`: entries such as `piano`, `bed`,
-`history` and `work` are context-sensitive but stored as unconditional answers,
-and the table matches a word anywhere in the input. So `I bought a piano` still
-answers `the`. Conditioning those entries is the next structural change, and it
-should come before any new words are added to the table.
+The lookup table is now conditioned (26 of 49 entries), so context-sensitive
+nouns defer instead of guessing. What remains is coverage rather than
+correctness: the conditions are word lists, not grammar, so an unusual phrasing
+can still slip past one. Adding vocabulary to the table means adding its
+conditions at the same time.
 
 ### Deploying
 
