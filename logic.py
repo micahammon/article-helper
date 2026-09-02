@@ -200,7 +200,7 @@ class ArticleLogic:
             return {
                 "focus_noun": normalized,
                 "result": _result(
-                    "the",
+                    PROPER_NOUN_THE["article"],
                     PROPER_NOUN_THE["explanation"],
                     PROPER_NOUN_THE["rule_ref"],
                 ),

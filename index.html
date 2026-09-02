@@ -384,7 +384,7 @@ function gate0(text){
   /* 4. nationality adjective for a whole people */
   var nat = D.nationality_the;
   if(nat.examples.indexOf(norm) !== -1){
-    return {form:"the", why:nat.explanation, ref:nat.rule_ref,
+    return {form:formOf(nat.article), why:nat.explanation, ref:nat.rule_ref,
             cat:"Gate 0 \u00b7 nationality adjective", match:norm};
   }
 
@@ -399,7 +399,7 @@ function gate0(text){
   }
   if(!hit && pn.contains_of && tokens.indexOf("of") !== -1 && /[A-Z]/.test(String(text))) hit = true;
   if(hit){
-    return {form:"the", why:pn.explanation, ref:pn.rule_ref,
+    return {form:formOf(pn.article), why:pn.explanation, ref:pn.rule_ref,
             cat:"Gate 0 \u00b7 name in the the-taking class", match:norm};
   }
 

@@ -65,6 +65,26 @@ class GateZeroTests(unittest.TestCase):
         self.assertGate("at school", "no article", "fixed_expression")
         self.assertEqual(self.logic.analyze_input("the mall")["mode"], "question")
 
+    def test_every_gate_zero_rule_carries_its_own_article(self):
+        """No Gate 0 branch may hardcode a form: editing the JSON must be enough."""
+        for section in ("proper_noun_the", "nationality_the"):
+            self.assertIn("article", DATA[section], f"{section} does not name its article")
+            self.assertIn(DATA[section]["article"], FORMS)
+            self.assertTrue(DATA[section]["rule_ref"])
+
+    def test_proper_noun_article_is_read_from_the_data(self):
+        """Flip the value in memory; the answer must follow it."""
+        import rules
+
+        original = rules.PROPER_NOUN_THE["article"]
+        try:
+            rules.PROPER_NOUN_THE["article"] = "no article"
+            flipped = ArticleLogic().analyze_input("the Nile")
+            self.assertEqual(flipped["result"]["article"], "no article")
+        finally:
+            rules.PROPER_NOUN_THE["article"] = original
+        self.assertEqual(ArticleLogic().analyze_input("the Nile")["result"]["article"], original)
+
     def test_all_49_original_lookup_entries_survive(self):
         original = json.loads(
             (Path(__file__).resolve().parents[1] / "rules_data.classic.json").read_text(encoding="utf-8")
