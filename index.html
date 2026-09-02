@@ -1,501 +1,732 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>English Article Helper</title>
-    <style>
-        /* --- Basic Styling & Layout --- */
-        :root {
-            --bg-color: #f0f2f5;
-            --container-bg: #ffffff;
-            --text-color: #1c1e21;
-            --primary-color: #1877f2;
-            --primary-hover: #166fe5;
-            --secondary-text: #606770;
-            --border-color: #dddfe2;
-            --shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 8px 16px rgba(0, 0, 0, 0.1);
-        }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            padding-top: 50px;
-            margin: 0;
-            min-height: 100vh;
-        }
-        .container {
-            width: 100%;
-            max-width: 600px;
-            background-color: var(--container-bg);
-            border-radius: 8px;
-            box-shadow: var(--shadow);
-            padding: 20px 30px;
-            box-sizing: border-box;
-        }
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Articles: a / an / the / zero</title>
+<style>
+:root{
+  --paper:#EDF0F2;
+  --card:#FAFBFB;
+  --ink:#16232B;
+  --muted:#5A6E78;
+  --rule:#C7D0D5;
+  --the:#1F5C7A;
+  --the-wash:#E2ECF1;
+  --an:#6B3F87;
+  --an-wash:#EDE5F2;
+  --zero:#2F6B4F;
+  --zero-wash:#E1EDE7;
+  --fixed:#7A5C10;
+  --fixed-wash:#F2EBD8;
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--sans);
+  font-size:16px;
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:980px;margin:0 auto;padding:32px 24px 80px}
 
-        /* --- Widget Styling --- */
-        h1 {
-            text-align: center;
-            font-size: 28px;
-            margin-bottom: 20px;
-        }
-        .input-frame {
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            padding: 15px;
-            margin-bottom: 25px;
-        }
-        .input-frame label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
-        }
-        .input-group {
-            display: flex;
-            gap: 10px;
-        }
-        .input-group input {
-            flex-grow: 1;
-            padding: 12px;
-            font-size: 16px;
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-        }
-        .input-group button, .option-button, .reset-button {
-            padding: 12px 20px;
-            font-size: 16px;
-            font-weight: bold;
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: background-color 0.2s;
-        }
-        .input-group button:hover, .option-button:hover, .reset-button:hover {
-            background-color: var(--primary-hover);
-        }
-        .display-frame {
-            text-align: center;
-        }
-        #question-label {
-            font-size: 20px;
-            font-weight: bold;
-            margin-bottom: 8px;
-        }
-        #details-label {
-            font-size: 16px;
-            font-style: italic;
-            color: var(--secondary-text);
-            margin-bottom: 20px;
-            min-height: 40px; /* Reserve space */
-        }
-        #options-container {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        .explanation-text {
-            text-align: left;
-            background-color: var(--bg-color);
-            padding: 15px;
-            border-radius: 6px;
-            line-height: 1.5;
-        }
-        .explanation-text span {
-            font-weight: bold;
-            color: var(--secondary-text);
-        }
+/* ---------- masthead ---------- */
+.masthead{
+  display:flex;align-items:baseline;justify-content:space-between;
+  gap:24px;flex-wrap:wrap;
+  border-bottom:2px solid var(--ink);
+  padding-bottom:14px;margin-bottom:28px;
+}
+.masthead h1{
+  font-family:var(--serif);
+  font-size:30px;font-weight:400;letter-spacing:-.01em;
+  margin:0;
+}
+.masthead h1 .slash{color:var(--muted);padding:0 2px}
+.modes{display:flex;gap:2px;background:var(--rule);padding:2px;border-radius:2px}
+.modes button{
+  font-family:var(--sans);font-size:13px;
+  border:0;background:transparent;color:var(--muted);
+  padding:6px 14px;cursor:pointer;border-radius:1px;
+}
+.modes button[aria-pressed="true"]{background:var(--card);color:var(--ink);font-weight:600}
+.modes button:focus-visible{outline:2px solid var(--the);outline-offset:1px}
 
-        .explanation-text.guidance {
-            border-left: 4px solid var(--primary-color);
-            background-color: rgba(24, 119, 242, 0.1);
-        }
+/* ---------- phrase bar ---------- */
+.phrasebar{margin-bottom:24px}
+.phrasebar label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}
+.phrasebar input{
+  width:100%;font-family:var(--serif);font-size:19px;
+  padding:10px 12px;border:1px solid var(--rule);border-radius:2px;
+  background:var(--card);color:var(--ink);
+}
+.phrasebar input:focus{outline:2px solid var(--the);outline-offset:-1px;border-color:var(--the)}
 
-        .explanation-text.guidance strong {
-            color: var(--primary-color);
-        }
-    </style>
+/* ---------- question card ---------- */
+.qcard{
+  background:var(--card);
+  border:1px solid var(--rule);
+  border-left:4px solid var(--ink);
+  border-radius:2px;
+  padding:24px 26px;
+}
+.gate{font-size:13px;color:var(--muted);margin-bottom:10px}
+.qtext{
+  font-family:var(--serif);
+  font-size:25px;line-height:1.3;font-weight:400;
+  margin:0 0 10px;max-width:34em;
+}
+.qnote{font-size:14px;color:var(--muted);margin:0 0 20px;max-width:46em}
+.qnote em{font-family:var(--serif);font-style:italic;font-size:15px;color:var(--ink)}
+
+.opts{display:flex;flex-direction:column;gap:8px}
+.opt{
+  display:block;width:100%;text-align:left;
+  font-family:var(--sans);font-size:15px;color:var(--ink);
+  background:var(--paper);border:1px solid var(--rule);border-radius:2px;
+  padding:12px 14px;cursor:pointer;
+  transition:border-color .12s,background .12s;
+}
+.opt:hover{border-color:var(--ink);background:var(--card)}
+.opt:focus-visible{outline:2px solid var(--the);outline-offset:1px}
+.opt .ex{display:block;font-family:var(--serif);font-style:italic;font-size:15px;color:var(--muted);margin-top:4px}
+.opt .tag{float:right;font-size:12px;color:var(--muted);margin-left:12px}
+
+/* checklist style for the identifiability gate */
+.checklist .opt{border-left:3px solid var(--the)}
+.checklist .opt.none{border-left:3px solid var(--rule);margin-top:6px}
+
+.warn{
+  background:var(--fixed-wash);
+  border:1px solid #DBCB9A;border-radius:2px;
+  padding:12px 14px;font-size:14px;margin:16px 0 0;
+}
+.warn strong{font-weight:600}
+.warn em{font-family:var(--serif);font-size:15px}
+
+/* ---------- result ---------- */
+.result{border-radius:2px;padding:26px;border:1px solid var(--rule)}
+.result .form{
+  font-family:var(--serif);font-size:52px;line-height:1;font-weight:400;
+  margin:0 0 6px;letter-spacing:-.02em;
+}
+.result .cat{font-size:14px;margin:0 0 18px;font-weight:600}
+.result .why{font-size:15px;max-width:44em;margin:0 0 16px}
+.result .why em{font-family:var(--serif);font-size:16px}
+.result .built{
+  font-family:var(--serif);font-size:24px;
+  padding:14px 0 0;border-top:1px solid rgba(0,0,0,.13);margin-top:6px;
+}
+.result ul{margin:10px 0 0;padding-left:20px}
+.result li{font-family:var(--serif);font-size:16px;margin-bottom:3px}
+.r-the{background:var(--the-wash);border-color:#B4CEDC}
+.r-the .form,.r-the .cat{color:var(--the)}
+.r-an{background:var(--an-wash);border-color:#CDB8D9}
+.r-an .form,.r-an .cat{color:var(--an)}
+.r-zero{background:var(--zero-wash);border-color:#B2CFC0}
+.r-zero .form,.r-zero .cat{color:var(--zero)}
+.r-fixed{background:var(--fixed-wash);border-color:#DBCB9A}
+.r-fixed .form,.r-fixed .cat{color:var(--fixed)}
+
+/* ---------- trail ---------- */
+.trail{margin-top:26px;border-top:1px solid var(--rule);padding-top:16px}
+.trail h2{font-size:13px;color:var(--muted);font-weight:600;margin:0 0 10px}
+.trail ol{margin:0;padding:0;list-style:none;counter-reset:step}
+.trail li{
+  counter-increment:step;font-size:14px;padding:5px 0 5px 30px;position:relative;
+  border-bottom:1px solid var(--rule);
+}
+.trail li:last-child{border-bottom:0}
+.trail li::before{
+  content:counter(step);position:absolute;left:0;top:5px;
+  width:20px;height:20px;border-radius:50%;background:var(--rule);color:var(--ink);
+  font-size:11px;display:flex;align-items:center;justify-content:center;font-weight:600;
+}
+.trail .q{color:var(--muted)}
+.trail .a{color:var(--ink);font-weight:600}
+
+.actions{display:flex;gap:10px;margin-top:22px;flex-wrap:wrap}
+.btn{
+  font-family:var(--sans);font-size:14px;
+  border:1px solid var(--ink);background:transparent;color:var(--ink);
+  padding:9px 16px;border-radius:2px;cursor:pointer;
+}
+.btn:hover{background:var(--ink);color:var(--paper)}
+.btn:focus-visible{outline:2px solid var(--the);outline-offset:1px}
+.btn.ghost{border-color:var(--rule);color:var(--muted)}
+.btn.ghost:hover{background:var(--rule);color:var(--ink)}
+
+/* ---------- traces ---------- */
+.traces{margin-top:34px;border-top:1px solid var(--rule);padding-top:18px}
+.traces h2{font-size:13px;color:var(--muted);font-weight:600;margin:0 0 12px}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chip{
+  font-family:var(--serif);font-size:15px;font-style:italic;
+  background:var(--card);border:1px solid var(--rule);border-radius:2px;
+  padding:6px 11px;cursor:pointer;color:var(--ink);
+}
+.chip:hover{border-color:var(--ink)}
+.chip:focus-visible{outline:2px solid var(--the);outline-offset:1px}
+
+/* ---------- map ---------- */
+.map .mgate{margin-bottom:26px;background:var(--card);border:1px solid var(--rule);border-left:4px solid var(--ink);border-radius:2px;padding:18px 22px}
+.map h3{font-family:var(--serif);font-weight:400;font-size:21px;margin:0 0 4px}
+.map .mq{font-size:14px;color:var(--muted);margin:0 0 14px}
+.map .row{display:flex;gap:12px;padding:8px 0;border-top:1px solid var(--rule);font-size:14px;align-items:flex-start}
+.map .row .lead{flex:1 1 auto}
+.map .row .ex{font-family:var(--serif);font-style:italic;color:var(--muted);display:block;margin-top:2px}
+.pill{
+  flex:0 0 auto;font-size:12px;font-weight:600;padding:3px 9px;border-radius:2px;white-space:nowrap;
+}
+.p-the{background:var(--the-wash);color:var(--the)}
+.p-an{background:var(--an-wash);color:var(--an)}
+.p-zero{background:var(--zero-wash);color:var(--zero)}
+.p-fixed{background:var(--fixed-wash);color:var(--fixed)}
+.p-next{background:var(--rule);color:var(--ink)}
+.hidden{display:none}
+.foot{margin-top:40px;font-size:13px;color:var(--muted);border-top:1px solid var(--rule);padding-top:14px}
+@media (max-width:560px){
+  .wrap{padding:22px 16px 60px}
+  .masthead h1{font-size:24px}
+  .qtext{font-size:21px}
+  .result .form{font-size:40px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* ---------- gate 0 ---------- */
+.phrasebar .row{display:flex;gap:8px;align-items:stretch;flex-wrap:wrap}
+.phrasebar .row input{flex:1 1 240px}
+.gate0{
+  display:inline-block;font-size:11px;font-weight:600;letter-spacing:.06em;
+  text-transform:uppercase;padding:3px 8px;border-radius:2px;
+  background:var(--rule);color:var(--ink);margin-bottom:10px;
+}
+.g-hit{background:var(--fixed-wash);color:var(--fixed)}
+.g-miss{background:var(--rule);color:var(--muted)}
+.ref{
+  display:inline-block;font-size:12px;color:var(--muted);
+  border:1px solid var(--rule);border-radius:2px;padding:2px 7px;margin-top:14px;
+}
+.note-card{
+  background:var(--card);border:1px solid var(--rule);border-left:4px solid var(--fixed);
+  border-radius:2px;padding:14px 18px;margin-bottom:18px;font-size:14px;
+}
+.note-card b{font-weight:600}
+.err{
+  background:var(--card);border:1px solid var(--rule);border-left:4px solid var(--an);
+  border-radius:2px;padding:18px 22px;font-size:14px;
+}
+.reflist{columns:2;column-gap:26px;margin:10px 0 0;padding:0;list-style:none}
+.reflist li{
+  font-family:var(--serif);font-style:italic;font-size:14px;
+  break-inside:avoid;padding:2px 0;color:var(--ink);
+}
+.refgroup{margin-bottom:18px}
+.refgroup h4{margin:0;font-size:13px;font-weight:600;color:var(--muted);
+  display:flex;align-items:center;gap:8px}
+@media (max-width:560px){ .reflist{columns:1} }
+</style>
 </head>
 <body>
+<div class="wrap">
 
-    <div class="container">
-        <h1>English Article Helper</h1>
+  <div class="masthead">
+    <h1>a <span class="slash">/</span> an <span class="slash">/</span> the <span class="slash">/</span> zero</h1>
+    <div class="modes" role="group" aria-label="View">
+      <button id="m-walk" aria-pressed="true">Walk the tree</button>
+      <button id="m-map" aria-pressed="false">See the whole map</button>
+    </div>
+  </div>
 
-        <div class="input-frame">
-            <label for="noun-entry">Enter a noun or phrase:</label>
-            <div class="input-group">
-                <input type="text" id="noun-entry" placeholder="e.g., I bought book yesterday / USA / breakfast">
-                <button id="check-button">Analyze Phrase</button>
-            </div>
-        </div>
-
-        <div class="display-frame">
-            <h2 id="question-label">Welcome! Enter text above to get started.</h2>
-            <p id="details-label"></p>
-            <div id="options-container"></div>
-        </div>
+  <!-- ============ WALK ============ -->
+  <div id="walk">
+    <div class="phrasebar">
+      <label for="phrase">Noun or phrase you're deciding about</label>
+      <div class="row">
+        <input id="phrase" type="text" placeholder="government" autocomplete="off">
+        <button class="btn" id="check">Check</button>
+      </div>
     </div>
 
-    <script>
-        // ==============================================================================
-        // JAVASCRIPT "BRAIN" - CONVERTED FROM rules.py
-        // ==============================================================================
+    <div id="stage" aria-live="polite"></div>
 
-        const DETERMINER_PATTERN = /^(?:the|an|a)\s+/i;
-        const SIMPLE_PUNCTUATION_PATTERN = /[!"#$%&'()*+,\-./:;<=>?@[\\\]^_`{|}~]/g;
-        const WORD_PATTERN = /[A-Za-z]+(?:'[A-Za-z]+)?/g;
-        const GUIDANCE_NODE_TYPE = "guidance";
+    <div class="trail hidden" id="trailbox">
+      <h2>Your path</h2>
+      <ol id="trail"></ol>
+    </div>
 
-        // Mirror the Python normalization used for lookup table checks.
-        function normalizeNoun(noun) {
-            if (noun == null) {
-                return "";
-            }
+    <div class="actions">
+      <button class="btn ghost" id="back">Go back a step</button>
+      <button class="btn ghost" id="restart">Start over</button>
+    </div>
 
-            let normalized = String(noun).trim();
-            normalized = normalized.replace(DETERMINER_PATTERN, "");
-            normalized = normalized.replace(SIMPLE_PUNCTUATION_PATTERN, "");
-            normalized = normalized.replace(/\s+/g, " ").trim();
+    <div class="traces">
+      <h2>Or watch one of these route itself</h2>
+      <div class="chips" id="chips"></div>
+    </div>
+  </div>
 
-            return normalized.toLowerCase();
-        }
+  <!-- ============ MAP ============ -->
+  <div id="map" class="map hidden"></div>
 
-        function normalizeRulesData(rawData) {
-            if (!rawData || typeof rawData !== "object") {
-                return { lookup_table: {}, decision_tree: {} };
-            }
+  <p class="foot">Fixed expressions and known names are matched automatically. Everything else answers the first question that matches and stops as soon as it reaches a form.</p>
+</div>
 
-            const normalized = rawData;
-            const decisionTree = normalized.decision_tree || {};
+<script>
+"use strict";
 
-            Object.values(decisionTree).forEach((node) => {
-                if (!node || typeof node !== "object") {
-                    return;
-                }
+/* =========================================================
+   All content lives in rules_data.json, shared with the
+   Tkinter app. Gate 0 is matched here; the tree is walked.
+   ========================================================= */
 
-                const articleValue = node.article;
+var D = null, T = null, FORM = null;
+var cur = null, hist = [], entry = "q2";
+var pendingNote = null;
 
-                if (node.type === GUIDANCE_NODE_TYPE) {
-                    if (articleValue !== null) {
-                        node.article = null;
-                    }
-                    return;
-                }
+var stage    = document.getElementById("stage");
+var trail    = document.getElementById("trail");
+var trailbox = document.getElementById("trailbox");
+var phrase   = document.getElementById("phrase");
+var mapEl    = document.getElementById("map");
+var chipsEl  = document.getElementById("chips");
 
-                if (typeof articleValue === "string" && articleValue.toUpperCase() === "GUIDANCE") {
-                    node.type = GUIDANCE_NODE_TYPE;
-                    node.article = null;
-                }
-            });
+function esc(s){
+  return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+}
 
-            normalized.decision_tree = decisionTree;
-            return normalized;
-        }
+/* ---------------- normalization (mirrors logic.py) ---------------- */
 
-        function tokenizeWords(text) {
-            if (text == null) {
-                return [];
-            }
-            const words = String(text).match(WORD_PATTERN);
-            return words ? words.map((token) => token.toLowerCase()) : [];
-        }
+var PUNCT = /[!-\/:-@\[-`{-~]/g;
 
-        function findLookupPhrase(tokens, lookupTable) {
-            if (!tokens.length) {
-                return undefined;
-            }
+function stripPunct(s){ return String(s).replace(PUNCT, ""); }
 
-            const maxWindow = Math.min(4, tokens.length);
-            for (let windowSize = maxWindow; windowSize > 0; windowSize -= 1) {
-                for (let start = 0; start <= tokens.length - windowSize; start += 1) {
-                    const end = start + windowSize;
-                    const candidate = tokens.slice(start, end).join(' ');
-                    if (lookupTable[candidate]) {
-                        return candidate;
-                    }
-                }
-            }
-            return undefined;
-        }
+function normalize(s){
+  var n = String(s == null ? "" : s).trim();
+  n = n.replace(/^(?:the|an|a)\s+/i, "");
+  n = stripPunct(n);
+  n = n.replace(/\s+/g, " ").trim();
+  return n.toLowerCase();
+}
 
-        function inferFocusNoun(tokens) {
-            if (!tokens.length) {
-                return "";
-            }
+/* same trimming as normalize(), but keeps the user's capitalisation so
+   proper nouns render as "the Nile" rather than "the nile" */
+function displayWord(s){
+  var n = String(s == null ? "" : s).trim();
+  n = n.replace(/^(?:the|an|a)\s+/i, "");
+  n = stripPunct(n);
+  return n.replace(/\s+/g, " ").trim();
+}
 
-            const determiners = new Set(["a", "an", "the"]);
-            for (let index = 0; index < tokens.length - 1; index += 1) {
-                if (determiners.has(tokens[index])) {
-                    const candidate = tokens[index + 1];
-                    if (!determiners.has(candidate)) {
-                        return candidate;
-                    }
-                }
-            }
+function tokenize(s){
+  var t = stripPunct(String(s == null ? "" : s).toLowerCase());
+  t = t.replace(/\s+/g, " ").trim();
+  return t ? t.split(" ") : [];
+}
 
-            const stopWords = new Set([
-                "i", "you", "he", "she", "it", "we", "they", "me", "him", "her", "us", "them",
-                "my", "your", "his", "our", "their", "am", "is", "are", "was", "were", "be",
-                "been", "being", "do", "does", "did", "have", "has", "had", "go", "goes", "went",
-                "come", "came", "arrive", "arrived", "buy", "bought", "see", "saw", "like", "use",
-                "at", "in", "on", "to", "for", "from", "with", "by", "of", "and", "or", "but",
-                "this", "that", "these", "those", "today", "tomorrow", "yesterday", "now", "then",
-            ]);
+/* longest n-gram in tokens that exists as a key of map */
+function longestPhrase(tokens, map){
+  var max = Math.min(tokens.length, 5), n, i, key;
+  for(n = max; n >= 1; n--){
+    for(i = 0; i + n <= tokens.length; i++){
+      key = tokens.slice(i, i + n).join(" ");
+      if(Object.prototype.hasOwnProperty.call(map, key)) return key;
+    }
+  }
+  return null;
+}
 
-            const filtered = tokens.filter((token) => !determiners.has(token) && !stopWords.has(token));
-            if (filtered.length) {
-                return filtered[filtered.length - 1];
-            }
-            return "";
-        }
+/* article string -> form key */
+function formOf(article){
+  var a = String(article).toLowerCase();
+  if(a.indexOf("the") === 0) return "the";
+  if(a.indexOf("a /") === 0 || a.indexOf("a/") === 0 || a.indexOf("an") === 0) return "an";
+  return "zero";
+}
 
-        function buildExampleSentence(articleValue, focusNoun) {
-            if (!focusNoun) {
-                return "";
-            }
+/* ---------------- Gate 0 ---------------- */
 
-            const nounText = String(focusNoun).trim();
-            if (!nounText) {
-                return "";
-            }
+function gate0(text){
+  var norm = normalize(text);
+  var tokens = tokenize(text);
+  if(!norm && !tokens.length) return null;
+  var key, e;
 
-            const normalizedArticle = String(articleValue || "").toLowerCase();
-            if (normalizedArticle === "the") {
-                return `Example: Please pass the ${nounText}.`;
-            }
-            if (normalizedArticle === "a / an") {
-                const articleChoice = /^[aeiou]/i.test(nounText) ? "an" : "a";
-                return `Example: I saw ${articleChoice} ${nounText} near my house.`;
-            }
-            if (normalizedArticle.startsWith("no article")) {
-                return `Example: I use ${nounText} every day.`;
-            }
-            return "";
-        }
+  /* 1. fixed expressions win over everything */
+  key = longestPhrase(tokens, D.fixed_expressions) ||
+        (D.fixed_expressions[norm] ? norm : null);
+  if(key){
+    e = D.fixed_expressions[key];
+    return {form:formOf(e.article), why:e.explanation, ref:e.rule_ref,
+            cat:"Gate 0 \u00b7 fixed expression", match:key, fixed:true};
+  }
 
-        class ArticleLogic {
-            constructor(lookupTable, decisionTree) {
-                this.lookupTable = lookupTable;
-                this.decisionTree = decisionTree;
-                this.reset();
-            }
+  /* 2. noun + classifying number or letter */
+  var np = D.patterns.noun_number;
+  if(new RegExp(np.regex, "i").test(norm)){
+    return {form:formOf(np.article), why:np.explanation, ref:np.rule_ref,
+            cat:"Gate 0 \u00b7 noun with a classifying number", match:norm};
+  }
 
-            reset() {
-                this.currentNodeId = "start";
-            }
+  /* 3. the lookup table, direct then longest phrase */
+  key = Object.prototype.hasOwnProperty.call(D.lookup_table, norm) ? norm
+      : longestPhrase(tokens, D.lookup_table);
+  if(key){
+    e = D.lookup_table[key];
+    return {form:formOf(e.article), why:e.explanation, ref:e.rule_ref,
+            cat:"Gate 0 \u00b7 listed noun", match:key};
+  }
 
-            checkLookupTable(noun) {
-                const normalized = normalizeNoun(noun);
-                if (!normalized) {
-                    return undefined;
-                }
+  /* 4. nationality adjective for a whole people */
+  var nat = D.nationality_the;
+  if(nat.examples.indexOf(norm) !== -1){
+    return {form:"the", why:nat.explanation, ref:nat.rule_ref,
+            cat:"Gate 0 \u00b7 nationality adjective", match:norm};
+  }
 
-                return this.lookupTable[normalized];
-            }
+  /* 5. names in the the-taking class */
+  var pn = D.proper_noun_the, i;
+  var hit = pn.named.indexOf(norm) !== -1;
+  if(!hit) for(i = 0; i < pn.named.length; i++){
+    if(tokens.indexOf(pn.named[i]) !== -1){ hit = true; break; }
+  }
+  if(!hit) for(i = 0; i < pn.keywords.length; i++){
+    if(tokens.indexOf(pn.keywords[i]) !== -1){ hit = true; break; }
+  }
+  if(!hit && pn.contains_of && tokens.indexOf("of") !== -1 && /[A-Z]/.test(String(text))) hit = true;
+  if(hit){
+    return {form:"the", why:pn.explanation, ref:pn.rule_ref,
+            cat:"Gate 0 \u00b7 name in the the-taking class", match:norm};
+  }
 
-            analyzeInput(text) {
-                const directLookup = this.checkLookupTable(text);
-                if (directLookup) {
-                    return {
-                        mode: "lookup",
-                        focusNoun: normalizeNoun(text),
-                        result: directLookup,
-                    };
-                }
+  return null;
+}
 
-                const tokens = tokenizeWords(text);
-                const phraseMatch = findLookupPhrase(tokens, this.lookupTable);
-                if (phraseMatch) {
-                    return {
-                        mode: "lookup",
-                        focusNoun: phraseMatch,
-                        result: this.lookupTable[phraseMatch],
-                    };
-                }
+/* ---------------- entry point ---------------- */
 
-                return {
-                    mode: "question",
-                    focusNoun: inferFocusNoun(tokens),
-                    result: undefined,
-                };
-            }
+function analyze(text, scriptedPath){
+  hist = [];
+  pendingNote = null;
+  cur = entry;
 
-            getCurrentNode() {
-                return this.decisionTree[this.currentNodeId];
-            }
+  var hitResult = gate0(text);
+  if(hitResult){ renderGate0(hitResult); return true; }
 
-            processAnswer(selectedOptionText) {
-                const currentNode = this.getCurrentNode();
-                const nextNodeId = currentNode.options[selectedOptionText];
-                this.currentNodeId = nextNodeId;
-                return this.getCurrentNode();
-            }
-        }
+  /* noun adjunct: two bare nouns, nothing matched -> the second noun decides */
+  var tokens = tokenize(normalize(text));
+  if(tokens.length === 2){
+    var second = tokens[1];
+    var secondHit = gate0(second);
+    if(secondHit){
+      secondHit.adjunct = tokens[0];
+      renderGate0(secondHit);
+      return true;
+    }
+    pendingNote = "<b>Noun-noun pair.</b> " + D.patterns.noun_adjunct.explanation +
+                  " Deciding about <em>" + esc(second) + "</em>. (" +
+                  D.patterns.noun_adjunct.rule_ref + ")";
+  }
 
-        // ==============================================================================
-        // JAVASCRIPT "GLUE" - CONNECTING THE BRAIN TO THE HTML
-        // ==============================================================================
+  if(scriptedPath && scriptedPath.length){
+    scriptedPath.forEach(function(idx){
+      var n = T[cur];
+      if(!n || !n.opts) return;
+      hist.push({node:cur, opt:idx});
+      cur = n.opts[idx].go;
+    });
+  }
+  render();
+  return false;
+}
 
-        document.addEventListener('DOMContentLoaded', () => {
-            const nounEntry = document.getElementById('noun-entry');
-            const checkButton = document.getElementById('check-button');
-            const questionLabel = document.getElementById('question-label');
-            const detailsLabel = document.getElementById('details-label');
-            const optionsContainer = document.getElementById('options-container');
+/* ---------------- rendering ---------------- */
 
-            const WELCOME_MESSAGE = "Welcome! Enter text above to get started.";
-            let currentFocusNoun = "";
+function render(){
+  var n = T[cur];
+  stage.innerHTML = "";
+  if(pendingNote){
+    var nc = document.createElement("div");
+    nc.className = "note-card";
+    nc.innerHTML = pendingNote;
+    stage.appendChild(nc);
+  }
+  if(!hist.length){
+    var badge = document.createElement("div");
+    badge.className = "gate0 g-miss";
+    badge.textContent = "Gate 0 \u2014 no fixed expression or listed name matched";
+    stage.appendChild(badge);
+  }
+  if(n.out) renderResult(n); else renderQuestion(n);
+  renderTrail();
+}
 
-            nounEntry.disabled = true;
-            checkButton.disabled = true;
-            questionLabel.textContent = "Loading rules...";
-            detailsLabel.textContent = "Please wait while we fetch the article guide.";
+function renderQuestion(n){
+  var card = document.createElement("div");
+  card.className = "qcard";
+  var h = '<div class="gate">' + n.gate + '</div><h2 class="qtext">' + n.q + '</h2>';
+  if(n.note) h += '<p class="qnote">' + n.note + '</p>';
+  card.innerHTML = h;
 
-            const initializeApp = (data) => {
-                const normalizedData = normalizeRulesData(data);
-                const lookupTable = normalizedData.lookup_table;
-                const decisionTree = normalizedData.decision_tree;
+  var box = document.createElement("div");
+  box.className = "opts" + (n.style === "checklist" ? " checklist" : "");
+  n.opts.forEach(function(o, i){
+    var b = document.createElement("button");
+    b.className = "opt" + (o.cls ? " " + o.cls : "");
+    var inner = "";
+    if(o.tag) inner += '<span class="tag">' + o.tag + '</span>';
+    inner += o.label;
+    if(o.ex) inner += '<span class="ex">' + o.ex + '</span>';
+    b.innerHTML = inner;
+    b.addEventListener("click", function(){ choose(i); });
+    box.appendChild(b);
+  });
+  card.appendChild(box);
 
-                if (!lookupTable || !decisionTree) {
-                    throw new Error('Invalid rules data format.');
-                }
+  if(n.warn){
+    var w = document.createElement("div");
+    w.className = "warn";
+    w.innerHTML = n.warn;
+    card.appendChild(w);
+  }
+  stage.appendChild(card);
+}
 
-                const logic = new ArticleLogic(lookupTable, decisionTree);
+function buildPhrase(form, word){
+  if(!word) return "";
+  if(form === "the") return "the " + word;
+  if(form === "an")  return (/^[aeiou]/i.test(word) ? "an " : "a ") + word;
+  return word;
+}
 
-                function resetApp() {
-                    logic.reset();
-                    currentFocusNoun = "";
-                    nounEntry.value = "";
-                    questionLabel.textContent = WELCOME_MESSAGE;
-                    detailsLabel.textContent = "";
-                    optionsContainer.innerHTML = '';
-                }
+function renderResult(n){
+  var f = FORM[n.out];
+  var card = document.createElement("div");
+  card.className = "result " + f.cls;
+  var h = '<p class="form">' + f.word + '</p>' +
+          '<p class="cat">' + n.cat + '</p>' +
+          '<p class="why">' + n.why + '</p>';
+  if(n.list){
+    h += "<ul>";
+    n.list.forEach(function(li){ h += "<li>" + li + "</li>"; });
+    h += "</ul>";
+  }
+  var word = displayWord(phrase.value);
+  if(word && n.out !== "fixed"){
+    h += '<p class="built">' + esc(buildPhrase(n.out, word)) + '</p>';
+  }
+  if(n.rule_ref) h += '<span class="ref">Rule ' + esc(n.rule_ref) + '</span>';
+  card.innerHTML = h;
+  stage.appendChild(card);
+}
 
-                function displayFinalResult(resultData, focusNoun = "") {
-                    optionsContainer.innerHTML = '';
+function renderGate0(r){
+  stage.innerHTML = "";
+  trailbox.classList.add("hidden");
+  trail.innerHTML = "";
 
-                    const articleValue = resultData && resultData.article;
-                    const isGuidance = (resultData && resultData.type === GUIDANCE_NODE_TYPE) || articleValue == null;
+  var badge = document.createElement("div");
+  badge.className = "gate0 g-hit";
+  badge.textContent = "Gate 0 \u2014 matched \u201c" + r.match + "\u201d before any question";
+  stage.appendChild(badge);
 
-                    let headlineText = "Guidance Provided (no article recommendation)";
-                    if (!isGuidance) {
-                        const articleResult = String(articleValue || '').toUpperCase();
-                        headlineText = `Recommended Article: '${articleResult}'`;
-                    }
+  if(r.adjunct){
+    var nc = document.createElement("div");
+    nc.className = "note-card";
+    nc.innerHTML = "<b>Noun-noun pair.</b> " + D.patterns.noun_adjunct.explanation +
+                   " So <em>" + esc(r.adjunct) + "</em> is ignored and <em>" +
+                   esc(r.match) + "</em> decides. (" + D.patterns.noun_adjunct.rule_ref + ")";
+    stage.appendChild(nc);
+  }
 
-                    questionLabel.textContent = headlineText;
-                    detailsLabel.textContent = "";
+  var f = FORM[r.form];
+  var card = document.createElement("div");
+  card.className = "result " + f.cls;
+  var h = '<p class="form">' + f.word + '</p>' +
+          '<p class="cat">' + r.cat + '</p>' +
+          '<p class="why">' + r.why + '</p>';
+  if(r.fixed){
+    h += '<p class="built">' + esc(r.match) + '</p>';
+  }else{
+    /* prefer what the user actually typed, so capitalisation survives */
+    var typed = displayWord(phrase.value);
+    var word = (normalize(typed) === r.match) ? typed : r.match;
+    h += '<p class="built">' + esc(buildPhrase(r.form, word)) + '</p>';
+  }
+  if(r.ref) h += '<span class="ref">Rule ' + esc(r.ref) + '</span>';
+  card.innerHTML = h;
+  stage.appendChild(card);
+}
 
-                    const explanationEl = document.createElement('div');
-                    explanationEl.className = 'explanation-text';
-                    if (isGuidance) {
-                        explanationEl.classList.add('guidance');
-                    }
+function renderTrail(){
+  if(!hist.length){ trailbox.classList.add("hidden"); trail.innerHTML = ""; return; }
+  trailbox.classList.remove("hidden");
+  trail.innerHTML = "";
+  hist.forEach(function(step){
+    var n = T[step.node], o = n.opts[step.opt];
+    var li = document.createElement("li");
+    li.innerHTML = '<span class="q">' + n.gate + ' \u2014 </span>' +
+                   '<span class="a">' + o.label.replace(/^\d[a-z]? \u00b7 /, "") + '</span>';
+    trail.appendChild(li);
+  });
+}
 
-                    const explanationCopy = (resultData && resultData.explanation) ? resultData.explanation : '';
-                    const exampleCopy = buildExampleSentence(articleValue, focusNoun);
-                    const focusCopy = focusNoun ? `<span>Focus noun:</span> ${focusNoun}<br><br>` : '';
-                    const ruleRef = (resultData && resultData.rule_ref)
-                        ? `<br><br><span>(Reference: ${resultData.rule_ref})</span>`
-                        : '';
-                    const guidancePrefix = isGuidance ? '<strong>Guidance:</strong> ' : '';
-                    const exampleSection = exampleCopy ? `<br><br>${exampleCopy}` : '';
-                    explanationEl.innerHTML = `${focusCopy}${guidancePrefix}${explanationCopy}${exampleSection}${ruleRef}`;
-                    optionsContainer.appendChild(explanationEl);
+function choose(i){
+  var n = T[cur];
+  hist.push({node:cur, opt:i});
+  cur = n.opts[i].go;
+  pendingNote = null;
+  render();
+  stage.scrollIntoView({block:"nearest", behavior:"smooth"});
+}
 
-                    const resetButton = document.createElement('button');
-                    resetButton.textContent = "Start Over";
-                    resetButton.className = 'reset-button';
-                    resetButton.style.marginTop = '20px';
-                    resetButton.addEventListener('click', resetApp);
-                    optionsContainer.appendChild(resetButton);
-                }
+/* ---------------- controls ---------------- */
 
-                function handleOptionClick(selectedOption) {
-                    const nextNode = logic.processAnswer(selectedOption);
-                    if (nextNode.question) {
-                        updateQuestionAndOptions(nextNode);
-                    } else {
-                        displayFinalResult(nextNode);
-                    }
-                }
+function runCheck(){
+  analyze(phrase.value, null);
+  stage.scrollIntoView({block:"nearest", behavior:"smooth"});
+}
 
-                function updateQuestionAndOptions(nodeData) {
-                    optionsContainer.innerHTML = '';
-                    questionLabel.textContent = nodeData.question;
-                    const detailsText = nodeData.details || "";
-                    if (currentFocusNoun) {
-                        detailsLabel.textContent = `Detected focus word: '${currentFocusNoun}'. ${detailsText}`.trim();
-                    } else {
-                        detailsLabel.textContent = detailsText;
-                    }
+document.getElementById("check").addEventListener("click", runCheck);
+phrase.addEventListener("keydown", function(e){
+  if(e.key === "Enter"){ e.preventDefault(); runCheck(); }
+});
 
-                    for (const optionText of Object.keys(nodeData.options)) {
-                        const button = document.createElement('button');
-                        button.textContent = optionText;
-                        button.className = 'option-button';
-                        button.addEventListener('click', () => handleOptionClick(optionText));
-                        optionsContainer.appendChild(button);
-                    }
-                }
+document.getElementById("back").addEventListener("click", function(){
+  if(!hist.length) return;
+  var last = hist.pop();
+  cur = last.node;
+  render();
+});
 
-                function startCheck() {
-                    logic.reset();
-                    currentFocusNoun = "";
-                    const userInput = nounEntry.value.trim();
-                    if (!userInput) {
-                        alert("Please enter a noun or phrase to check.");
-                        return;
-                    }
+document.getElementById("restart").addEventListener("click", function(){
+  hist = []; cur = entry; pendingNote = null; phrase.value = "";
+  render(); phrase.focus();
+});
 
-                    const analysis = logic.analyzeInput(userInput);
-                    currentFocusNoun = analysis.focusNoun || "";
+/* ---------------- map ---------------- */
 
-                    if (analysis.mode === "lookup" && analysis.result) {
-                        displayFinalResult(analysis.result, currentFocusNoun);
-                        return;
-                    }
+function buildMap(){
+  mapEl.innerHTML = "";
 
-                    const startNode = logic.getCurrentNode();
-                    updateQuestionAndOptions(startNode);
-                }
+  /* Gate 0 reference: what used to be Question 1 */
+  var fr = D.fixed_reference;
+  var g0 = document.createElement("div");
+  g0.className = "mgate";
+  var gh = "<h3>" + fr.title + "</h3><p class=\"mq\">" + fr.note + "</p>";
+  fr.groups.forEach(function(grp){
+    gh += '<div class="refgroup"><h4>' + grp.label +
+          ' <span class="pill p-' + (grp.form === "an" ? "an" : grp.form) + '">' +
+          FORM[grp.form].word + '</span></h4><ul class="reflist">';
+    grp.items.forEach(function(it){ gh += "<li>" + esc(it) + "</li>"; });
+    gh += "</ul></div>";
+  });
+  g0.innerHTML = gh;
+  mapEl.appendChild(g0);
 
-                checkButton.addEventListener('click', startCheck);
-                nounEntry.addEventListener('keyup', (event) => {
-                    if (event.key === 'Enter') {
-                        startCheck();
-                    }
-                });
+  /* the tree itself, generated from the same data the walk uses */
+  var order = ["q2", "q3", "q4", "q5"];
+  order.forEach(function(id){
+    var n = T[id];
+    var d = document.createElement("div");
+    d.className = "mgate";
+    var h = "<h3>" + n.gate + " \u2014 " + n.q + "</h3>";
+    if(n.note) h += '<p class="mq">' + n.note + "</p>";
+    h += renderMapRows(n);
+    d.innerHTML = h;
+    mapEl.appendChild(d);
+  });
+}
 
-                nounEntry.disabled = false;
-                checkButton.disabled = false;
-                resetApp();
-                nounEntry.focus();
-            };
+function pillFor(nodeId){
+  var n = T[nodeId];
+  if(!n) return {p:nodeId, c:"p-next"};
+  if(n.out) return {p:FORM[n.out].word, c:"p-" + n.out};
+  return {p:n.gate, c:"p-next"};
+}
 
-            const loadRulesData = async () => {
-                try {
-                    const response = await fetch('rules_data.json');
-                    if (!response.ok) {
-                        throw new Error(`Request failed: ${response.status} ${response.statusText}`);
-                    }
-                    const data = await response.json();
-                    initializeApp(data);
-                } catch (error) {
-                    console.error('Failed to load rules data:', error);
-                    questionLabel.textContent = "Unable to load article rules.";
-                    detailsLabel.textContent = "If you're opening this file locally, start a simple HTTP server (e.g., `python -m http.server`) so the browser can access rules_data.json.";
-                }
-            };
+function renderMapRows(n){
+  var h = "";
+  n.opts.forEach(function(o){
+    var target = T[o.go], rows;
+    /* expand a sub-question inline so the map stays flat and readable */
+    if(target && target.opts && (o.go === "q2a" || o.go === "q3a" || o.go === "q4f")){
+      rows = target.opts.map(function(so){
+        var pf = pillFor(so.go);
+        return {t: o.label + " \u2192 " + so.label, e: so.ex || "", p: pf.p, c: pf.c};
+      });
+    }else{
+      var pf2 = pillFor(o.go);
+      rows = [{t:o.label, e:o.ex || "", p:pf2.p, c:pf2.c}];
+    }
+    rows.forEach(function(r){
+      h += '<div class="row"><div class="lead">' + r.t +
+           (r.e ? '<span class="ex">' + r.e + "</span>" : "") +
+           '</div><span class="pill ' + r.c + '">' + r.p + "</span></div>";
+    });
+  });
+  return h;
+}
 
-            loadRulesData();
-        });
+/* ---------------- traces ---------------- */
 
-    </script>
+function buildChips(){
+  chipsEl.innerHTML = "";
+  D.traces.forEach(function(t){
+    var b = document.createElement("button");
+    b.className = "chip";
+    b.textContent = t.p;
+    b.addEventListener("click", function(){
+      phrase.value = t.p;
+      analyze(t.p, t.path || null);
+      stage.scrollIntoView({block:"nearest", behavior:"smooth"});
+    });
+    chipsEl.appendChild(b);
+  });
+}
+
+/* ---------------- mode toggle ---------------- */
+
+var walkEl = document.getElementById("walk");
+var bWalk  = document.getElementById("m-walk");
+var bMap   = document.getElementById("m-map");
+function mode(isWalk){
+  walkEl.classList.toggle("hidden", !isWalk);
+  mapEl.classList.toggle("hidden", isWalk);
+  bWalk.setAttribute("aria-pressed", String(isWalk));
+  bMap.setAttribute("aria-pressed", String(!isWalk));
+}
+bWalk.addEventListener("click", function(){ mode(true); });
+bMap.addEventListener("click", function(){ mode(false); });
+
+/* ---------------- boot ---------------- */
+
+fetch("rules_data.json")
+  .then(function(r){
+    if(!r.ok) throw new Error("HTTP " + r.status);
+    return r.json();
+  })
+  .then(function(data){
+    D = data;
+    T = D.decision_tree;
+    FORM = D.form_labels;
+    entry = (D.meta && D.meta.entry_node) || "q2";
+    cur = entry;
+    buildChips();
+    buildMap();
+    render();
+  })
+  .catch(function(err){
+    stage.innerHTML = '<div class="err"><b>Could not load rules_data.json.</b><br><br>' +
+      'The page reads its rules from that file, so it has to be served over HTTP \u2014 ' +
+      'opening the .html directly from disk will not work. Run ' +
+      '<code>python -m http.server</code> in the project folder and open ' +
+      '<code>http://localhost:8000/</code>.<br><br>' +
+      '<span class="ex">' + esc(String(err && err.message ? err.message : err)) + '</span></div>';
+  });
+</script>
 </body>
 </html>

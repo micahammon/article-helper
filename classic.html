@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English Article Helper</title>
+    <style>
+        /* --- Basic Styling & Layout --- */
+        :root {
+            --bg-color: #f0f2f5;
+            --container-bg: #ffffff;
+            --text-color: #1c1e21;
+            --primary-color: #1877f2;
+            --primary-hover: #166fe5;
+            --secondary-text: #606770;
+            --border-color: #dddfe2;
+            --shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding-top: 50px;
+            margin: 0;
+            min-height: 100vh;
+        }
+        .container {
+            width: 100%;
+            max-width: 600px;
+            background-color: var(--container-bg);
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            padding: 20px 30px;
+            box-sizing: border-box;
+        }
+
+        /* --- Widget Styling --- */
+        h1 {
+            text-align: center;
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+        .input-frame {
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 15px;
+            margin-bottom: 25px;
+        }
+        .input-frame label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        .input-group {
+            display: flex;
+            gap: 10px;
+        }
+        .input-group input {
+            flex-grow: 1;
+            padding: 12px;
+            font-size: 16px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+        }
+        .input-group button, .option-button, .reset-button {
+            padding: 12px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .input-group button:hover, .option-button:hover, .reset-button:hover {
+            background-color: var(--primary-hover);
+        }
+        .display-frame {
+            text-align: center;
+        }
+        #question-label {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        #details-label {
+            font-size: 16px;
+            font-style: italic;
+            color: var(--secondary-text);
+            margin-bottom: 20px;
+            min-height: 40px; /* Reserve space */
+        }
+        #options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .explanation-text {
+            text-align: left;
+            background-color: var(--bg-color);
+            padding: 15px;
+            border-radius: 6px;
+            line-height: 1.5;
+        }
+        .explanation-text span {
+            font-weight: bold;
+            color: var(--secondary-text);
+        }
+
+        .explanation-text.guidance {
+            border-left: 4px solid var(--primary-color);
+            background-color: rgba(24, 119, 242, 0.1);
+        }
+
+        .explanation-text.guidance strong {
+            color: var(--primary-color);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>English Article Helper</h1>
+
+        <div class="input-frame">
+            <label for="noun-entry">Enter a noun or phrase:</label>
+            <div class="input-group">
+                <input type="text" id="noun-entry" placeholder="e.g., I bought book yesterday / USA / breakfast">
+                <button id="check-button">Analyze Phrase</button>
+            </div>
+        </div>
+
+        <div class="display-frame">
+            <h2 id="question-label">Welcome! Enter text above to get started.</h2>
+            <p id="details-label"></p>
+            <div id="options-container"></div>
+        </div>
+    </div>
+
+    <script>
+        // ==============================================================================
+        // JAVASCRIPT "BRAIN" - CONVERTED FROM rules.py
+        // ==============================================================================
+
+        const DETERMINER_PATTERN = /^(?:the|an|a)\s+/i;
+        const SIMPLE_PUNCTUATION_PATTERN = /[!"#$%&'()*+,\-./:;<=>?@[\\\]^_`{|}~]/g;
+        const WORD_PATTERN = /[A-Za-z]+(?:'[A-Za-z]+)?/g;
+        const GUIDANCE_NODE_TYPE = "guidance";
+
+        // Mirror the Python normalization used for lookup table checks.
+        function normalizeNoun(noun) {
+            if (noun == null) {
+                return "";
+            }
+
+            let normalized = String(noun).trim();
+            normalized = normalized.replace(DETERMINER_PATTERN, "");
+            normalized = normalized.replace(SIMPLE_PUNCTUATION_PATTERN, "");
+            normalized = normalized.replace(/\s+/g, " ").trim();
+
+            return normalized.toLowerCase();
+        }
+
+        function normalizeRulesData(rawData) {
+            if (!rawData || typeof rawData !== "object") {
+                return { lookup_table: {}, decision_tree: {} };
+            }
+
+            const normalized = rawData;
+            const decisionTree = normalized.decision_tree || {};
+
+            Object.values(decisionTree).forEach((node) => {
+                if (!node || typeof node !== "object") {
+                    return;
+                }
+
+                const articleValue = node.article;
+
+                if (node.type === GUIDANCE_NODE_TYPE) {
+                    if (articleValue !== null) {
+                        node.article = null;
+                    }
+                    return;
+                }
+
+                if (typeof articleValue === "string" && articleValue.toUpperCase() === "GUIDANCE") {
+                    node.type = GUIDANCE_NODE_TYPE;
+                    node.article = null;
+                }
+            });
+
+            normalized.decision_tree = decisionTree;
+            return normalized;
+        }
+
+        function tokenizeWords(text) {
+            if (text == null) {
+                return [];
+            }
+            const words = String(text).match(WORD_PATTERN);
+            return words ? words.map((token) => token.toLowerCase()) : [];
+        }
+
+        function findLookupPhrase(tokens, lookupTable) {
+            if (!tokens.length) {
+                return undefined;
+            }
+
+            const maxWindow = Math.min(4, tokens.length);
+            for (let windowSize = maxWindow; windowSize > 0; windowSize -= 1) {
+                for (let start = 0; start <= tokens.length - windowSize; start += 1) {
+                    const end = start + windowSize;
+                    const candidate = tokens.slice(start, end).join(' ');
+                    if (lookupTable[candidate]) {
+                        return candidate;
+                    }
+                }
+            }
+            return undefined;
+        }
+
+        function inferFocusNoun(tokens) {
+            if (!tokens.length) {
+                return "";
+            }
+
+            const determiners = new Set(["a", "an", "the"]);
+            for (let index = 0; index < tokens.length - 1; index += 1) {
+                if (determiners.has(tokens[index])) {
+                    const candidate = tokens[index + 1];
+                    if (!determiners.has(candidate)) {
+                        return candidate;
+                    }
+                }
+            }
+
+            const stopWords = new Set([
+                "i", "you", "he", "she", "it", "we", "they", "me", "him", "her", "us", "them",
+                "my", "your", "his", "our", "their", "am", "is", "are", "was", "were", "be",
+                "been", "being", "do", "does", "did", "have", "has", "had", "go", "goes", "went",
+                "come", "came", "arrive", "arrived", "buy", "bought", "see", "saw", "like", "use",
+                "at", "in", "on", "to", "for", "from", "with", "by", "of", "and", "or", "but",
+                "this", "that", "these", "those", "today", "tomorrow", "yesterday", "now", "then",
+            ]);
+
+            const filtered = tokens.filter((token) => !determiners.has(token) && !stopWords.has(token));
+            if (filtered.length) {
+                return filtered[filtered.length - 1];
+            }
+            return "";
+        }
+
+        function buildExampleSentence(articleValue, focusNoun) {
+            if (!focusNoun) {
+                return "";
+            }
+
+            const nounText = String(focusNoun).trim();
+            if (!nounText) {
+                return "";
+            }
+
+            const normalizedArticle = String(articleValue || "").toLowerCase();
+            if (normalizedArticle === "the") {
+                return `Example: Please pass the ${nounText}.`;
+            }
+            if (normalizedArticle === "a / an") {
+                const articleChoice = /^[aeiou]/i.test(nounText) ? "an" : "a";
+                return `Example: I saw ${articleChoice} ${nounText} near my house.`;
+            }
+            if (normalizedArticle.startsWith("no article")) {
+                return `Example: I use ${nounText} every day.`;
+            }
+            return "";
+        }
+
+        class ArticleLogic {
+            constructor(lookupTable, decisionTree) {
+                this.lookupTable = lookupTable;
+                this.decisionTree = decisionTree;
+                this.reset();
+            }
+
+            reset() {
+                this.currentNodeId = "start";
+            }
+
+            checkLookupTable(noun) {
+                const normalized = normalizeNoun(noun);
+                if (!normalized) {
+                    return undefined;
+                }
+
+                return this.lookupTable[normalized];
+            }
+
+            analyzeInput(text) {
+                const directLookup = this.checkLookupTable(text);
+                if (directLookup) {
+                    return {
+                        mode: "lookup",
+                        focusNoun: normalizeNoun(text),
+                        result: directLookup,
+                    };
+                }
+
+                const tokens = tokenizeWords(text);
+                const phraseMatch = findLookupPhrase(tokens, this.lookupTable);
+                if (phraseMatch) {
+                    return {
+                        mode: "lookup",
+                        focusNoun: phraseMatch,
+                        result: this.lookupTable[phraseMatch],
+                    };
+                }
+
+                return {
+                    mode: "question",
+                    focusNoun: inferFocusNoun(tokens),
+                    result: undefined,
+                };
+            }
+
+            getCurrentNode() {
+                return this.decisionTree[this.currentNodeId];
+            }
+
+            processAnswer(selectedOptionText) {
+                const currentNode = this.getCurrentNode();
+                const nextNodeId = currentNode.options[selectedOptionText];
+                this.currentNodeId = nextNodeId;
+                return this.getCurrentNode();
+            }
+        }
+
+        // ==============================================================================
+        // JAVASCRIPT "GLUE" - CONNECTING THE BRAIN TO THE HTML
+        // ==============================================================================
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const nounEntry = document.getElementById('noun-entry');
+            const checkButton = document.getElementById('check-button');
+            const questionLabel = document.getElementById('question-label');
+            const detailsLabel = document.getElementById('details-label');
+            const optionsContainer = document.getElementById('options-container');
+
+            const WELCOME_MESSAGE = "Welcome! Enter text above to get started.";
+            let currentFocusNoun = "";
+
+            nounEntry.disabled = true;
+            checkButton.disabled = true;
+            questionLabel.textContent = "Loading rules...";
+            detailsLabel.textContent = "Please wait while we fetch the article guide.";
+
+            const initializeApp = (data) => {
+                const normalizedData = normalizeRulesData(data);
+                const lookupTable = normalizedData.lookup_table;
+                const decisionTree = normalizedData.decision_tree;
+
+                if (!lookupTable || !decisionTree) {
+                    throw new Error('Invalid rules data format.');
+                }
+
+                const logic = new ArticleLogic(lookupTable, decisionTree);
+
+                function resetApp() {
+                    logic.reset();
+                    currentFocusNoun = "";
+                    nounEntry.value = "";
+                    questionLabel.textContent = WELCOME_MESSAGE;
+                    detailsLabel.textContent = "";
+                    optionsContainer.innerHTML = '';
+                }
+
+                function displayFinalResult(resultData, focusNoun = "") {
+                    optionsContainer.innerHTML = '';
+
+                    const articleValue = resultData && resultData.article;
+                    const isGuidance = (resultData && resultData.type === GUIDANCE_NODE_TYPE) || articleValue == null;
+
+                    let headlineText = "Guidance Provided (no article recommendation)";
+                    if (!isGuidance) {
+                        const articleResult = String(articleValue || '').toUpperCase();
+                        headlineText = `Recommended Article: '${articleResult}'`;
+                    }
+
+                    questionLabel.textContent = headlineText;
+                    detailsLabel.textContent = "";
+
+                    const explanationEl = document.createElement('div');
+                    explanationEl.className = 'explanation-text';
+                    if (isGuidance) {
+                        explanationEl.classList.add('guidance');
+                    }
+
+                    const explanationCopy = (resultData && resultData.explanation) ? resultData.explanation : '';
+                    const exampleCopy = buildExampleSentence(articleValue, focusNoun);
+                    const focusCopy = focusNoun ? `<span>Focus noun:</span> ${focusNoun}<br><br>` : '';
+                    const ruleRef = (resultData && resultData.rule_ref)
+                        ? `<br><br><span>(Reference: ${resultData.rule_ref})</span>`
+                        : '';
+                    const guidancePrefix = isGuidance ? '<strong>Guidance:</strong> ' : '';
+                    const exampleSection = exampleCopy ? `<br><br>${exampleCopy}` : '';
+                    explanationEl.innerHTML = `${focusCopy}${guidancePrefix}${explanationCopy}${exampleSection}${ruleRef}`;
+                    optionsContainer.appendChild(explanationEl);
+
+                    const resetButton = document.createElement('button');
+                    resetButton.textContent = "Start Over";
+                    resetButton.className = 'reset-button';
+                    resetButton.style.marginTop = '20px';
+                    resetButton.addEventListener('click', resetApp);
+                    optionsContainer.appendChild(resetButton);
+                }
+
+                function handleOptionClick(selectedOption) {
+                    const nextNode = logic.processAnswer(selectedOption);
+                    if (nextNode.question) {
+                        updateQuestionAndOptions(nextNode);
+                    } else {
+                        displayFinalResult(nextNode);
+                    }
+                }
+
+                function updateQuestionAndOptions(nodeData) {
+                    optionsContainer.innerHTML = '';
+                    questionLabel.textContent = nodeData.question;
+                    const detailsText = nodeData.details || "";
+                    if (currentFocusNoun) {
+                        detailsLabel.textContent = `Detected focus word: '${currentFocusNoun}'. ${detailsText}`.trim();
+                    } else {
+                        detailsLabel.textContent = detailsText;
+                    }
+
+                    for (const optionText of Object.keys(nodeData.options)) {
+                        const button = document.createElement('button');
+                        button.textContent = optionText;
+                        button.className = 'option-button';
+                        button.addEventListener('click', () => handleOptionClick(optionText));
+                        optionsContainer.appendChild(button);
+                    }
+                }
+
+                function startCheck() {
+                    logic.reset();
+                    currentFocusNoun = "";
+                    const userInput = nounEntry.value.trim();
+                    if (!userInput) {
+                        alert("Please enter a noun or phrase to check.");
+                        return;
+                    }
+
+                    const analysis = logic.analyzeInput(userInput);
+                    currentFocusNoun = analysis.focusNoun || "";
+
+                    if (analysis.mode === "lookup" && analysis.result) {
+                        displayFinalResult(analysis.result, currentFocusNoun);
+                        return;
+                    }
+
+                    const startNode = logic.getCurrentNode();
+                    updateQuestionAndOptions(startNode);
+                }
+
+                checkButton.addEventListener('click', startCheck);
+                nounEntry.addEventListener('keyup', (event) => {
+                    if (event.key === 'Enter') {
+                        startCheck();
+                    }
+                });
+
+                nounEntry.disabled = false;
+                checkButton.disabled = false;
+                resetApp();
+                nounEntry.focus();
+            };
+
+            const loadRulesData = async () => {
+                try {
+                    const response = await fetch('rules_data.classic.json');
+                    if (!response.ok) {
+                        throw new Error(`Request failed: ${response.status} ${response.statusText}`);
+                    }
+                    const data = await response.json();
+                    initializeApp(data);
+                } catch (error) {
+                    console.error('Failed to load rules data:', error);
+                    questionLabel.textContent = "Unable to load article rules.";
+                    detailsLabel.textContent = "If you're opening this file locally, start a simple HTTP server (e.g., `python -m http.server`) so the browser can access rules_data.json.";
+                }
+            };
+
+            loadRulesData();
+        });
+
+    </script>
+</body>
+</html>

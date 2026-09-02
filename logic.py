@@ -7,9 +7,19 @@ import re
 import string
 
 # Import the data structures from our rules file
-from rules import LOOKUP_TABLE, DECISION_TREE
+from rules import (
+    DECISION_TREE,
+    ENTRY_NODE,
+    FIXED_EXPRESSIONS,
+    LOOKUP_TABLE,
+    NATIONALITY_THE,
+    PATTERNS,
+    PROPER_NOUN_THE,
+)
 
-WORD_PATTERN = re.compile(r"[A-Za-z]+(?:'[A-Za-z]+)?")
+WORD_PATTERN = re.compile(r"[A-Za-z0-9]+(?:'[A-Za-z]+)?")
+
+_NOUN_NUMBER_RE = re.compile(PATTERNS["noun_number"]["regex"], re.IGNORECASE)
 
 
 def _normalize_noun(noun):
@@ -32,23 +42,28 @@ def _tokenize_words(text):
     return [token.lower() for token in WORD_PATTERN.findall(str(text))]
 
 
-def _find_lookup_phrase(tokens):
+def _find_phrase(tokens, table):
     """
-    Find the longest phrase in ``tokens`` that exists in the lookup table.
+    Find the longest phrase in ``tokens`` that exists as a key of ``table``.
     Returns:
         tuple[str, int, int] | None: (matched_key, start_index, end_index_exclusive)
     """
     if not tokens:
         return None
 
-    max_window = min(4, len(tokens))
+    max_window = min(5, len(tokens))
     for window_size in range(max_window, 0, -1):
         for start_index in range(0, len(tokens) - window_size + 1):
             end_index = start_index + window_size
             candidate = " ".join(tokens[start_index:end_index])
-            if candidate in LOOKUP_TABLE:
+            if candidate in table:
                 return candidate, start_index, end_index
     return None
+
+
+def _find_lookup_phrase(tokens):
+    """Backwards-compatible helper: longest phrase present in the lookup table."""
+    return _find_phrase(tokens, LOOKUP_TABLE)
 
 
 def _infer_focus_noun(tokens):
@@ -78,22 +93,28 @@ def _infer_focus_noun(tokens):
 
     return ""
 
+
+def _result(article, explanation, rule_ref):
+    return {"article": article, "explanation": explanation, "rule_ref": rule_ref}
+
+
 class ArticleLogic:
     """
     Manages the logic flow for determining the correct English article.
     It holds the current state of the user's path through the decision tree.
     """
+
     def __init__(self):
         """Initializes the logic controller."""
-        self.current_node_id = "start"
+        self.current_node_id = ENTRY_NODE
 
     def reset(self):
         """Resets the logic to the beginning of the decision tree."""
-        self.current_node_id = "start"
+        self.current_node_id = ENTRY_NODE
 
     def check_lookup_table(self, noun):
         """
-        First check: See if the noun is a special case in our LOOKUP_TABLE.
+        See if the noun is a special case in our LOOKUP_TABLE.
         Args:
             noun (str): The raw user-provided noun or phrase.
         Returns:
@@ -105,6 +126,89 @@ class ArticleLogic:
 
         return LOOKUP_TABLE.get(normalized)
 
+    def check_gate_zero(self, text):
+        """
+        Gate 0: everything that can be decided from the noun alone, before any
+        question is asked. Checked in precedence order, first match wins.
+
+        Returns:
+            dict | None: {"focus_noun", "result", "source"} when something matched.
+        """
+        normalized = _normalize_noun(text)
+        tokens = _tokenize_words(text)
+        if not normalized and not tokens:
+            return None
+
+        # 1. Fixed expressions outrank every rule below them.
+        match = _find_phrase(tokens, FIXED_EXPRESSIONS)
+        key = match[0] if match else (normalized if normalized in FIXED_EXPRESSIONS else None)
+        if key:
+            entry = FIXED_EXPRESSIONS[key]
+            return {
+                "focus_noun": key,
+                "result": _result(entry["article"], entry["explanation"], entry["rule_ref"]),
+                "source": "fixed_expression",
+            }
+
+        # 2. A noun followed by a classifying number or letter.
+        if _NOUN_NUMBER_RE.match(normalized):
+            pattern = PATTERNS["noun_number"]
+            return {
+                "focus_noun": normalized,
+                "result": _result(pattern["article"], pattern["explanation"], pattern["rule_ref"]),
+                "source": "noun_number",
+            }
+
+        # 3. The lookup table: exact normalized form, then longest phrase.
+        if normalized in LOOKUP_TABLE:
+            return {
+                "focus_noun": normalized,
+                "result": dict(LOOKUP_TABLE[normalized]),
+                "source": "lookup",
+            }
+        phrase_match = _find_lookup_phrase(tokens)
+        if phrase_match:
+            matched = phrase_match[0]
+            return {
+                "focus_noun": matched,
+                "result": dict(LOOKUP_TABLE[matched]),
+                "source": "lookup",
+            }
+
+        # 4. Nationality adjective standing for a whole people.
+        if normalized in NATIONALITY_THE["examples"]:
+            return {
+                "focus_noun": normalized,
+                "result": _result(
+                    NATIONALITY_THE["article"],
+                    NATIONALITY_THE["explanation"],
+                    NATIONALITY_THE["rule_ref"],
+                ),
+                "source": "nationality",
+            }
+
+        # 5. Names in the the-taking class.
+        token_set = set(tokens)
+        hit = normalized in PROPER_NOUN_THE["named"]
+        if not hit:
+            hit = bool(token_set.intersection(PROPER_NOUN_THE["named"]))
+        if not hit:
+            hit = bool(token_set.intersection(PROPER_NOUN_THE["keywords"]))
+        if not hit and PROPER_NOUN_THE.get("contains_of"):
+            hit = "of" in token_set and any(char.isupper() for char in str(text))
+        if hit:
+            return {
+                "focus_noun": normalized,
+                "result": _result(
+                    "the",
+                    PROPER_NOUN_THE["explanation"],
+                    PROPER_NOUN_THE["rule_ref"],
+                ),
+                "source": "proper_noun",
+            }
+
+        return None
+
     def analyze_input(self, text):
         """
         Analyze free-form user input and prepare the next step.
@@ -112,31 +216,47 @@ class ArticleLogic:
             dict: {
                 "mode": "lookup" | "question",
                 "focus_noun": str,
-                "result": dict | None
+                "result": dict | None,
+                "source": str | None,
+                "note": str | None
             }
         """
-        direct_lookup = self.check_lookup_table(text)
-        if direct_lookup:
+        self.reset()
+
+        gate_zero = self.check_gate_zero(text)
+        if gate_zero:
             return {
                 "mode": "lookup",
-                "focus_noun": _normalize_noun(text),
-                "result": direct_lookup,
+                "focus_noun": gate_zero["focus_noun"],
+                "result": gate_zero["result"],
+                "source": gate_zero["source"],
+                "note": None,
             }
 
-        tokens = _tokenize_words(text)
-        phrase_match = _find_lookup_phrase(tokens)
-        if phrase_match:
-            matched_phrase = phrase_match[0]
-            return {
-                "mode": "lookup",
-                "focus_noun": matched_phrase,
-                "result": LOOKUP_TABLE[matched_phrase],
-            }
+        tokens = _tokenize_words(_normalize_noun(text))
+        note = None
+
+        # A two-noun pair: the first noun acts like an adjective, so the second
+        # one decides. Re-run Gate 0 on it before falling through to the tree.
+        if len(tokens) == 2:
+            second = tokens[1]
+            second_hit = self.check_gate_zero(second)
+            if second_hit:
+                return {
+                    "mode": "lookup",
+                    "focus_noun": second_hit["focus_noun"],
+                    "result": second_hit["result"],
+                    "source": "noun_adjunct",
+                    "note": PATTERNS["noun_adjunct"]["explanation"],
+                }
+            note = PATTERNS["noun_adjunct"]["explanation"]
 
         return {
             "mode": "question",
-            "focus_noun": _infer_focus_noun(tokens),
+            "focus_noun": _infer_focus_noun(_tokenize_words(text)),
             "result": None,
+            "source": None,
+            "note": note,
         }
 
     def get_current_node(self):
@@ -157,65 +277,54 @@ class ArticleLogic:
         """
         # Find the current node
         current_node = self.get_current_node()
-        
+
         # Look up the next node's ID based on the user's choice
         next_node_id = current_node["options"][selected_option_text]
-        
+
         # Update the state to the new node
         self.current_node_id = next_node_id
-        
+
         # Return the data for the new node
         return self.get_current_node()
+
 
 # --- This section is for testing our logic directly ---
 def test_logic():
     """A simple text-based simulation to ensure our logic works."""
     print("--- Testing ArticleLogic ---")
-    
-    # 1. Test the lookup table (with normalization for determiners/punctuation)
-    print("\n[Test 1: Lookup Table]")
-    logic_engine = ArticleLogic()
-    lookup_samples = [
-        "USA",
-        "the USA",
-        "an opera",
-    ]
-    for sample in lookup_samples:
-        result = logic_engine.check_lookup_table(sample)
-        if result:
-            print(f"Checked '{sample}': Found in lookup table!")
-            print(f"  -> Article: {result['article']}")
-            print(f"  -> Explanation: {result['explanation']}")
-        else:
-            print(f"Checked '{sample}': Not in lookup table. Starting tree...")
 
-    # 2. Test the decision tree flow
+    print("\n[Test 1: Gate 0]")
+    logic_engine = ArticleLogic()
+    samples = ["USA", "the USA", "an opera", "at school", "during the week", "Page 42", "the French"]
+    for sample in samples:
+        analysis = logic_engine.analyze_input(sample)
+        if analysis["mode"] == "lookup":
+            print(f"'{sample}': {analysis['result']['article']}  [{analysis['source']}]")
+        else:
+            print(f"'{sample}': no Gate 0 match, starting tree...")
+
     print("\n[Test 2: Decision Tree Walkthrough]")
-    logic_engine.reset() # Start from the beginning
-    
-    # Step 1: Get starting question
+    logic_engine.reset()
+
     current_node = logic_engine.get_current_node()
     print(f"Q: {current_node['question']}")
-    options = list(current_node['options'].keys())
+    options = list(current_node["options"].keys())
     print(f"Options: {options}")
-    
-    # Step 2: Simulate user choosing the first option
+
     user_choice = options[0]
     print(f"\nUser chooses: '{user_choice}'")
     current_node = logic_engine.process_answer(user_choice)
-    
-    # Step 3: See the next question or result
+
     if "question" in current_node:
         print(f"Q: {current_node['question']}")
-        options = list(current_node['options'].keys())
-        print(f"Options: {options}")
+        print(f"Options: {list(current_node['options'].keys())}")
     elif "article" in current_node:
-        print(f"\nFinal Result Reached!")
+        print("\nFinal Result Reached!")
         print(f"  -> Article: {current_node['article']}")
         print(f"  -> Explanation: {current_node['explanation']}")
+
 
 if __name__ == "__main__":
     # This block runs ONLY when you execute `python logic.py` directly.
     # It allows us to test our logic before building the GUI.
     test_logic()
-

@@ -1,389 +1,1412 @@
 {
-    "lookup_table": {
-        "cinema": {
-            "article": "the",
-            "explanation": "As a general concept of entertainment, we say 'go to the cinema'.",
-            "rule_ref": "4.1"
-        },
-        "opera": {
-            "article": "the",
-            "explanation": "As a general concept of entertainment, we say 'go to the opera'.",
-            "rule_ref": "4.1"
-        },
-        "theatre": {
-            "article": "the",
-            "explanation": "As a general concept of entertainment, we say 'go to the theatre'.",
-            "rule_ref": "4.1"
-        },
-        "ballet": {
-            "article": "the",
-            "explanation": "As a general concept of entertainment, we say 'go to the ballet'.",
-            "rule_ref": "4.1"
-        },
-        "internet": {
-            "article": "the",
-            "explanation": "The name of a global system, 'the internet', always takes 'the'.",
-            "rule_ref": "4.14"
-        },
-        "radio": {
-            "article": "the",
-            "explanation": "As a medium of communication, we say 'listen to the radio'. Note: with 'by radio', use no article.",
-            "rule_ref": "4.5"
-        },
-        "post": {
-            "article": "the",
-            "explanation": "Referring to the mail system, we say 'in the post'. Note: with 'by post' (UK) / 'by mail' (US), use no article.",
-            "rule_ref": "4.5"
-        },
-        "phone": {
-            "article": "the",
-            "explanation": "When referring to the device as a means of communication, we say 'on the phone'. Note: with 'by phone', use no article.",
-            "rule_ref": "4.5"
-        },
-        "piano": {
-            "article": "the",
-            "explanation": "Musical instruments, especially with 'play', take 'the'. E.g., 'play the piano'.",
-            "rule_ref": "4.3"
-        },
-        "guitar": {
-            "article": "the",
-            "explanation": "Musical instruments, especially with 'play', take 'the'. E.g., 'play the guitar'.",
-            "rule_ref": "4.3"
-        },
-        "violin": {
-            "article": "the",
-            "explanation": "Musical instruments, especially with 'play', take 'the'. E.g., 'play the violin'.",
-            "rule_ref": "4.3"
-        },
-        "sun": {
-            "article": "the",
-            "explanation": "Unique celestial bodies in our solar system take 'the'.",
-            "rule_ref": "2.3"
-        },
-        "moon": {
-            "article": "the",
-            "explanation": "Unique celestial bodies in our solar system take 'the'.",
-            "rule_ref": "2.3"
-        },
-        "world": {
-            "article": "the",
-            "explanation": "As a unique concept, we say 'in the world'.",
-            "rule_ref": "2.3"
-        },
-        "environment": {
-            "article": "the",
-            "explanation": "As a unique, shared concept, we say 'protect the environment'.",
-            "rule_ref": "4.14"
-        },
-        "police": {
-            "article": "the",
-            "explanation": "Refers to the police force as a whole organization.",
-            "rule_ref": "4.14"
-        },
-        "countryside": {
-            "article": "the",
-            "explanation": "As a general geographical concept, we say 'in the countryside'.",
-            "rule_ref": "4.10"
-        },
-        "nature": {
-            "article": "no article",
-            "explanation": "The abstract concept of 'nature' does not take an article.",
-            "rule_ref": "4.15"
-        },
-        "society": {
-            "article": "no article",
-            "explanation": "The abstract concept of 'society' does not take an article.",
-            "rule_ref": "4.15"
-        },
-        "space": {
-            "article": "no article",
-            "explanation": "When meaning 'outer space', this abstract concept does not take an article.",
-            "rule_ref": "4.15"
-        },
-        "history": {
-            "article": "no article",
-            "explanation": "The abstract concept of 'history' does not take an article.",
-            "rule_ref": "4.15"
-        },
-        "art": {
-            "article": "no article",
-            "explanation": "The abstract concept of 'art' does not take an article.",
-            "rule_ref": "4.15"
-        },
-        "music": {
-            "article": "no article",
-            "explanation": "The abstract concept of 'music' does not take an article.",
-            "rule_ref": "4.15"
-        },
-        "breakfast": {
-            "article": "no article",
-            "explanation": "Names of meals (breakfast, lunch, dinner) generally take no article.",
-            "rule_ref": "6.1.2"
-        },
-        "lunch": {
-            "article": "no article",
-            "explanation": "Names of meals (breakfast, lunch, dinner) generally take no article.",
-            "rule_ref": "6.1.2"
-        },
-        "dinner": {
-            "article": "no article",
-            "explanation": "Names of meals (breakfast, lunch, dinner) generally take no article.",
-            "rule_ref": "6.1.2"
-        },
-        "golf": {
-            "article": "no article",
-            "explanation": "Names of sports and games generally take no article.",
-            "rule_ref": "6.1.3"
-        },
-        "tennis": {
-            "article": "no article",
-            "explanation": "Names of sports and games generally take no article.",
-            "rule_ref": "6.1.3"
-        },
-        "football": {
-            "article": "no article",
-            "explanation": "Names of sports and games generally take no article.",
-            "rule_ref": "6.1.3"
-        },
-        "bed": {
-            "article": "no article",
-            "explanation": "When referring to the state of being in bed to sleep/rest, use 'no article' (e.g., 'go to bed'). If you mean the physical object, use normal rules (a/the).",
-            "rule_ref": "7.4.1"
-        },
-        "home": {
-            "article": "no article",
-            "explanation": "When used with verbs of motion like 'go', 'come', 'arrive', we say 'go home' with no article. If you mean a specific building/house, use normal rules (a/the).",
-            "rule_ref": "7.4.2"
-        },
-        "work": {
-            "article": "no article",
-            "explanation": "When referring to the place of employment, we say 'at work' or 'go to work' with no article. If you mean a specific job/task, use normal rules (a/the).",
-            "rule_ref": "7.4.3"
-        },
-        "flu": {
-            "article": "the",
-            "explanation": "For some common illnesses, it's conventional to use 'the' (e.g., 'I have the flu'). 'No article' is also sometimes possible.",
-            "rule_ref": "7.5"
-        },
-        "measles": {
-            "article": "the",
-            "explanation": "For some common illnesses, it's conventional to use 'the' (e.g., 'I have the measles'). 'No article' is also sometimes possible.",
-            "rule_ref": "7.5"
-        },
-        "cancer": {
-            "article": "no article",
-            "explanation": "Most serious or uncountable illnesses like 'cancer' or 'heart disease' take no article.",
-            "rule_ref": "7.5"
-        },
-        "usa": {
-            "article": "the",
-            "explanation": "Plural proper nouns like 'the United States of America' take 'the'.",
-            "rule_ref": "9.2.1"
-        },
-        "united kingdom": {
-            "article": "the",
-            "explanation": "Proper nouns signifying a collection of states (kingdom, republic) take 'the'.",
-            "rule_ref": "9.2.1"
-        },
-        "netherlands": {
-            "article": "the",
-            "explanation": "Plural proper nouns like 'the Netherlands' take 'the'.",
-            "rule_ref": "9.2.1"
-        },
-        "philippines": {
-            "article": "the",
-            "explanation": "Plural proper nouns like 'the Philippines' take 'the'.",
-            "rule_ref": "9.2.1"
-        },
-        "the hague": {
-            "article": "the",
-            "explanation": "'The Hague' is an exception where 'The' is part of the city's official name.",
-            "rule_ref": "9.2.1"
-        },
-        "nile river": {
-            "article": "the",
-            "explanation": "Names of rivers, oceans, and seas always take 'the'.",
-            "rule_ref": "9.2.2"
-        },
-        "sahara desert": {
-            "article": "the",
-            "explanation": "Names of deserts always take 'the'.",
-            "rule_ref": "9.2.2"
-        },
-        "alps": {
-            "article": "the",
-            "explanation": "Names of mountain ranges (plural) always take 'the'.",
-            "rule_ref": "9.2.2"
-        },
-        "mount fuji": {
-            "article": "no article",
-            "explanation": "Names of single mountains or peaks generally take no article.",
-            "rule_ref": "9.2.1"
-        },
-        "lake geneva": {
-            "article": "no article",
-            "explanation": "Names of lakes generally take no article.",
-            "rule_ref": "9.2.1"
-        },
-        "poor": {
-            "article": "the",
-            "explanation": "To refer to a group of people as a whole, use 'the' + adjective (e.g., 'the poor', 'the rich').",
-            "rule_ref": "3.5"
-        },
-        "rich": {
-            "article": "the",
-            "explanation": "To refer to a group of people as a whole, use 'the' + adjective (e.g., 'the poor', 'the rich').",
-            "rule_ref": "3.5"
-        },
-        "unemployed": {
-            "article": "the",
-            "explanation": "To refer to a group of people as a whole, use 'the' + adjective (e.g., 'the unemployed').",
-            "rule_ref": "3.5"
-        },
-        "elderly": {
-            "article": "the",
-            "explanation": "To refer to a group of people as a whole, use 'the' + adjective (e.g., 'the elderly').",
-            "rule_ref": "3.5"
-        }
+  "meta": {
+    "entry_node": "q2",
+    "source": "Seonaid Beckwith, 'A' and 'The' Explained — see docs/",
+    "note": "Gate 0 (fixed_expressions, lookup_table, proper_noun_the, nationality_the, patterns) is matched automatically. The decision_tree is only entered on a Gate 0 miss."
+  },
+  "lookup_table": {
+    "cinema": {
+      "article": "the",
+      "explanation": "As a general concept of entertainment, we say 'go to the cinema'.",
+      "rule_ref": "4.1"
     },
-    "decision_tree": {
-        "start": {
-            "question": "Is your word part of a two-noun pair, like 'bus station' or 'sun cream'?",
-            "details": "The first noun often acts like an adjective describing the second noun.",
-            "options": {
-                "Yes, it's a noun-noun pair": "noun_adjunct_rule",
-                "No, it's a regular noun": "main_menu"
-            }
-        },
-        "noun_adjunct_rule": {
-            "type": "guidance",
-            "article": null,
-            "explanation": "In a noun-noun pair (a noun adjunct), the first noun acts like an adjective. The article you choose depends entirely on the SECOND noun. Please restart the check and focus only on the second noun in your pair.",
-            "rule_ref": "7.1"
-        },
-        "main_menu": {
-            "question": "Which type of word are you using? Choose the closest option.",
-            "details": "Pick one option to quickly reach the right rule.",
-            "options": {
-                "It's a common noun (e.g., 'book', 'water', 'idea')": "specific_or_general",
-                "It's a nationality (e.g., 'French', 'Brazilians')": "nationality_check",
-                "It's an institution (e.g., 'school', 'hospital', 'prison')": "institution_check",
-                "It's a noun followed by a number (e.g., 'page 5', 'question 3')": "noun_number_check",
-                "It's an uncountable noun with an adjective (e.g., 'a deep knowledge')": "uncountable_adjective_check"
-            }
-        },
-        "specific_or_general": {
-            "question": "Are you talking about one particular thing/person, or things in general?",
-            "details": "Example: 'I read a book' (one particular item) vs. 'Books are interesting' (general idea).",
-            "options": {
-                "One particular thing/person": "specific_known",
-                "Things in general": "general_type"
-            }
-        },
-        "general_type": {
-            "question": "How does your sentence talk about a whole group?",
-            "details": "Choose the pattern that matches your sentence.",
-            "options": {
-                "With a plural or uncountable noun (e.g., 'Cats are great')": "result_no_article_general",
-                "With a singular noun representing the whole group (e.g., 'A lion has a mane')": "result_a_an_general",
-                "To classify or define something (e.g., 'She is a doctor')": "result_a_an_classify",
-                "To talk about a typical member in formal style (e.g., 'the customer')": "result_the_typical_member"
-            }
-        },
-        "specific_known": {
-            "question": "Will your listener/reader know exactly which one you mean?",
-            "details": "Example: 'Pass me the book on the table' (they know) vs. 'I bought a book yesterday' (they do not know).",
-            "options": {
-                "Yes, they know which one": "result_the_specific",
-                "No, they do not know which one": "specific_unknown_type"
-            }
-        },
-        "specific_unknown_type": {
-            "question": "What kind of noun is it?",
-            "details": "Countable = can count it (one book, two books). Uncountable = cannot count it directly (water, advice).",
-            "options": {
-                "Singular & Countable": "result_a_an_specific",
-                "Plural or Uncountable": "result_no_article_specific"
-            }
-        },
-        "institution_check": {
-            "question": "Are you talking about the general purpose/activity of the institution, or the physical building?",
-            "details": "This is a key distinction for places like 'school' or 'church'.",
-            "options": {
-                "The Purpose / Activity": "institution_type_check",
-                "The Physical Building": "specific_or_general"
-            }
-        },
-        "institution_type_check": {
-            "question": "Is it a place people normally use for its main purpose (at school, in prison, in hospital)?",
-            "details": "If yes, this pattern often uses no article. (Bed/home/work are handled in separate special rules.)",
-            "options": {
-                "Yes, it is (school, church, hospital, prison, university)": "result_no_article_institution",
-                "No, it's a different kind of institution (e.g., government, company, museum)": "specific_or_general"
-            }
-        },
-        "nationality_check": {
-            "question": "How is the nationality written in your sentence?",
-            "details": "Example: 'French' is an adjective; 'a German' / 'Germans' are nouns.",
-            "options": {
-                "Adjective form for the whole group (-ish, -ch, -ese like 'the French')": "result_the_nationality_adj",
-                "Noun form (plural) for the whole group (e.g., 'Germans', 'Kenyans')": "result_no_article_general"
-            }
-        },
-        "noun_number_check": {
-            "article": "no article",
-            "explanation": "When a noun is followed by a classifying number or letter (e.g., Platform 9, Page 42, Question B), you use no article.",
-            "rule_ref": "6.3"
-        },
-        "uncountable_adjective_check": {
-            "article": "a / an",
-            "explanation": "In formal or literary English, you can use 'a/an' with an uncountable noun if you are describing a *particular type* of it, usually with an adjective (e.g., 'a profound sadness', 'an excellent knowledge of history').",
-            "rule_ref": "7.2"
-        },
-        "result_the_specific": {
-            "article": "the",
-            "explanation": "Use 'the' when it's clear which specific thing(s) you mean. This can be because it's unique (the sun), previously mentioned, or identified by other words in the sentence (the girl I met).",
-            "rule_ref": "Section 2"
-        },
-        "result_a_an_specific": {
-            "article": "a / an",
-            "explanation": "Use 'a/an' to talk about a single, specific item that is new to your listener.",
-            "rule_ref": "2.1.2"
-        },
-        "result_no_article_specific": {
-            "article": "no article (or 'some')",
-            "explanation": "Use 'no article' or 'some' for specific plural or uncountable items that are new to your listener.",
-            "rule_ref": "2.1.2"
-        },
-        "result_no_article_general": {
-            "article": "no article",
-            "explanation": "The most common way to generalize is to use a plural countable noun (dogs) or an uncountable noun (water) with no article.",
-            "rule_ref": "3.1"
-        },
-        "result_a_an_general": {
-            "article": "a / an",
-            "explanation": "Use 'a/an' with a singular noun to represent any single member of a group, standing for the whole group (e.g., 'A dog needs exercise').",
-            "rule_ref": "3.3"
-        },
-        "result_a_an_classify": {
-            "article": "a / an",
-            "explanation": "Use 'a/an' with a singular noun when classifying something or stating its category, job, or type.",
-            "rule_ref": "5.2"
-        },
-        "result_the_typical_member": {
-            "article": "the",
-            "explanation": "In formal contexts, use 'the' with a singular noun to talk about a typical member of a group or class (e.g., 'the customer', 'the student').",
-            "rule_ref": "3.4"
-        },
-        "result_no_article_institution": {
-            "article": "no article",
-            "explanation": "When referring to the purpose or activity associated with an institution, use no article (e.g., 'at school', 'in prison', 'to church').",
-            "rule_ref": "7.3"
-        },
-        "result_the_nationality_adj": {
-            "article": "the",
-            "explanation": "Use 'the' with nationality adjectives ending in -ish, -ch, or -ese to refer to the people of that country as a group (e.g., 'the British', 'the French').",
-            "rule_ref": "3.6"
-        }
+    "opera": {
+      "article": "the",
+      "explanation": "As a general concept of entertainment, we say 'go to the opera'.",
+      "rule_ref": "4.1"
+    },
+    "theatre": {
+      "article": "the",
+      "explanation": "As a general concept of entertainment, we say 'go to the theatre'.",
+      "rule_ref": "4.1"
+    },
+    "ballet": {
+      "article": "the",
+      "explanation": "As a general concept of entertainment, we say 'go to the ballet'.",
+      "rule_ref": "4.1"
+    },
+    "internet": {
+      "article": "the",
+      "explanation": "The name of a global system, 'the internet', always takes 'the'.",
+      "rule_ref": "4.14"
+    },
+    "radio": {
+      "article": "the",
+      "explanation": "As a medium of communication, we say 'listen to the radio'. Note: with 'by radio', use no article.",
+      "rule_ref": "4.5"
+    },
+    "post": {
+      "article": "the",
+      "explanation": "Referring to the mail system, we say 'in the post'. Note: with 'by post' (UK) / 'by mail' (US), use no article.",
+      "rule_ref": "4.5"
+    },
+    "phone": {
+      "article": "the",
+      "explanation": "When referring to the device as a means of communication, we say 'on the phone'. Note: with 'by phone', use no article.",
+      "rule_ref": "4.5"
+    },
+    "piano": {
+      "article": "the",
+      "explanation": "Musical instruments, especially with 'play', take 'the'. E.g., 'play the piano'.",
+      "rule_ref": "4.3"
+    },
+    "guitar": {
+      "article": "the",
+      "explanation": "Musical instruments, especially with 'play', take 'the'. E.g., 'play the guitar'.",
+      "rule_ref": "4.3"
+    },
+    "violin": {
+      "article": "the",
+      "explanation": "Musical instruments, especially with 'play', take 'the'. E.g., 'play the violin'.",
+      "rule_ref": "4.3"
+    },
+    "sun": {
+      "article": "the",
+      "explanation": "Unique celestial bodies in our solar system take 'the'.",
+      "rule_ref": "2.3"
+    },
+    "moon": {
+      "article": "the",
+      "explanation": "Unique celestial bodies in our solar system take 'the'.",
+      "rule_ref": "2.3"
+    },
+    "world": {
+      "article": "the",
+      "explanation": "As a unique concept, we say 'in the world'.",
+      "rule_ref": "2.3"
+    },
+    "environment": {
+      "article": "the",
+      "explanation": "As a unique, shared concept, we say 'protect the environment'.",
+      "rule_ref": "4.14"
+    },
+    "police": {
+      "article": "the",
+      "explanation": "Refers to the police force as a whole organization.",
+      "rule_ref": "4.14"
+    },
+    "countryside": {
+      "article": "the",
+      "explanation": "As a general geographical concept, we say 'in the countryside'.",
+      "rule_ref": "4.10"
+    },
+    "nature": {
+      "article": "no article",
+      "explanation": "The abstract concept of 'nature' does not take an article.",
+      "rule_ref": "4.15"
+    },
+    "society": {
+      "article": "no article",
+      "explanation": "The abstract concept of 'society' does not take an article.",
+      "rule_ref": "4.15"
+    },
+    "space": {
+      "article": "no article",
+      "explanation": "When meaning 'outer space', this abstract concept does not take an article.",
+      "rule_ref": "4.15"
+    },
+    "history": {
+      "article": "no article",
+      "explanation": "The abstract concept of 'history' does not take an article.",
+      "rule_ref": "4.15"
+    },
+    "art": {
+      "article": "no article",
+      "explanation": "The abstract concept of 'art' does not take an article.",
+      "rule_ref": "4.15"
+    },
+    "music": {
+      "article": "no article",
+      "explanation": "The abstract concept of 'music' does not take an article.",
+      "rule_ref": "4.15"
+    },
+    "breakfast": {
+      "article": "no article",
+      "explanation": "Names of meals (breakfast, lunch, dinner) generally take no article.",
+      "rule_ref": "6.1.2"
+    },
+    "lunch": {
+      "article": "no article",
+      "explanation": "Names of meals (breakfast, lunch, dinner) generally take no article.",
+      "rule_ref": "6.1.2"
+    },
+    "dinner": {
+      "article": "no article",
+      "explanation": "Names of meals (breakfast, lunch, dinner) generally take no article.",
+      "rule_ref": "6.1.2"
+    },
+    "golf": {
+      "article": "no article",
+      "explanation": "Names of sports and games generally take no article.",
+      "rule_ref": "6.1.3"
+    },
+    "tennis": {
+      "article": "no article",
+      "explanation": "Names of sports and games generally take no article.",
+      "rule_ref": "6.1.3"
+    },
+    "football": {
+      "article": "no article",
+      "explanation": "Names of sports and games generally take no article.",
+      "rule_ref": "6.1.3"
+    },
+    "bed": {
+      "article": "no article",
+      "explanation": "When referring to the state of being in bed to sleep/rest, use 'no article' (e.g., 'go to bed'). If you mean the physical object, use normal rules (a/the).",
+      "rule_ref": "7.4.1"
+    },
+    "home": {
+      "article": "no article",
+      "explanation": "When used with verbs of motion like 'go', 'come', 'arrive', we say 'go home' with no article. If you mean a specific building/house, use normal rules (a/the).",
+      "rule_ref": "7.4.2"
+    },
+    "work": {
+      "article": "no article",
+      "explanation": "When referring to the place of employment, we say 'at work' or 'go to work' with no article. If you mean a specific job/task, use normal rules (a/the).",
+      "rule_ref": "7.4.3"
+    },
+    "flu": {
+      "article": "the",
+      "explanation": "For some common illnesses, it's conventional to use 'the' (e.g., 'I have the flu'). 'No article' is also sometimes possible.",
+      "rule_ref": "7.5"
+    },
+    "measles": {
+      "article": "the",
+      "explanation": "For some common illnesses, it's conventional to use 'the' (e.g., 'I have the measles'). 'No article' is also sometimes possible.",
+      "rule_ref": "7.5"
+    },
+    "cancer": {
+      "article": "no article",
+      "explanation": "Most serious or uncountable illnesses like 'cancer' or 'heart disease' take no article.",
+      "rule_ref": "7.5"
+    },
+    "usa": {
+      "article": "the",
+      "explanation": "Plural proper nouns like 'the United States of America' take 'the'.",
+      "rule_ref": "9.2.1"
+    },
+    "united kingdom": {
+      "article": "the",
+      "explanation": "Proper nouns signifying a collection of states (kingdom, republic) take 'the'.",
+      "rule_ref": "9.2.1"
+    },
+    "netherlands": {
+      "article": "the",
+      "explanation": "Plural proper nouns like 'the Netherlands' take 'the'.",
+      "rule_ref": "9.2.1"
+    },
+    "philippines": {
+      "article": "the",
+      "explanation": "Plural proper nouns like 'the Philippines' take 'the'.",
+      "rule_ref": "9.2.1"
+    },
+    "the hague": {
+      "article": "the",
+      "explanation": "'The Hague' is an exception where 'The' is part of the city's official name.",
+      "rule_ref": "9.2.1"
+    },
+    "nile river": {
+      "article": "the",
+      "explanation": "Names of rivers, oceans, and seas always take 'the'.",
+      "rule_ref": "9.2.2"
+    },
+    "sahara desert": {
+      "article": "the",
+      "explanation": "Names of deserts always take 'the'.",
+      "rule_ref": "9.2.2"
+    },
+    "alps": {
+      "article": "the",
+      "explanation": "Names of mountain ranges (plural) always take 'the'.",
+      "rule_ref": "9.2.2"
+    },
+    "mount fuji": {
+      "article": "no article",
+      "explanation": "Names of single mountains or peaks generally take no article.",
+      "rule_ref": "9.2.1"
+    },
+    "lake geneva": {
+      "article": "no article",
+      "explanation": "Names of lakes generally take no article.",
+      "rule_ref": "9.2.1"
+    },
+    "poor": {
+      "article": "the",
+      "explanation": "To refer to a group of people as a whole, use 'the' + adjective (e.g., 'the poor', 'the rich').",
+      "rule_ref": "3.5"
+    },
+    "rich": {
+      "article": "the",
+      "explanation": "To refer to a group of people as a whole, use 'the' + adjective (e.g., 'the poor', 'the rich').",
+      "rule_ref": "3.5"
+    },
+    "unemployed": {
+      "article": "the",
+      "explanation": "To refer to a group of people as a whole, use 'the' + adjective (e.g., 'the unemployed').",
+      "rule_ref": "3.5"
+    },
+    "elderly": {
+      "article": "the",
+      "explanation": "To refer to a group of people as a whole, use 'the' + adjective (e.g., 'the elderly').",
+      "rule_ref": "3.5"
     }
+  },
+  "fixed_expressions": {
+    "go to school": {
+      "article": "no article",
+      "group": "zero",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+    },
+    "at school": {
+      "article": "no article",
+      "group": "zero",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+    },
+    "to school": {
+      "article": "no article",
+      "group": "zero",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+    },
+    "in school": {
+      "article": "no article",
+      "group": "zero",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+    },
+    "go to church": {
+      "article": "no article",
+      "group": "zero",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+    },
+    "at church": {
+      "article": "no article",
+      "group": "zero",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+    },
+    "to church": {
+      "article": "no article",
+      "group": "zero",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+    },
+    "in class": {
+      "article": "no article",
+      "group": "zero",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+    },
+    "to class": {
+      "article": "no article",
+      "group": "zero",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+    },
+    "in prison": {
+      "article": "no article",
+      "group": "zero",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+    },
+    "to prison": {
+      "article": "no article",
+      "group": "zero",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+    },
+    "in hospital": {
+      "article": "no article",
+      "group": "zero",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+    },
+    "to hospital": {
+      "article": "no article",
+      "group": "zero",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+    },
+    "at work": {
+      "article": "no article",
+      "group": "zero",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+    },
+    "to work": {
+      "article": "no article",
+      "group": "zero",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+    },
+    "go to work": {
+      "article": "no article",
+      "group": "zero",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+    },
+    "in bed": {
+      "article": "no article",
+      "group": "zero",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+    },
+    "to bed": {
+      "article": "no article",
+      "group": "zero",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+    },
+    "go to bed": {
+      "article": "no article",
+      "group": "zero",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+    },
+    "at sea": {
+      "article": "no article",
+      "group": "zero",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+    },
+    "in court": {
+      "article": "no article",
+      "group": "zero",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+    },
+    "to court": {
+      "article": "no article",
+      "group": "zero",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+    },
+    "at home": {
+      "article": "no article",
+      "group": "zero",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+    },
+    "go home": {
+      "article": "no article",
+      "group": "zero",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+    },
+    "by car": {
+      "article": "no article",
+      "group": "zero",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+    },
+    "by bus": {
+      "article": "no article",
+      "group": "zero",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+    },
+    "by train": {
+      "article": "no article",
+      "group": "zero",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+    },
+    "by plane": {
+      "article": "no article",
+      "group": "zero",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+    },
+    "by bike": {
+      "article": "no article",
+      "group": "zero",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+    },
+    "by boat": {
+      "article": "no article",
+      "group": "zero",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+    },
+    "by taxi": {
+      "article": "no article",
+      "group": "zero",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+    },
+    "on foot": {
+      "article": "no article",
+      "group": "zero",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+    },
+    "have breakfast": {
+      "article": "no article",
+      "group": "zero",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+    },
+    "have lunch": {
+      "article": "no article",
+      "group": "zero",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+    },
+    "have dinner": {
+      "article": "no article",
+      "group": "zero",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+    },
+    "at night": {
+      "article": "no article",
+      "group": "zero",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+    },
+    "at noon": {
+      "article": "no article",
+      "group": "zero",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+    },
+    "at midnight": {
+      "article": "no article",
+      "group": "zero",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+    },
+    "at dawn": {
+      "article": "no article",
+      "group": "zero",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+    },
+    "at dusk": {
+      "article": "no article",
+      "group": "zero",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+    },
+    "on monday": {
+      "article": "no article",
+      "group": "zero",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+    },
+    "on tuesday": {
+      "article": "no article",
+      "group": "zero",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+    },
+    "on wednesday": {
+      "article": "no article",
+      "group": "zero",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+    },
+    "on thursday": {
+      "article": "no article",
+      "group": "zero",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+    },
+    "on friday": {
+      "article": "no article",
+      "group": "zero",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+    },
+    "on saturday": {
+      "article": "no article",
+      "group": "zero",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+    },
+    "on sunday": {
+      "article": "no article",
+      "group": "zero",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+    },
+    "in trouble": {
+      "article": "no article",
+      "group": "zero",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+    },
+    "on time": {
+      "article": "no article",
+      "group": "zero",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+    },
+    "at last": {
+      "article": "no article",
+      "group": "zero",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+    },
+    "take place": {
+      "article": "no article",
+      "group": "zero",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+    },
+    "hand in hand": {
+      "article": "no article",
+      "group": "zero",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+    },
+    "side by side": {
+      "article": "no article",
+      "group": "zero",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+    },
+    "at first": {
+      "article": "no article",
+      "group": "zero",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+    },
+    "by heart": {
+      "article": "no article",
+      "group": "zero",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+    },
+    "in fact": {
+      "article": "no article",
+      "group": "zero",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+    },
+    "on purpose": {
+      "article": "no article",
+      "group": "zero",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+    },
+    "in charge of": {
+      "article": "no article",
+      "group": "zero",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+    },
+    "out of date": {
+      "article": "no article",
+      "group": "zero",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the zero-article group. There is no rule to recover here — the form is memorized as a unit."
+    },
+    "during the week": {
+      "article": "the",
+      "group": "the",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the <em>the</em> group. The article is part of the expression, not a live choice."
+    },
+    "during the day": {
+      "article": "the",
+      "group": "the",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the <em>the</em> group. The article is part of the expression, not a live choice."
+    },
+    "in the morning": {
+      "article": "the",
+      "group": "the",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the <em>the</em> group. The article is part of the expression, not a live choice."
+    },
+    "in the afternoon": {
+      "article": "the",
+      "group": "the",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the <em>the</em> group. The article is part of the expression, not a live choice."
+    },
+    "in the evening": {
+      "article": "the",
+      "group": "the",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the <em>the</em> group. The article is part of the expression, not a live choice."
+    },
+    "at the moment": {
+      "article": "the",
+      "group": "the",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the <em>the</em> group. The article is part of the expression, not a live choice."
+    },
+    "play the piano": {
+      "article": "the",
+      "group": "the",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the <em>the</em> group. The article is part of the expression, not a live choice."
+    },
+    "play the guitar": {
+      "article": "the",
+      "group": "the",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the <em>the</em> group. The article is part of the expression, not a live choice."
+    },
+    "play the violin": {
+      "article": "the",
+      "group": "the",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the <em>the</em> group. The article is part of the expression, not a live choice."
+    },
+    "on the radio": {
+      "article": "the",
+      "group": "the",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the <em>the</em> group. The article is part of the expression, not a live choice."
+    },
+    "in the end": {
+      "article": "the",
+      "group": "the",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the <em>the</em> group. The article is part of the expression, not a live choice."
+    },
+    "by the way": {
+      "article": "the",
+      "group": "the",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the <em>the</em> group. The article is part of the expression, not a live choice."
+    },
+    "all the time": {
+      "article": "the",
+      "group": "the",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the <em>the</em> group. The article is part of the expression, not a live choice."
+    },
+    "on the whole": {
+      "article": "the",
+      "group": "the",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the <em>the</em> group. The article is part of the expression, not a live choice."
+    },
+    "in the meantime": {
+      "article": "the",
+      "group": "the",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the <em>the</em> group. The article is part of the expression, not a live choice."
+    },
+    "at the same time": {
+      "article": "the",
+      "group": "the",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the <em>the</em> group. The article is part of the expression, not a live choice."
+    },
+    "on the other hand": {
+      "article": "the",
+      "group": "the",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the <em>the</em> group. The article is part of the expression, not a live choice."
+    },
+    "the day after tomorrow": {
+      "article": "the",
+      "group": "the",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the <em>the</em> group. The article is part of the expression, not a live choice."
+    },
+    "the day before yesterday": {
+      "article": "the",
+      "group": "the",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the <em>the</em> group. The article is part of the expression, not a live choice."
+    },
+    "twice a week": {
+      "article": "a / an",
+      "group": "a_an",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the <em>a/an</em> group. The article is part of the expression, not a live choice."
+    },
+    "once a week": {
+      "article": "a / an",
+      "group": "a_an",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the <em>a/an</em> group. The article is part of the expression, not a live choice."
+    },
+    "three times a week": {
+      "article": "a / an",
+      "group": "a_an",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the <em>a/an</em> group. The article is part of the expression, not a live choice."
+    },
+    "50 a night": {
+      "article": "a / an",
+      "group": "a_an",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the <em>a/an</em> group. The article is part of the expression, not a live choice."
+    },
+    "a lot of": {
+      "article": "a / an",
+      "group": "a_an",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the <em>a/an</em> group. The article is part of the expression, not a live choice."
+    },
+    "a few": {
+      "article": "a / an",
+      "group": "a_an",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the <em>a/an</em> group. The article is part of the expression, not a live choice."
+    },
+    "a little": {
+      "article": "a / an",
+      "group": "a_an",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the <em>a/an</em> group. The article is part of the expression, not a live choice."
+    },
+    "in a hurry": {
+      "article": "a / an",
+      "group": "a_an",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the <em>a/an</em> group. The article is part of the expression, not a live choice."
+    },
+    "as a result": {
+      "article": "a / an",
+      "group": "a_an",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the <em>a/an</em> group. The article is part of the expression, not a live choice."
+    },
+    "all of a sudden": {
+      "article": "a / an",
+      "group": "a_an",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the <em>a/an</em> group. The article is part of the expression, not a live choice."
+    },
+    "a couple of": {
+      "article": "a / an",
+      "group": "a_an",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the <em>a/an</em> group. The article is part of the expression, not a live choice."
+    },
+    "in a moment": {
+      "article": "a / an",
+      "group": "a_an",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the <em>a/an</em> group. The article is part of the expression, not a live choice."
+    },
+    "have a good time": {
+      "article": "a / an",
+      "group": "a_an",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the <em>a/an</em> group. The article is part of the expression, not a live choice."
+    },
+    "as a matter of fact": {
+      "article": "a / an",
+      "group": "a_an",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the <em>a/an</em> group. The article is part of the expression, not a live choice."
+    },
+    "at a loss": {
+      "article": "a / an",
+      "group": "a_an",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the <em>a/an</em> group. The article is part of the expression, not a live choice."
+    },
+    "in a row": {
+      "article": "a / an",
+      "group": "a_an",
+      "rule_ref": "7.5",
+      "explanation": "A set phrase in the <em>a/an</em> group. The article is part of the expression, not a live choice."
+    }
+  },
+  "fixed_reference": {
+    "title": "Gate 0 · fixed expressions",
+    "note": "Checked automatically before any question is asked. Set phrases override every rule below, so they get caught first. There is no rule to recover here — the form is memorized as a unit.",
+    "groups": [
+      {
+        "form": "zero",
+        "label": "Zero",
+        "items": [
+          "go to school",
+          "at school",
+          "to school",
+          "in school",
+          "go to church",
+          "at church",
+          "to church",
+          "in class",
+          "to class",
+          "in prison",
+          "to prison",
+          "in hospital",
+          "to hospital",
+          "at work",
+          "to work",
+          "go to work",
+          "in bed",
+          "to bed",
+          "go to bed",
+          "at sea",
+          "in court",
+          "to court",
+          "at home",
+          "go home",
+          "by car",
+          "by bus",
+          "by train",
+          "by plane",
+          "by bike",
+          "by boat",
+          "by taxi",
+          "on foot",
+          "have breakfast",
+          "have lunch",
+          "have dinner",
+          "at night",
+          "at noon",
+          "at midnight",
+          "at dawn",
+          "at dusk",
+          "on Monday",
+          "on Tuesday",
+          "on Wednesday",
+          "on Thursday",
+          "on Friday",
+          "on Saturday",
+          "on Sunday",
+          "in trouble",
+          "on time",
+          "at last",
+          "take place",
+          "hand in hand",
+          "side by side",
+          "at first",
+          "by heart",
+          "in fact",
+          "on purpose",
+          "in charge of",
+          "out of date"
+        ]
+      },
+      {
+        "form": "the",
+        "label": "The",
+        "items": [
+          "during the week",
+          "during the day",
+          "in the morning",
+          "in the afternoon",
+          "in the evening",
+          "at the moment",
+          "play the piano",
+          "play the guitar",
+          "play the violin",
+          "on the radio",
+          "in the end",
+          "by the way",
+          "all the time",
+          "on the whole",
+          "in the meantime",
+          "at the same time",
+          "on the other hand",
+          "the day after tomorrow",
+          "the day before yesterday"
+        ]
+      },
+      {
+        "form": "an",
+        "label": "A / an",
+        "items": [
+          "twice a week",
+          "once a week",
+          "three times a week",
+          "50 a night",
+          "a lot of",
+          "a few",
+          "a little",
+          "in a hurry",
+          "as a result",
+          "all of a sudden",
+          "a couple of",
+          "in a moment",
+          "have a good time",
+          "as a matter of fact",
+          "at a loss",
+          "in a row"
+        ]
+      }
+    ]
+  },
+  "proper_noun_the": {
+    "named": [
+      "alps",
+      "andes",
+      "himalayas",
+      "netherlands",
+      "philippines",
+      "bahamas",
+      "maldives",
+      "usa",
+      "uk",
+      "united states",
+      "united kingdom",
+      "emirates",
+      "nile",
+      "amazon",
+      "thames",
+      "danube",
+      "rhine",
+      "ganges",
+      "mediterranean",
+      "atlantic",
+      "pacific",
+      "arctic",
+      "antarctic",
+      "sahara",
+      "gobi",
+      "middle east",
+      "far east",
+      "hague",
+      "prado",
+      "louvre",
+      "ritz",
+      "kremlin",
+      "vatican",
+      "guardian",
+      "times"
+    ],
+    "keywords": [
+      "river",
+      "sea",
+      "ocean",
+      "desert",
+      "gulf",
+      "canal",
+      "strait",
+      "channel",
+      "republic",
+      "kingdom",
+      "states",
+      "mountains",
+      "islands",
+      "museum",
+      "hotel",
+      "theatre",
+      "theater"
+    ],
+    "contains_of": true,
+    "rule_ref": "9.2.1",
+    "explanation": "Plural names, <em>of</em>-constructions, rivers, seas, oceans, deserts, mountain ranges, regions, hotels, museums, theatres and newspapers take <em>the</em>. This is a closed list — learn it as one group."
+  },
+  "nationality_the": {
+    "examples": [
+      "british",
+      "english",
+      "irish",
+      "spanish",
+      "welsh",
+      "french",
+      "dutch",
+      "chinese",
+      "japanese",
+      "portuguese",
+      "vietnamese",
+      "swiss",
+      "scottish",
+      "danish",
+      "finnish",
+      "polish"
+    ],
+    "article": "the",
+    "rule_ref": "3.6",
+    "explanation": "Nationality adjectives ending in <em>-ish</em>, <em>-ch</em> or <em>-ese</em> take <em>the</em> when they mean the people of that country as a whole: <em>the British</em>, <em>the French</em>, <em>the Chinese</em>. The plural noun form takes no article: <em>Germans</em>, <em>Kenyans</em>."
+  },
+  "patterns": {
+    "noun_number": {
+      "regex": "^(page|platform|question|room|chapter|section|gate|flight|number|line|track|part|step|level|floor|unit|table|figure|exercise)\\s+([0-9]+|[a-z])$",
+      "article": "no article",
+      "rule_ref": "6.3",
+      "explanation": "When a noun is followed by a classifying number or letter — <em>Page 42</em>, <em>Platform 9</em>, <em>Question B</em> — English uses no article. The number does the identifying that <em>the</em> would otherwise do."
+    },
+    "noun_adjunct": {
+      "rule_ref": "7.1",
+      "explanation": "In a noun-noun pair the first noun works like an adjective, so the article is decided entirely by the <b>second</b> noun."
+    }
+  },
+  "form_labels": {
+    "the": {
+      "word": "the",
+      "cls": "r-the"
+    },
+    "an": {
+      "word": "a / an",
+      "cls": "r-an"
+    },
+    "zero": {
+      "word": "— no article —",
+      "cls": "r-zero"
+    },
+    "fixed": {
+      "word": "memorized",
+      "cls": "r-fixed"
+    }
+  },
+  "decision_tree": {
+    "q2": {
+      "gate": "Question 2",
+      "q": "Is it a proper noun — a name?",
+      "note": "",
+      "opts": [
+        {
+          "label": "Yes",
+          "go": "q2a"
+        },
+        {
+          "label": "No",
+          "go": "q3"
+        }
+      ]
+    },
+    "q2a": {
+      "gate": "Question 2a",
+      "q": "Is it in the <em>the</em>-taking class of names?",
+      "note": "Plural names, <em>of</em>-constructions, water and landforms, regions, buildings and publications.",
+      "opts": [
+        {
+          "label": "Yes",
+          "ex": "the Netherlands · the Alps · the Republic of Ireland · the Nile · the Mediterranean · the Sahara · the Middle East · the Prado · the Guardian",
+          "go": "outPropThe"
+        },
+        {
+          "label": "No",
+          "ex": "Madrid · Spain · Micah · Everest · Portuguese · President Sánchez",
+          "go": "outPropZero"
+        }
+      ]
+    },
+    "outPropThe": {
+      "out": "the",
+      "cat": "Question 2a · name in the the-taking class",
+      "rule_ref": "9.2.1",
+      "why": "Plural names, <em>of</em>-constructions, rivers, seas, oceans, deserts, mountain ranges, regions, hotels, museums, theaters and newspapers take <em>the</em>. This is a closed list — learn it as one."
+    },
+    "outPropZero": {
+      "out": "zero",
+      "cat": "Question 2a · ordinary name",
+      "rule_ref": "9.1",
+      "why": "People, cities, single countries, single mountains, streets, continents, languages and companies take no article. Also titles used with a name: <em>President Sánchez</em>, <em>Doctor Ruiz</em> — but <em>the president</em> on its own is a role noun and routes to 4g."
+    },
+    "q3": {
+      "gate": "Question 3",
+      "q": "Am I talking about the whole class, or about particular instances?",
+      "note": "Test: can you insert <em>in general</em> without changing the meaning? If yes, it's generic.",
+      "opts": [
+        {
+          "label": "The class as a whole — generic",
+          "ex": "Dogs are loyal. · Life is hard.",
+          "go": "q3a"
+        },
+        {
+          "label": "Particular instances",
+          "ex": "I saw a dog. · The dog bit me.",
+          "go": "q4"
+        }
+      ],
+      "warn": "<strong>Highest-error node for a Spanish speaker.</strong> <em>La vida es dura</em> becomes <em>Life is hard</em>, not <em>the life</em>. When you're unsure at this question, generic plus zero is the safer guess."
+    },
+    "q3a": {
+      "gate": "Question 3a",
+      "q": "How is the noun behaving here?",
+      "note": "All three forms can be generic in English. This is the one place where <em>the</em> and <em>a</em> and zero are all live options for the same meaning.",
+      "opts": [
+        {
+          "label": "Plural countable",
+          "ex": "Dogs are loyal.",
+          "tag": "the usual choice",
+          "go": "outGenZeroPl"
+        },
+        {
+          "label": "Non-count or abstract",
+          "ex": "Life is hard. · She studies economics.",
+          "go": "outGenZeroNc"
+        },
+        {
+          "label": "Singular countable, any representative",
+          "ex": "A dog needs exercise.",
+          "go": "outGenA"
+        },
+        {
+          "label": "Singular countable, the species",
+          "ex": "The dog is a social animal.",
+          "tag": "formal",
+          "go": "outGenThe"
+        }
+      ]
+    },
+    "outGenZeroPl": {
+      "out": "zero",
+      "cat": "Question 3a · generic plural",
+      "rule_ref": "3.1",
+      "why": "The default way to talk about a whole class in English. Reach for this first when the generic reading is what you want."
+    },
+    "outGenZeroNc": {
+      "out": "zero",
+      "cat": "Question 3a · generic non-count",
+      "rule_ref": "3.1",
+      "why": "Abstractions and mass nouns take no article in their generic sense: <em>water, life, music, economics, happiness, advice</em>. This is the single biggest source of article errors for Romance-language speakers.<br><br>One exception worth knowing: in formal or literary English you can put <em>a/an</em> on an uncountable noun when you name a <em>particular type</em> of it, almost always with an adjective — <em>a profound sadness</em>, <em>an excellent knowledge of history</em>. (7.2)"
+    },
+    "outGenA": {
+      "out": "an",
+      "cat": "Question 3a · representative singular",
+      "rule_ref": "3.3",
+      "why": "Picks out any arbitrary member to stand for the class. Slightly more formal than the plural, and it won't work with every predicate — <em>A dog is widespread</em> fails, because being widespread is true of the species and not of any individual."
+    },
+    "outGenThe": {
+      "out": "the",
+      "cat": "Question 3a · the species",
+      "rule_ref": "3.4",
+      "why": "Names the class as a single entity. Formal and mostly scientific: <em>The blue whale is endangered.</em> Note this reading is only reachable from Question 3 — if you route a generic through the later questions instead, you'll never arrive here."
+    },
+    "q4": {
+      "gate": "Question 4",
+      "q": "Can my listener identify <em>which one</em> I mean?",
+      "note": "Work down the list. The first one that matches is your answer — they all produce <em>the</em>, and the labels just tell you why.",
+      "style": "checklist",
+      "opts": [
+        {
+          "label": "4a · The sentence itself specifies it",
+          "ex": "the book I lent you · the man in the corner · the capital of Spain",
+          "go": "out4a"
+        },
+        {
+          "label": "4b · There's a superlative, ordinal or uniqueness word",
+          "ex": "the best · the first · the only · the same · the next",
+          "go": "out4b"
+        },
+        {
+          "label": "4c · We've mentioned it already",
+          "ex": "I bought a car. The car was red.",
+          "go": "out4c"
+        },
+        {
+          "label": "4d · It's inferable from something we mentioned",
+          "ex": "I bought a car. The engine was noisy.",
+          "go": "out4d"
+        },
+        {
+          "label": "4e · There's only one in the world",
+          "ex": "the sun · the equator · the internet",
+          "go": "out4e"
+        },
+        {
+          "label": "4f · There's only one in our shared community",
+          "ex": "the mall · the beach · the park · the gym · the doctor",
+          "go": "q4f"
+        },
+        {
+          "label": "4g · It's a role that belongs to something",
+          "ex": "the government · the president · the economy · the weather",
+          "go": "out4g"
+        },
+        {
+          "label": "None of these — my listener can't tell which one",
+          "go": "q5",
+          "cls": "none"
+        }
+      ]
+    },
+    "out4a": {
+      "out": "the",
+      "cat": "4a · specified by the sentence",
+      "rule_ref": "2.2",
+      "why": "A relative clause or an <em>of</em>-phrase narrows the noun to one referent, so the identification happens inside the sentence itself. The most mechanically detectable of the seven, which is why it's checked first."
+    },
+    "out4b": {
+      "out": "the",
+      "cat": "4b · superlative, ordinal or uniqueness word",
+      "rule_ref": "2.4",
+      "why": "<em>Best, first, only, same, next, last, main</em> all entail that there's exactly one, so <em>the</em> follows automatically."
+    },
+    "out4c": {
+      "out": "the",
+      "cat": "4c · second mention",
+      "rule_ref": "2.1",
+      "why": "The classic <em>a</em> → <em>the</em> switch. First mention introduces, second mention points back."
+    },
+    "out4d": {
+      "out": "the",
+      "cat": "4d · inferable from what we mentioned",
+      "rule_ref": "2.1",
+      "why": "Part-whole and possession relations license this without any prior mention of the noun itself. A car has one engine, a room has one ceiling, so naming the whole makes the part identifiable."
+    },
+    "out4e": {
+      "out": "the",
+      "cat": "4e · only one in the world",
+      "rule_ref": "2.3",
+      "why": "Shared world knowledge does the identifying. No context needed at all."
+    },
+    "q4f": {
+      "gate": "Question 4f · check first",
+      "q": "Does the noun name a place, or an institutional activity?",
+      "note": "This is where <em>the mall</em> and <em>at school</em> collide. Both are familiar community places, so the wrong branch is easy to take.",
+      "opts": [
+        {
+          "label": "A place",
+          "ex": "mall · beach · park · gym · bank · airport · library · store",
+          "go": "out4f"
+        },
+        {
+          "label": "An institutional activity or state",
+          "ex": "school · church · class · prison · court · bed · work · sea",
+          "go": "outActivityZero"
+        }
+      ],
+      "warn": "Compare <em>at school</em>, meaning studying, with <em>at the school</em>, meaning standing in the building. The activity set is closed and somewhat arbitrary — <em>I'm at school</em> is available but <em>I'm at library</em> isn't."
+    },
+    "out4f": {
+      "out": "the",
+      "cat": "4f · only one in our shared community",
+      "rule_ref": "2.5",
+      "why": "No specific one has been mentioned, and none needs to be. <em>I'm at the mall</em> doesn't identify which mall — it relies on your listener not needing to ask. This still holds for a mall neither of you has ever visited, because what's required is that the question <em>which one?</em> doesn't arise, not that a particular referent exists."
+    },
+    "outActivityZero": {
+      "out": "zero",
+      "cat": "4f · institutional activity, not a place",
+      "rule_ref": "7.3",
+      "why": "When the noun names the activity an institution exists for rather than its building, English drops the article: <em>at school</em> (studying), <em>in prison</em> (serving a sentence), <em>in bed</em> (sleeping), <em>at work</em> (working), <em>in class</em>, <em>at sea</em>, <em>in court</em>.<br><br>Put <em>the</em> back the moment you mean the building instead: <em>I parked at the school.</em>"
+    },
+    "out4g": {
+      "out": "the",
+      "cat": "4g · a role that belongs to something",
+      "rule_ref": "2.6",
+      "why": "Role nouns are inherently <em>of</em> something: government of a country, capital of a country, manager of a team. The article is licensed because the noun carries an implicit slot that context fills — and the slot can stay unfilled out loud. <em>What should the government do?</em> works between an American and a Spaniard discussing neither country, because it means <em>the government of whatever situation we're discussing</em>. Unique relative to an argument, not unique in the world."
+    },
+    "q5": {
+      "gate": "Question 5",
+      "q": "How am I using the noun here — countable or not?",
+      "note": "Ask about this use, not about the noun. <em>Coffee</em> and <em>a coffee</em>. <em>Experience</em> and <em>an experience</em>. <em>Paper</em> and <em>a paper</em>. A noun-property question sends dual-membership nouns down the wrong branch and keeps them there.",
+      "opts": [
+        {
+          "label": "Singular countable",
+          "ex": "I saw a dog. · She's a teacher. · I need a pen.",
+          "go": "out5a"
+        },
+        {
+          "label": "Plural countable",
+          "ex": "I bought books.",
+          "go": "out5zPl"
+        },
+        {
+          "label": "Non-count",
+          "ex": "We need water.",
+          "go": "out5zNc"
+        }
+      ]
+    },
+    "out5a": {
+      "out": "an",
+      "cat": "Question 5 · indefinite singular",
+      "rule_ref": "2.1.2",
+      "why": "Countable, singular, and your listener can't yet tell which one. Covers first mention, non-specific <em>any</em> uses, and classifying after <em>be</em> — <em>She is a doctor</em> (5.2)."
+    },
+    "out5zPl": {
+      "out": "zero",
+      "cat": "Question 5 · indefinite plural",
+      "rule_ref": "2.1.2",
+      "why": "The plural counterpart of <em>a</em>. English has no plural indefinite article, so the slot stays empty. Add <em>some</em> if you need to signal quantity."
+    },
+    "out5zNc": {
+      "out": "zero",
+      "cat": "Question 5 · indefinite non-count",
+      "rule_ref": "2.1.2",
+      "why": "Mass nouns take no article when indefinite. Add a quantifier if you need one: <em>some water</em>, <em>a lot of water</em>."
+    }
+  },
+  "traces": [
+    {
+      "p": "during the week"
+    },
+    {
+      "p": "go to school"
+    },
+    {
+      "p": "the Netherlands"
+    },
+    {
+      "p": "Madrid",
+      "path": [
+        0,
+        1
+      ]
+    },
+    {
+      "p": "Dogs are loyal",
+      "path": [
+        1,
+        0,
+        0
+      ]
+    },
+    {
+      "p": "Life is hard",
+      "path": [
+        1,
+        0,
+        1
+      ]
+    },
+    {
+      "p": "the book I lent you",
+      "path": [
+        1,
+        1,
+        0
+      ]
+    },
+    {
+      "p": "the mall",
+      "path": [
+        1,
+        1,
+        5,
+        0
+      ]
+    },
+    {
+      "p": "at school"
+    },
+    {
+      "p": "the government",
+      "path": [
+        1,
+        1,
+        6
+      ]
+    },
+    {
+      "p": "I need a pen",
+      "path": [
+        1,
+        1,
+        7,
+        0
+      ]
+    },
+    {
+      "p": "We need water",
+      "path": [
+        1,
+        1,
+        7,
+        2
+      ]
+    },
+    {
+      "p": "bus station"
+    },
+    {
+      "p": "Page 42"
+    },
+    {
+      "p": "the French"
+    }
+  ]
 }

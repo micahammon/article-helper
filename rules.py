@@ -1,34 +1,66 @@
-"""Utilities for loading article helper rules from a shared JSON file."""
+"""Utilities for loading article helper rules from a shared JSON file.
+
+``rules_data.json`` is written for the browser first: its decision-tree nodes use
+``q`` / ``opts`` for questions and ``out`` / ``why`` for leaves, and the prose
+carries light HTML for the web page.
+
+The Tkinter app predates that shape and expects ``question`` / ``options`` /
+``article`` / ``explanation`` with plain text. Rather than rewrite the GUI, this
+module adapts the new nodes into the old shape, so both front-ends read the same
+file and stay in sync.
+"""
 
 from __future__ import annotations
 
 import json
+import re
+from collections import OrderedDict
 from pathlib import Path
 
 GUIDANCE_NODE_TYPE = "guidance"
-_GUIDANCE_SENTINEL = "GUIDANCE"
+
+_TAG_RE = re.compile(r"<[^>]+>")
+_ARTICLE_FOR_FORM = {"the": "the", "an": "a / an", "zero": "no article"}
 
 
-def _normalize_guidance_nodes(decision_tree):
-    """Ensure guidance-only nodes share a consistent structure."""
+def _strip_tags(text):
+    """Turn the page's light HTML into plain text for the desktop app."""
+    if not text:
+        return ""
+    cleaned = _TAG_RE.sub("", str(text))
+    cleaned = cleaned.replace("&amp;", "&").replace("&lt;", "<").replace("&gt;", ">")
+    return re.sub(r"\s+", " ", cleaned).strip()
 
-    for node in decision_tree.values():
-        if not isinstance(node, dict):
-            continue
 
-        node_type = node.get("type")
-        article_value = node.get("article")
+def _adapt_node(node):
+    """Return one decision-tree node in the shape the Tkinter app expects."""
+    adapted = dict(node)
 
-        # If the node is already marked as guidance, force ``article`` to ``None``.
-        if node_type == GUIDANCE_NODE_TYPE:
-            if article_value is not None:
-                node["article"] = None
-            continue
+    if "opts" in node:
+        options = OrderedDict()
+        for opt in node["opts"]:
+            label = _strip_tags(opt.get("label"))
+            example = _strip_tags(opt.get("ex"))
+            if example:
+                label = "{0}  ({1})".format(label, example)
+            options[label] = opt["go"]
 
-        # Older datasets used a sentinel string in the ``article`` slot. Convert them.
-        if isinstance(article_value, str) and article_value.upper() == _GUIDANCE_SENTINEL:
-            node["type"] = GUIDANCE_NODE_TYPE
-            node["article"] = None
+        adapted["question"] = _strip_tags(node.get("q"))
+        adapted["details"] = _strip_tags(node.get("note"))
+        adapted["options"] = options
+        if node.get("warn"):
+            adapted["warning"] = _strip_tags(node["warn"])
+
+    elif "out" in node:
+        adapted["article"] = _ARTICLE_FOR_FORM.get(node["out"], node["out"])
+        adapted["explanation"] = _strip_tags(node.get("why"))
+        adapted["category"] = _strip_tags(node.get("cat"))
+
+    return adapted
+
+
+def _adapt_tree(decision_tree):
+    return OrderedDict((key, _adapt_node(node)) for key, node in decision_tree.items())
 
 
 _DATA_PATH = Path(__file__).resolve().with_name("rules_data.json")
@@ -36,10 +68,23 @@ _DATA_PATH = Path(__file__).resolve().with_name("rules_data.json")
 with _DATA_PATH.open(encoding="utf-8") as data_file:
     _rules_data = json.load(data_file)
 
-decision_tree = _rules_data["decision_tree"]
-_normalize_guidance_nodes(decision_tree)
-
 LOOKUP_TABLE = _rules_data["lookup_table"]
-DECISION_TREE = decision_tree
+FIXED_EXPRESSIONS = _rules_data["fixed_expressions"]
+PROPER_NOUN_THE = _rules_data["proper_noun_the"]
+NATIONALITY_THE = _rules_data["nationality_the"]
+PATTERNS = _rules_data["patterns"]
+FORM_LABELS = _rules_data["form_labels"]
+ENTRY_NODE = _rules_data.get("meta", {}).get("entry_node", "q2")
+DECISION_TREE = _adapt_tree(_rules_data["decision_tree"])
 
-__all__ = ["LOOKUP_TABLE", "DECISION_TREE", "GUIDANCE_NODE_TYPE"]
+__all__ = [
+    "LOOKUP_TABLE",
+    "FIXED_EXPRESSIONS",
+    "PROPER_NOUN_THE",
+    "NATIONALITY_THE",
+    "PATTERNS",
+    "FORM_LABELS",
+    "ENTRY_NODE",
+    "DECISION_TREE",
+    "GUIDANCE_NODE_TYPE",
+]
