@@ -2529,14 +2529,16 @@
       "short": "a proper noun?",
       "gate": "Question 2",
       "q": "Is it a proper noun — a name?",
-      "note": "",
+      "note": "A name picks out one particular person, place, day, language or brand — and it is written with a capital letter.",
       "opts": [
         {
-          "label": "Yes",
+          "label": "Yes — a name",
+          "ex": "Sarah · Madrid · Everest · Monday · Spanish · Toyota",
           "go": "q2a"
         },
         {
-          "label": "No",
+          "label": "No — a kind of thing",
+          "ex": "friend · city · mountain · day · language · car",
           "go": "q3"
         }
       ]
