@@ -3,3 +3,6 @@ AGENTS.md
 TASKS.md
 /__pycache__
 /tests/__pycache__
+/.claude/skills/
+/skills-lock.json
+/.agents/

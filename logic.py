@@ -144,6 +144,41 @@ def _determiner_before(tokens, start, determiner_words):
     return None
 
 
+#: words that are never the noun a learner is asking about
+_NOT_A_FOCUS = {
+    "a", "an", "the", "this", "that", "these", "those", "my", "your", "his",
+    "her", "its", "our", "their", "i", "you", "he", "she", "it", "we", "they",
+    "me", "him", "us", "them", "and", "or", "but", "if", "so", "because",
+    "at", "in", "on", "to", "for", "from", "with", "by", "of", "about", "as",
+    "into", "over", "under", "very", "really", "always", "never", "not",
+    "there", "here", "then", "than", "when", "where", "how", "why", "what",
+    "some", "any", "no", "all", "every", "each", "much", "many", "more",
+    "most", "few", "little", "lots", "one", "two", "three",
+    "next", "last", "first", "second", "other", "same", "own",
+}
+
+
+def focus_candidates(text):
+    """
+    The words a learner might be asking about, in the order they appear.
+
+    The tool has always picked a focus silently, which is fine when the input
+    is one noun and misleading when it is a sentence: in `I have a doubt about
+    the homework` either noun is a fair guess, and the page gave no sign which
+    one it had chosen. This returns all of them so the choice can be shown and
+    changed.
+    """
+    seen, candidates = set(), []
+    for index, token in enumerate(_tokenize_words(text)):
+        if token in _NOT_A_FOCUS or token in _VERB_HINTS or len(token) < 2:
+            continue
+        if token in seen:
+            continue
+        seen.add(token)
+        candidates.append({"word": token, "index": index})
+    return candidates
+
+
 def _find_in(tokens, words):
     """The longest listed phrase present in the tokens, if any."""
     for size in range(min(3, len(tokens)), 0, -1):
@@ -374,7 +409,11 @@ class ArticleLogic:
             if rule.get("contrast"):
                 result["contrast"] = rule["contrast"]
             return {
-                "focus_noun": phrase,
+                # what the rule actually matched, not the whole sentence: the
+                # page highlights this, and a pinned focus is checked against it
+                "focus_noun": match.group(0).strip() or phrase,
+                "matched": match.group(0).strip(),
+                "frame": bool(rule.get("frame")),
                 "result": result,
                 "source": "construction:" + rule["name"],
             }
@@ -624,19 +663,91 @@ class ArticleLogic:
 
         return None
 
-    def analyze_input(self, text):
+    def _analyze_pinned(self, text, focus):
+        """
+        Gate 0 for a noun the learner chose, inside the sentence they typed.
+
+        The sentence still matters - the determiner in front of the word and
+        the verbs a condition needs both come from it - so the full token list
+        is kept and only the *matching* is narrowed to the chosen word.
+        """
+        tokens = _tokenize_words(text)
+        word = _normalize_noun(focus)
+        span = _span_of(tokens, word)
+
+        # A construction only speaks for this noun if its match covers it.
+        for whole_only in (True, False):
+            hit = self.check_constructions(text, tokens, whole_only=whole_only)
+            # A frame speaks for the whole clause, so it still applies to a
+            # noun inside it: 2.7 is precisely a rule about the noun after
+            # `there is`. Other rules only apply if they matched that word.
+            if hit and word and (hit.get("frame")
+                                 or word in hit.get("matched", "").split()):
+                return dict(hit, mode="lookup", note=None)
+
+        if span[1] is not None:
+            if word in FIXED_EXPRESSIONS:
+                entry = FIXED_EXPRESSIONS[word]
+                return {"mode": "lookup", "focus_noun": word,
+                        "result": _result(entry["article"], entry["explanation"],
+                                          entry["rule_ref"]),
+                        "source": "fixed_expression", "note": None}
+            if word in LOOKUP_TABLE:
+                answer = self._lookup_result(word, tokens, span)
+                return dict(answer, mode="lookup", note=None)
+
+        for check in (lambda: self.check_time_words(word, [word]),
+                      lambda: self.check_categories(word, [word])):
+            hit = check()
+            if hit:
+                return dict(hit, mode="lookup", note=None)
+
+        if word in NATIONALITY_THE["examples"] and span[0] > 0 and \
+                tokens[span[0] - 1] in (NATIONALITY_THE.get("requires_prev") or ["the"]):
+            return {"mode": "lookup", "focus_noun": word,
+                    "result": _result(NATIONALITY_THE["article"],
+                                      NATIONALITY_THE["explanation"],
+                                      NATIONALITY_THE["rule_ref"]),
+                    "source": "nationality", "note": None}
+
+        if self._is_the_taking_name(text, word, [word]):
+            return {"mode": "lookup", "focus_noun": word,
+                    "result": _result(PROPER_NOUN_THE["article"],
+                                      PROPER_NOUN_THE["explanation"],
+                                      PROPER_NOUN_THE["rule_ref"]),
+                    "source": "proper_noun", "note": None}
+
+        return {"mode": "question", "focus_noun": word, "result": None,
+                "source": None, "note": None}
+
+    def analyze_input(self, text, focus=None):
         """
         Analyze free-form user input and prepare the next step.
+
+        ``focus`` pins the noun being asked about. Without it the tool infers
+        one, which is a guess the learner cannot see or correct; with it, the
+        lexical gates look only at that word, while the rest of the sentence
+        still supplies context - the determiner in front of it, the verb a
+        condition needs.
+
         Returns:
             dict: {
                 "mode": "lookup" | "question",
                 "focus_noun": str,
+                "candidates": [{"word": str, "index": int}],
                 "result": dict | None,
                 "source": str | None,
                 "note": str | None
             }
         """
         self.reset()
+        candidates = focus_candidates(text)
+
+        if focus:
+            answer = self._analyze_pinned(text, focus)
+            answer["candidates"] = candidates
+            answer["pinned"] = True
+            return answer
 
         gate_zero = self.check_gate_zero(text)
         if gate_zero:
@@ -651,6 +762,8 @@ class ArticleLogic:
             # answer rather than replacing it
             if "unusual" in gate_zero:
                 answer["unusual"] = gate_zero["unusual"]
+            answer["candidates"] = candidates
+            answer["pinned"] = False
             return answer
 
         tokens = _tokenize_words(_normalize_noun(text))
@@ -668,6 +781,8 @@ class ArticleLogic:
                     "result": second_hit["result"],
                     "source": "noun_adjunct",
                     "note": PATTERNS["noun_adjunct"]["explanation"],
+                    "candidates": candidates,
+                    "pinned": False,
                 }
             note = PATTERNS["noun_adjunct"]["explanation"]
 
@@ -677,6 +792,8 @@ class ArticleLogic:
             "result": None,
             "source": None,
             "note": note,
+            "candidates": candidates,
+            "pinned": False,
         }
 
     def get_current_node(self):

@@ -11,17 +11,48 @@
   --ink:#16232B;
   --muted:#5A6E78;
   --rule:#C7D0D5;
+  --hairline:rgba(0,0,0,.13);
   --the:#1F5C7A;
   --the-wash:#E2ECF1;
+  --the-edge:#B4CEDC;
   --an:#6B3F87;
   --an-wash:#EDE5F2;
+  --an-edge:#CDB8D9;
   --zero:#2F6B4F;
   --zero-wash:#E1EDE7;
+  --zero-edge:#B2CFC0;
   --fixed:#7A5C10;
   --fixed-wash:#F2EBD8;
+  --fixed-edge:#DBCB9A;
   --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif;
   --sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
 }
+/* Dark mode. Same token names, same roles: paper stays the page, ink stays
+   the text, and each of the four article colours keeps its identity, so a
+   learner who has learned "teal means the" still reads it that way. */
+@media (prefers-color-scheme:dark){
+  :root{
+    --paper:#131A1F;
+    --card:#1B242A;
+    --ink:#E4EBEF;
+    --muted:#9AAAB3;
+    --rule:#33424B;
+    --hairline:rgba(255,255,255,.14);
+    --the:#7FBEDD;
+    --the-wash:#16323F;
+    --the-edge:#2C5468;
+    --an:#C7A3DC;
+    --an-wash:#2A2036;
+    --an-edge:#4A3A5C;
+    --zero:#84C9A6;
+    --zero-wash:#152F22;
+    --zero-edge:#2C5442;
+    --fixed:#DCBB60;
+    --fixed-wash:#332913;
+    --fixed-edge:#5C4A20;
+  }
+}
+
 *{box-sizing:border-box}
 html,body{margin:0;padding:0}
 body{
@@ -85,7 +116,8 @@ body{
 
 .opts{display:flex;flex-direction:column;gap:8px}
 .opt{
-  display:block;width:100%;text-align:left;
+  display:grid;grid-template-columns:1fr auto;column-gap:12px;align-items:baseline;
+  width:100%;text-align:left;
   font-family:var(--sans);font-size:15px;color:var(--ink);
   background:var(--paper);border:1px solid var(--rule);border-radius:2px;
   padding:12px 14px;cursor:pointer;
@@ -93,8 +125,8 @@ body{
 }
 .opt:hover{border-color:var(--ink);background:var(--card)}
 .opt:focus-visible{outline:2px solid var(--the);outline-offset:1px}
-.opt .ex{display:block;font-family:var(--serif);font-style:italic;font-size:15px;color:var(--muted);margin-top:4px}
-.opt .tag{float:right;font-size:12px;color:var(--muted);margin-left:12px}
+.opt .ex{grid-column:1;grid-row:2;font-family:var(--serif);font-style:italic;font-size:15px;color:var(--muted);margin-top:4px}
+.opt .tag{grid-column:2;grid-row:1;font-size:12px;color:var(--muted)}
 
 /* checklist style for the identifiability gate */
 .checklist .opt{border-left:3px solid var(--the)}
@@ -102,7 +134,7 @@ body{
 
 .warn{
   background:var(--fixed-wash);
-  border:1px solid #DBCB9A;border-radius:2px;
+  border:1px solid var(--fixed-edge);border-radius:2px;
   padding:12px 14px;font-size:14px;margin:16px 0 0;
 }
 .warn strong{font-weight:600}
@@ -119,17 +151,17 @@ body{
 .result .why em{font-family:var(--serif);font-size:16px}
 .result .built{
   font-family:var(--serif);font-size:24px;
-  padding:14px 0 0;border-top:1px solid rgba(0,0,0,.13);margin-top:6px;
+  padding:14px 0 0;border-top:1px solid var(--hairline);margin-top:6px;
 }
 .result ul{margin:10px 0 0;padding-left:20px}
 .result li{font-family:var(--serif);font-size:16px;margin-bottom:3px}
-.r-the{background:var(--the-wash);border-color:#B4CEDC}
+.r-the{background:var(--the-wash);border-color:var(--the-edge)}
 .r-the .form,.r-the .cat{color:var(--the)}
-.r-an{background:var(--an-wash);border-color:#CDB8D9}
+.r-an{background:var(--an-wash);border-color:var(--an-edge)}
 .r-an .form,.r-an .cat{color:var(--an)}
-.r-zero{background:var(--zero-wash);border-color:#B2CFC0}
+.r-zero{background:var(--zero-wash);border-color:var(--zero-edge)}
 .r-zero .form,.r-zero .cat{color:var(--zero)}
-.r-fixed{background:var(--fixed-wash);border-color:#DBCB9A}
+.r-fixed{background:var(--fixed-wash);border-color:var(--fixed-edge)}
 .r-fixed .form,.r-fixed .cat{color:var(--fixed)}
 
 /* ---------- trail ---------- */
@@ -146,7 +178,7 @@ body{
   width:20px;height:20px;border-radius:50%;background:var(--rule);color:var(--ink);
   font-size:11px;display:flex;align-items:center;justify-content:center;font-weight:600;
 }
-.trail .q{color:var(--muted)}
+.trail .q{color:var(--muted);display:block;font-size:13px}
 .trail .a{color:var(--ink);font-weight:600}
 
 .actions{display:flex;gap:10px;margin-top:22px;flex-wrap:wrap}
@@ -174,6 +206,7 @@ body{
 
 /* ---------- map ---------- */
 .map .mgate{margin-bottom:26px;background:var(--card);border:1px solid var(--rule);border-left:4px solid var(--ink);border-radius:2px;padding:18px 22px}
+.map .mgate-label{font-size:12px;font-weight:600;color:var(--muted);margin:0 0 4px}
 .map h3{font-family:var(--serif);font-weight:400;font-size:21px;margin:0 0 4px}
 .map .mq{font-size:14px;color:var(--muted);margin:0 0 14px}
 .map .row{display:flex;gap:12px;padding:8px 0;border-top:1px solid var(--rule);font-size:14px;align-items:flex-start}
@@ -195,7 +228,22 @@ body{
   .qtext{font-size:21px}
   .result .form{font-size:40px}
 }
-@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media (max-width:820px){
+  .wrap{padding:28px 20px 70px}
+  .qtext{font-size:23px}
+  .result .form{font-size:46px}
+  .map .row{flex-wrap:wrap}
+}
+
+/* Motion does one job: showing that what is on screen was just replaced.
+   The card that answers you rises in; each trail step rises in after the one
+   before it, so an appended step reads as appended. */
+@media (prefers-reduced-motion:no-preference){
+  .qcard,.result,.err,.note-card{animation:rise .28s cubic-bezier(.16,1,.3,1) both}
+  .trail li{animation:rise .24s cubic-bezier(.16,1,.3,1) both;animation-delay:calc(var(--i,0) * 45ms)}
+}
+@keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 
 /* ---------- gate 0 ---------- */
 .phrasebar .row{display:flex;gap:8px;align-items:stretch;flex-wrap:wrap}
@@ -236,6 +284,31 @@ body{
 .senses .lead b{font-weight:600}
 .senses .ex{font-family:var(--serif);font-style:italic;color:var(--muted);
   display:block;margin-top:3px}
+/* ---------- which word are we deciding about ---------- */
+.focusbar{
+  background:var(--card);border:1px solid var(--rule);border-radius:2px;
+  padding:12px 16px;margin-bottom:16px;
+}
+.focusbar h3{
+  margin:0 0 8px;font-size:11px;font-weight:600;letter-spacing:.06em;
+  text-transform:uppercase;color:var(--muted);
+}
+.sentence{font-family:var(--serif);font-size:18px;line-height:1.9}
+.sentence .w{
+  padding:1px 3px;border-radius:2px;color:var(--ink);
+  border:1px solid transparent;background:none;font:inherit;
+}
+.sentence button.w{
+  cursor:pointer;color:var(--muted);
+  text-decoration:underline;text-decoration-style:dotted;
+  text-underline-offset:4px;
+}
+.sentence button.w:hover{border-color:var(--rule);background:var(--paper);color:var(--ink)}
+.sentence button.w:focus-visible{outline:2px solid var(--the);outline-offset:1px}
+.sentence .w.on{
+  background:var(--the-wash);border-color:var(--the);color:var(--the);font-weight:600;
+}
+.focushint{margin:8px 0 0;font-size:13px;color:var(--muted)}
 @media (max-width:560px){ .reflist{columns:1} }
 </style>
 </head>
@@ -259,6 +332,8 @@ body{
         <button class="btn" id="check">Check</button>
       </div>
     </div>
+
+    <div id="focusbar" class="focusbar hidden"></div>
 
     <div id="stage" aria-live="polite"></div>
 
@@ -295,6 +370,7 @@ body{
 var D = null, T = null, FORM = null;
 var cur = null, hist = [], entry = "q2";
 var pendingNote = null;
+var pinned = null;
 
 var stage    = document.getElementById("stage");
 var trail    = document.getElementById("trail");
@@ -302,6 +378,7 @@ var trailbox = document.getElementById("trailbox");
 var phrase   = document.getElementById("phrase");
 var mapEl    = document.getElementById("map");
 var chipsEl  = document.getElementById("chips");
+var focusEl  = document.getElementById("focusbar");
 
 function esc(s){
   return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
@@ -379,6 +456,110 @@ function chooseAOrAn(word){
   }
 
   return "aeiou".indexOf(low.charAt(0)) !== -1 ? "an" : "a";
+}
+
+/* ---- the sentence, with the targeted word marked and the rest clickable --- */
+
+function renderFocusBar(text, hitResult){
+  var raw = String(text || "").trim();
+  var cands = focusCandidates(raw);
+  focusEl.innerHTML = "";
+
+  /* nothing to disambiguate: one candidate or none */
+  if(!raw || cands.length < 2){ focusEl.classList.add("hidden"); return; }
+  focusEl.classList.remove("hidden");
+
+  var target = pinned ? normalize(pinned)
+             : (hitResult ? String(hitResult.match || "") : inferFocus(raw));
+  var targetWords = target ? target.split(" ") : [];
+
+  var head = document.createElement("h3");
+  head.textContent = pinned ? "Deciding about" : "Deciding about \u2014 tap another word to change";
+  focusEl.appendChild(head);
+
+  var line = document.createElement("p");
+  line.className = "sentence";
+
+  /* walk the original text so capitalisation and punctuation survive */
+  var parts = raw.split(/(\s+)/), i, bare, isTarget, isCand;
+  for(i = 0; i < parts.length; i++){
+    if(/^\s+$/.test(parts[i])){ line.appendChild(document.createTextNode(parts[i])); continue; }
+    bare = normalizeWord(parts[i]);
+    isTarget = targetWords.indexOf(bare) !== -1;
+    isCand = false;
+    for(var c = 0; c < cands.length; c++){ if(cands[c].word === bare) isCand = true; }
+
+    if(isCand && !isTarget){
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "w";
+      b.textContent = parts[i];
+      b.title = "Decide about \u201c" + bare + "\u201d instead";
+      (function(word){
+        b.addEventListener("click", function(){
+          analyze(phrase.value, null, word);
+          stage.scrollIntoView({block:"nearest", behavior:"smooth"});
+        });
+      })(cands.filter(function(x){ return x.word === bare; })[0].word);
+      line.appendChild(b);
+    }else{
+      var span = document.createElement("span");
+      span.className = "w" + (isTarget ? " on" : "");
+      span.textContent = parts[i];
+      line.appendChild(span);
+    }
+  }
+  focusEl.appendChild(line);
+
+  var hint = document.createElement("p");
+  hint.className = "focushint";
+  hint.textContent = targetWords.length
+    ? "Answering about the highlighted word. The others are underlined - tap one to switch."
+    : "More than one noun here. Tap the one you are deciding about.";
+  focusEl.appendChild(hint);
+}
+
+/* strip punctuation from one word, keeping the clitic */
+function normalizeWord(w){
+  return String(w).toLowerCase().replace(/^[^a-z0-9]+|[^a-z0-9'\u2019]+$/g, "");
+}
+
+/* ---- which word is the learner asking about? (mirrors logic.py) ---- */
+
+var NOT_A_FOCUS = ["a","an","the","this","that","these","those","my","your",
+  "his","her","its","our","their","i","you","he","she","it","we","they","me",
+  "him","us","them","and","or","but","if","so","because","at","in","on","to",
+  "for","from","with","by","of","about","as","into","over","under","very",
+  "really","always","never","not","there","here","then","than","when","where",
+  "how","why","what","some","any","no","all","every","each","much","many",
+  "more","most","few","little","lots","one","two","three","next","last",
+  "first","second","other","same","own"];
+
+/* mirrors _infer_focus_noun in logic.py: the noun after the first article,
+   otherwise the last content word */
+function inferFocus(text){
+  var toks = tokenize(text), dets = ["a","an","the"], i;
+  for(i = 0; i < toks.length - 1; i++){
+    if(dets.indexOf(toks[i]) !== -1 && dets.indexOf(toks[i + 1]) === -1){
+      return toks[i + 1];
+    }
+  }
+  var cands = focusCandidates(text);
+  return cands.length ? cands[cands.length - 1].word : "";
+}
+
+function focusCandidates(text){
+  var seen = {}, out = [], toks = tokenize(text), i, t;
+  for(i = 0; i < toks.length; i++){
+    t = toks[i];
+    if(NOT_A_FOCUS.indexOf(t) !== -1) continue;
+    if(VERB_HINTS.indexOf(t) !== -1) continue;
+    if(t.length < 2) continue;
+    if(Object.prototype.hasOwnProperty.call(seen, t)) continue;
+    seen[t] = 1;
+    out.push({word:t, index:i});
+  }
+  return out;
 }
 
 /* longest n-gram in tokens that exists as a key of map */
@@ -508,7 +689,12 @@ function checkConstructions(text, tokens, wholeOnly){
        adjunct inside it, so it belongs in the first pass even when partial */
     if(wholeOnly !== (covers || !!rule.frame)) continue;
     return {form:formOf(rule.article), why:rule.explanation, ref:rule.rule_ref,
-            cat:"Gate 0 \u00b7 construction", match:phrase,
+            cat:"Gate 0 \u00b7 construction",
+            /* what the rule actually matched: the page highlights this, and a
+               pinned focus is checked against it */
+            match:(m[0] || "").replace(/^\s+|\s+$/g, "") || phrase,
+            matched:(m[0] || "").replace(/^\s+|\s+$/g, ""),
+            frame:!!rule.frame,
             construction:true,
             either:(String(rule.article).indexOf("either") === 0),
             examples:rule.examples || [], contrast:rule.contrast || null};
@@ -674,6 +860,53 @@ var VERB_HINTS = ["is","are","was","were","am","be","been","being","have","has",
   "studied","speak","speaks","spoke","read","reads","write","writes","wrote",
   "gave","give","gives","put","puts","know","knows","knew","found","find"];
 
+/* Gate 0 for a noun the learner picked, inside the sentence they typed.
+   The sentence still supplies context - the determiner in front of the word,
+   the verb a condition needs - so only the matching narrows to that word. */
+function gate0Pinned(text, focus){
+  var tokens = tokenize(text);
+  var word = normalize(focus);
+  var span = spanOf(tokens, word);
+  var i, hit;
+
+  for(i = 0; i < 2; i++){
+    hit = checkConstructions(text, tokens, i === 0);
+    /* a frame speaks for the whole clause, so it still covers a noun inside
+       it; any other rule has to have matched that word */
+    if(hit && word && (hit.frame || (hit.matched || "").split(" ").indexOf(word) !== -1)){
+      return hit;
+    }
+  }
+
+  if(span[1] !== null){
+    if(Object.prototype.hasOwnProperty.call(D.fixed_expressions, word)){
+      var fx = D.fixed_expressions[word];
+      return {form:formOf(fx.article), why:fx.explanation, ref:fx.rule_ref,
+              cat:"Gate 0 \u00b7 fixed expression", match:word, fixed:true};
+    }
+    if(Object.prototype.hasOwnProperty.call(D.lookup_table, word)){
+      return lookupResult(word, tokens);
+    }
+  }
+
+  hit = checkTimeWords(word, [word]) || checkCategories(word, [word]);
+  if(hit) return hit;
+
+  var nat = D.nationality_the;
+  if(nat.examples.indexOf(word) !== -1 && span[0] > 0 &&
+     (nat.requires_prev || ["the"]).indexOf(tokens[span[0] - 1]) !== -1){
+    return {form:formOf(nat.article), why:nat.explanation, ref:nat.rule_ref,
+            cat:"Gate 0 \u00b7 nationality adjective", match:word};
+  }
+
+  if(isTheTakingName(text, word)){
+    var pn = D.proper_noun_the;
+    return {form:formOf(pn.article), why:pn.explanation, ref:pn.rule_ref,
+            cat:"Gate 0 \u00b7 name in the the-taking class", match:word};
+  }
+  return null;
+}
+
 /* The article slot is already filled.
 
    Only looks at the first word, so it can only speak for a bare noun phrase.
@@ -747,12 +980,14 @@ function isTheTakingName(text, norm){
 
 /* ---------------- entry point ---------------- */
 
-function analyze(text, scriptedPath){
+function analyze(text, scriptedPath, focus){
   hist = [];
   pendingNote = null;
   cur = entry;
+  pinned = focus || null;
 
-  var hitResult = gate0(text);
+  var hitResult = focus ? gate0Pinned(text, focus) : gate0(text);
+  renderFocusBar(text, hitResult);
   if(hitResult){ renderGate0(hitResult); return true; }
 
   /* noun adjunct: two bare nouns, nothing matched -> the second noun decides */
@@ -1017,7 +1252,8 @@ document.getElementById("back").addEventListener("click", function(){
 });
 
 document.getElementById("restart").addEventListener("click", function(){
-  hist = []; cur = entry; pendingNote = null; phrase.value = "";
+  hist = []; cur = entry; pendingNote = null; pinned = null; phrase.value = "";
+  focusEl.classList.add("hidden"); focusEl.innerHTML = "";
   render(); phrase.focus();
 });
 

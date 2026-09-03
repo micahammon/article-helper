@@ -11,7 +11,7 @@ import re
 import unittest
 from pathlib import Path
 
-from logic import ArticleLogic, choose_a_or_an
+from logic import ArticleLogic, choose_a_or_an, focus_candidates
 from rules import DECISION_TREE, ENTRY_NODE
 
 DATA = json.loads((Path(__file__).resolve().parents[1] / "rules_data.json").read_text(encoding="utf-8"))
@@ -646,6 +646,69 @@ class LearnerSentenceTests(unittest.TestCase):
             analysis = self.logic.analyze_input(phrase)
             self.assertEqual(analysis["source"], "fixed_expression", phrase)
             self.assertEqual(analysis["result"]["article"], "a / an", phrase)
+
+
+class FocusTests(unittest.TestCase):
+    """The tool has always picked a noun silently.
+
+    In `I have a doubt about the homework` either noun is a fair guess, and
+    nothing on the page said which one had been chosen.
+    """
+
+    def setUp(self):
+        self.logic = ArticleLogic()
+
+    def test_candidates_are_the_plausible_nouns(self):
+        analysis = self.logic.analyze_input("I have a doubt about the homework.")
+        self.assertEqual([c["word"] for c in analysis["candidates"]],
+                         ["doubt", "homework"])
+
+    def test_candidates_skip_function_words_and_verbs(self):
+        words = [c["word"] for c in focus_candidates("I bought a piano last week.")]
+        self.assertEqual(words, ["piano", "week"])
+        self.assertNotIn("bought", words)
+        self.assertNotIn("last", words)
+
+    def test_every_answer_reports_its_candidates(self):
+        for text in ["at school", "the Netherlands", "my book",
+                     "I have a doubt about the homework.", "rugby"]:
+            self.assertIn("candidates", self.logic.analyze_input(text), text)
+
+    def test_pinning_changes_the_answer(self):
+        text = "We went to the Netherlands in July."
+        self.assertEqual(self.logic.analyze_input(text, focus="netherlands")["source"],
+                         "lookup")
+        self.assertEqual(self.logic.analyze_input(text, focus="july")["source"],
+                         "time_words:months")
+
+    def test_pinning_uses_sentence_context_not_just_the_word(self):
+        """`piano` alone would defer for a missing verb; here the `a` decides."""
+        analysis = self.logic.analyze_input("I bought a piano last week.", focus="piano")
+        self.assertEqual(analysis["result"]["result"], "context_required")
+        self.assertEqual(analysis["result"]["reason"], "determiner_conflict")
+
+    def test_an_unrelated_construction_does_not_answer_for_a_pinned_noun(self):
+        """`last week` must not answer when the learner asked about `piano`."""
+        analysis = self.logic.analyze_input("I bought a piano last week.", focus="piano")
+        self.assertNotEqual(analysis.get("source"), "construction:next_last_time_word")
+
+    def test_a_frame_still_answers_for_a_noun_inside_it(self):
+        """2.7 is a rule about the noun after `there is`."""
+        analysis = self.logic.analyze_input("There is a problem with my computer.",
+                                            focus="problem")
+        self.assertEqual(analysis["source"], "construction:there_is_singular")
+
+    def test_a_construction_reports_what_it_matched(self):
+        """Not the whole sentence - the page highlights this."""
+        analysis = self.logic.analyze_input("There is a problem with my computer.")
+        self.assertEqual(analysis["focus_noun"], "there is")
+
+    def test_pinned_results_are_marked(self):
+        analysis = self.logic.analyze_input("I have a doubt about the homework.",
+                                            focus="homework")
+        self.assertTrue(analysis["pinned"])
+        self.assertEqual(analysis["focus_noun"], "homework")
+        self.assertFalse(self.logic.analyze_input("rugby")["pinned"])
 
 
 class TreeIntegrityTests(unittest.TestCase):

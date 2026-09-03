@@ -128,6 +128,17 @@ never drift from the logic.
 
 1. **Enter text** — a noun, a phrase, or a full sentence.
 2. **Click Check.** If Gate 0 matches, you get the answer immediately.
+
+**Which word is it answering about?** A sentence usually holds more than one
+noun, and the tool used to pick one silently — in `I have a doubt about the
+homework` either is a fair guess, and nothing on the page said which had been
+chosen. The sentence is now shown back with the targeted word highlighted and
+the other candidates underlined; tapping one re-answers for that word instead.
+
+Pinning a word narrows only the *matching*. The sentence still supplies
+context, so `I bought a piano last week` pinned to `piano` still sees the `a`
+in front of it — and `last week` no longer answers a question about the piano.
+
 3. **Otherwise, answer the questions** until you reach a form.
 4. **Read the result** — the recommended article, why it applies, the phrase
    built for you, and the rule reference.
@@ -186,6 +197,7 @@ together, and no code change is needed to correct a rule or add a phrase.
 | A month, day, holiday, season, period | `time_words.groups.<name>.words` |
 | A date / year / decade pattern | `time_words.patterns` |
 | A phrase-shape rule | `constructions` (ordered; first match wins) |
+| Which words can be tapped as the focus | `_NOT_A_FOCUS` in `logic.py` |
 | Whether it outranks the lexical gates | that rule's `frame` flag |
 | When a noun is only fixed in context | that entry's `conditions` |
 | A caveat shown alongside an answer | that entry's `note` |

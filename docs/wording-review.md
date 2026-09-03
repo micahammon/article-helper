@@ -1,6 +1,7 @@
 ==============================================================================
 INPUT   "I have a doubt about the homework."
 focus   doubt
+others  homework   (the page offers these to tap)
 
 GATE 0
   miss constructions (whole input + frames)   
@@ -24,6 +25,7 @@ FIRST QUESTION (q2)
 ==============================================================================
 INPUT   "The life is difficult."
 focus   life
+others  difficult   (the page offers these to tap)
 
 GATE 0
   miss constructions (whole input + frames)   
@@ -47,6 +49,7 @@ FIRST QUESTION (q2)
 ==============================================================================
 INPUT   "I go to the school every day."
 focus   school
+others  day   (the page offers these to tap)
 
 GATE 0
   miss constructions (whole input + frames)   
@@ -70,6 +73,7 @@ FIRST QUESTION (q2)
 ==============================================================================
 INPUT   "She plays the football on Saturdays."
 focus   football
+others  saturdays   (the page offers these to tap)
 
 GATE 0
   miss constructions (whole input + frames)   
@@ -99,6 +103,7 @@ TEXT SHOWN TO THE STUDENT
 ==============================================================================
 INPUT   "I bought a piano last week."
 focus   piano
+others  week   (the page offers these to tap)
 
 GATE 0
   miss constructions (whole input + frames)   
@@ -130,6 +135,7 @@ TEXT SHOWN TO THE STUDENT
 ==============================================================================
 INPUT   "We had a lunch at two o'clock."
 focus   lunch
+others  o'clock   (the page offers these to tap)
 
 GATE 0
   miss constructions (whole input + frames)   
@@ -160,6 +166,7 @@ TEXT SHOWN TO THE STUDENT
 ==============================================================================
 INPUT   "My mother is a teacher."
 focus   teacher
+others  mother   (the page offers these to tap)
 
 GATE 0
   miss constructions (whole input + frames)   
@@ -183,6 +190,7 @@ FIRST QUESTION (q2)
 ==============================================================================
 INPUT   "I don't like the coffee."
 focus   coffee
+others  don't   (the page offers these to tap)
 
 GATE 0
   miss constructions (whole input + frames)   
@@ -205,7 +213,8 @@ FIRST QUESTION (q2)
 
 ==============================================================================
 INPUT   "There is a problem with my computer."
-focus   there is a problem with my computer
+focus   there is
+others  problem, computer   (the page offers these to tap)
 
 GATE 0
   HIT  constructions (whole input + frames)   there_is_singular  <-- ANSWERED HERE
@@ -231,11 +240,12 @@ TEXT SHOWN TO THE STUDENT
   but:      An uncountable noun after *there is* takes no article instead: *There is
   but:      always traffic on this road.* And *there* can mean 'in a certain place',
   but:      where no special rule applies: *There are the books that I lost!*
-  built:    a there is a problem with my computer
+  built:    a there is
 
 ==============================================================================
 INPUT   "What a nice day!"
-focus   what a nice day
+focus   what a
+others  nice, day   (the page offers these to tap)
 
 GATE 0
   HIT  constructions (whole input + frames)   exclamation_what_a  <-- ANSWERED HERE
@@ -257,11 +267,12 @@ TEXT SHOWN TO THE STUDENT
   headline: a / an
   body:   An exclamation with *what* and a singular countable noun takes *a/an*.
   examples: What a beautiful day! / What a party! / What a horrible taste!
-  built:    a what a nice day
+  built:    a what a
 
 ==============================================================================
 INPUT   "He was elected president last year."
-focus   he was elected president last year
+focus   elected president
+others  year   (the page offers these to tap)
 
 GATE 0
   HIT  constructions (whole input + frames)   unique_role  <-- ANSWERED HERE
@@ -287,11 +298,12 @@ TEXT SHOWN TO THE STUDENT
   but:      An ordinary job takes *a/an*, and a role identified for the listener takes
   but:      *the*: *Julie is a headteacher*, *Julie is the headteacher of our school*.
   but:      (5.2)
-  built:    he was elected president last year
+  built:    elected president
 
 ==============================================================================
 INPUT   "I studied the English for three years."
 focus   english
+others  years   (the page offers these to tap)
 
 GATE 0
   miss constructions (whole input + frames)   
@@ -323,6 +335,7 @@ TEXT SHOWN TO THE STUDENT
 ==============================================================================
 INPUT   "In the summer I go to the beach."
 focus   summer
+others  beach   (the page offers these to tap)
 
 GATE 0
   miss constructions (whole input + frames)   
@@ -352,6 +365,7 @@ TEXT SHOWN TO THE STUDENT
 ==============================================================================
 INPUT   "I saw Mr Smith at the supermarket."
 focus   supermarket
+others  mr, smith   (the page offers these to tap)
 
 GATE 0
   miss constructions (whole input + frames)   
@@ -375,6 +389,7 @@ FIRST QUESTION (q2)
 ==============================================================================
 INPUT   "It takes half an hour by bus."
 focus   by bus
+others  half, hour   (the page offers these to tap)
 
 GATE 0
   miss constructions (whole input + frames)   
@@ -399,7 +414,8 @@ TEXT SHOWN TO THE STUDENT
 
 ==============================================================================
 INPUT   "The most people think that English is hard."
-focus   the most people think that english is hard
+focus   the most
+others  people, english, hard   (the page offers these to tap)
 
 GATE 0
   HIT  constructions (whole input + frames)   the_most  <-- ANSWERED HERE
@@ -422,11 +438,12 @@ TEXT SHOWN TO THE STUDENT
   body:   *The most* is part of a superlative with a long adjective, and implies a
             comparison (2.4.5). With a noun it means 'the largest number of'.
   examples: Lucy is the most intelligent student in the class. / James has the most books of the people in the class.
-  built:    the the most people think that english is hard
+  built:    the the most
 
 ==============================================================================
 INPUT   "I have few friends here."
-focus   i have few friends here
+focus   few
+others  friends   (the page offers these to tap)
 
 GATE 0
   miss constructions (whole input + frames)   
@@ -452,11 +469,12 @@ TEXT SHOWN TO THE STUDENT
   but:      Compare *I have a little money, enough for the cinema* with *I have little
   but:      money*. With something unwanted, the bare form is positive: *there is little
   but:      crime in my town*.
-  built:    i have few friends here
+  built:    few
 
 ==============================================================================
 INPUT   "She is the best student in the class."
 focus   best
+others  student, class   (the page offers these to tap)
 
 GATE 0
   miss constructions (whole input + frames)   
@@ -503,6 +521,7 @@ FIRST QUESTION (q2)
 ==============================================================================
 INPUT   "We went to the Netherlands in July."
 focus   netherlands
+others  july   (the page offers these to tap)
 
 GATE 0
   miss constructions (whole input + frames)   

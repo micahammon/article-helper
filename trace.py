@@ -167,6 +167,10 @@ def trace(text, logic=None):
     out.append("=" * 78)
     out.append('INPUT   "%s"' % text)
     out.append("focus   %s" % (analysis["focus_noun"] or "(none inferred)"))
+    others = [c["word"] for c in analysis.get("candidates", [])
+              if c["word"] not in str(analysis["focus_noun"]).split()]
+    if others:
+        out.append("others  %s   (the page offers these to tap)" % ", ".join(others))
     out.append("")
     out.append("GATE 0")
 
