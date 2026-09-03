@@ -63,9 +63,15 @@ class GateZeroTests(unittest.TestCase):
         self.assertIn("second", analysis["note"].lower())
 
     def test_place_activity_collision(self):
-        """the mall walks the tree; at school is caught by Gate 0."""
+        """The place takes the; the institutional activity takes none.
+
+        Both are now answered by Gate 0 - the everyday-place words of 4.1/4.2
+        joined the lookup table - so the collision is checked on the articles
+        rather than on which half of the tool answers.
+        """
         self.assertGate("at school", "no article", "fixed_expression")
-        self.assertEqual(self.logic.analyze_input("the mall")["mode"], "question")
+        self.assertGate("the mall", "the", "lookup")
+        self.assertEqual(self.logic.analyze_input("the barber's")["mode"], "question")
 
     def test_every_gate_zero_rule_carries_its_own_article(self):
         """No Gate 0 branch may hardcode a form: editing the JSON must be enough."""
@@ -769,8 +775,9 @@ class TreeIntegrityTests(unittest.TestCase):
             "Dogs are loyal": "outGenZeroPl",
             "Life is hard": "outGenZeroNc",
             "the book I lent you": "out4a",
-            "the mall": "out4f",
-            "the government": "out4g",
+            "Pass me the glass": "out4f",
+            "the mall": "out4g",
+            "the government": "out4h",
             "I need a pen": "out5a",
             "We need water": "out5zNc",
         }

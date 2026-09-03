@@ -419,7 +419,15 @@ function esc(s){
 
 var PUNCT = /[!-\/:-@\[-`{-~]/g;
 
-function stripPunct(s){ return String(s).replace(PUNCT, ""); }
+/* Punctuation goes, except an apostrophe between two letters. Part 4.2 is full
+   of places spelled that way - the doctor's, the baker's - and stripping it
+   turned the headword into `doctors` and cut the word off from its own entry. */
+function stripPunct(s){
+  return String(s)
+    .replace(/([A-Za-z0-9])['’]([A-Za-z0-9])/g, "$1$2")
+    .replace(PUNCT, "")
+    .replace(//g, "'");
+}
 
 function normalize(s){
   var n = String(s == null ? "" : s).trim();
@@ -1468,7 +1476,7 @@ function renderMapRows(n){
   n.opts.forEach(function(o){
     var target = T[o.go], rows;
     /* expand a sub-question inline so the map stays flat and readable */
-    if(target && target.opts && (o.go === "q2a" || o.go === "q3a" || o.go === "q4f")){
+    if(target && target.opts && (o.go === "q2a" || o.go === "q3a" || o.go === "q4g")){
       rows = target.opts.map(function(so){
         var pf = pillFor(so.go);
         return {t: o.label + " \u2192 " + so.label, e: so.ex || "", p: pf.p, c: pf.c};

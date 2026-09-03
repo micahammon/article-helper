@@ -155,96 +155,52 @@
       "article": "the",
       "explanation": "As a general concept of entertainment, we say 'go to the cinema'.",
       "rule_ref": "4.1",
-      "conditions": {
-        "requires_any": [
-          "go",
-          "goes",
-          "going",
-          "went",
-          "gone",
-          "at",
-          "to",
-          "from"
-        ],
-        "sense": "the art form or the outing",
-        "contrast": "A particular building or performance follows the ordinary rules.",
+      "note": {
+        "text": "Meaning one particular building or performance instead, it is an ordinary noun again and the ordinary rules apply.",
         "examples": [
           "There's a cinema near my house.",
           "I saw an opera last night."
         ],
-        "contrast_rule_ref": "6.1.4"
+        "rule_ref": "6.1.4"
       }
     },
     "opera": {
       "article": "the",
       "explanation": "As a general concept of entertainment, we say 'go to the opera'.",
       "rule_ref": "4.1",
-      "conditions": {
-        "requires_any": [
-          "go",
-          "goes",
-          "going",
-          "went",
-          "gone",
-          "at",
-          "to",
-          "from"
-        ],
-        "sense": "the art form or the outing",
-        "contrast": "A particular building or performance follows the ordinary rules.",
+      "note": {
+        "text": "Meaning one particular building or performance instead, it is an ordinary noun again and the ordinary rules apply.",
         "examples": [
           "There's a cinema near my house.",
           "I saw an opera last night."
         ],
-        "contrast_rule_ref": "6.1.4"
+        "rule_ref": "6.1.4"
       }
     },
     "theatre": {
       "article": "the",
       "explanation": "As a general concept of entertainment, we say 'go to the theatre'.",
       "rule_ref": "4.1",
-      "conditions": {
-        "requires_any": [
-          "go",
-          "goes",
-          "going",
-          "went",
-          "gone",
-          "at",
-          "to",
-          "from"
-        ],
-        "sense": "the art form or the outing",
-        "contrast": "A particular building or performance follows the ordinary rules.",
+      "note": {
+        "text": "Meaning one particular building or performance instead, it is an ordinary noun again and the ordinary rules apply.",
         "examples": [
           "There's a cinema near my house.",
           "I saw an opera last night."
         ],
-        "contrast_rule_ref": "6.1.4"
+        "rule_ref": "6.1.4"
       }
     },
     "ballet": {
       "article": "the",
       "explanation": "As a general concept of entertainment, we say 'go to the ballet'.",
       "rule_ref": "4.1",
-      "conditions": {
-        "requires_any": [
-          "go",
-          "goes",
-          "going",
-          "went",
-          "gone",
-          "at",
-          "to",
-          "from"
-        ],
-        "sense": "the art form or the outing",
-        "contrast": "A particular building or performance follows the ordinary rules.",
+      "note": {
+        "text": "Meaning one particular building or performance instead, it is an ordinary noun again and the ordinary rules apply.",
         "examples": [
           "There's a cinema near my house.",
           "I saw an opera last night."
         ],
-        "contrast_rule_ref": "6.1.4"
+        "rule_ref": "6.1.4"
       }
     },
     "internet": {
@@ -865,6 +821,266 @@
         ],
         "contrast_rule_ref": "3.5"
       }
+    },
+    "gym": {
+      "article": "the",
+      "explanation": "A place we all know rather than a particular building: 'go to the gym'.",
+      "rule_ref": "4.1",
+      "note": {
+        "text": "Meaning one particular building instead, it is an ordinary noun again and the ordinary rules apply.",
+        "examples": [
+          "There's a gym near my house.",
+          "The library on our street is closed."
+        ],
+        "rule_ref": "2.1.2"
+      }
+    },
+    "park": {
+      "article": "the",
+      "explanation": "A place we all know rather than a particular one: 'go to the park'.",
+      "rule_ref": "4.1",
+      "note": {
+        "text": "Meaning one particular building instead, it is an ordinary noun again and the ordinary rules apply.",
+        "examples": [
+          "There's a gym near my house.",
+          "The library on our street is closed."
+        ],
+        "rule_ref": "2.1.2"
+      }
+    },
+    "zoo": {
+      "article": "the",
+      "explanation": "A place we all know rather than a particular one: 'go to the zoo'.",
+      "rule_ref": "4.1",
+      "note": {
+        "text": "Meaning one particular building instead, it is an ordinary noun again and the ordinary rules apply.",
+        "examples": [
+          "There's a gym near my house.",
+          "The library on our street is closed."
+        ],
+        "rule_ref": "2.1.2"
+      }
+    },
+    "library": {
+      "article": "the",
+      "explanation": "A place we all know rather than a particular building: 'go to the library'.",
+      "rule_ref": "4.1",
+      "note": {
+        "text": "Meaning one particular building instead, it is an ordinary noun again and the ordinary rules apply.",
+        "examples": [
+          "There's a gym near my house.",
+          "The library on our street is closed."
+        ],
+        "rule_ref": "2.1.2"
+      }
+    },
+    "movies": {
+      "article": "the",
+      "explanation": "American English for 'the cinema': 'go to the movies'. The outing, not a building.",
+      "rule_ref": "4.1",
+      "note": {
+        "text": "Meaning one particular building instead, it is an ordinary noun again and the ordinary rules apply.",
+        "examples": [
+          "There's a gym near my house.",
+          "The library on our street is closed."
+        ],
+        "rule_ref": "2.1.2"
+      }
+    },
+    "bank": {
+      "article": "the",
+      "explanation": "The errand rather than a particular branch: 'put it in the bank'.",
+      "rule_ref": "4.2",
+      "note": {
+        "text": "Meaning one particular business instead, it is an ordinary noun again and the ordinary rules apply.",
+        "examples": [
+          "A bank has opened on the corner.",
+          "I waited outside a shop on the high street."
+        ],
+        "rule_ref": "2.1.2"
+      }
+    },
+    "pub": {
+      "article": "the",
+      "explanation": "The outing rather than a particular pub: 'go to the pub'. American English says 'the bar'.",
+      "rule_ref": "4.2",
+      "note": {
+        "text": "Meaning one particular business instead, it is an ordinary noun again and the ordinary rules apply.",
+        "examples": [
+          "A bank has opened on the corner.",
+          "I waited outside a shop on the high street."
+        ],
+        "rule_ref": "2.1.2"
+      }
+    },
+    "bar": {
+      "article": "the",
+      "explanation": "American English counterpart of 'the pub': 'go to the bar'. Not 'a bar of chocolate', and not 'the bar' meaning the legal profession.",
+      "rule_ref": "4.2",
+      "note": {
+        "text": "Meaning one particular business instead, it is an ordinary noun again and the ordinary rules apply.",
+        "examples": [
+          "A bank has opened on the corner.",
+          "I waited outside a shop on the high street."
+        ],
+        "rule_ref": "2.1.2"
+      }
+    },
+    "post office": {
+      "article": "the",
+      "explanation": "The errand rather than a particular branch: 'go to the post office'.",
+      "rule_ref": "4.2",
+      "note": {
+        "text": "Meaning one particular business instead, it is an ordinary noun again and the ordinary rules apply.",
+        "examples": [
+          "A bank has opened on the corner.",
+          "I waited outside a shop on the high street."
+        ],
+        "rule_ref": "2.1.2"
+      }
+    },
+    "doctor's": {
+      "article": "the",
+      "explanation": "The visit rather than a particular surgery: 'go to the doctor's'. American English drops the 's': 'go to the doctor'.",
+      "rule_ref": "4.2",
+      "note": {
+        "text": "Meaning one particular business instead, it is an ordinary noun again and the ordinary rules apply.",
+        "examples": [
+          "A bank has opened on the corner.",
+          "I waited outside a shop on the high street."
+        ],
+        "rule_ref": "2.1.2"
+      }
+    },
+    "doctor": {
+      "article": "the",
+      "explanation": "American English for 'the doctor's': 'go to the doctor'. The visit, not a particular person.",
+      "rule_ref": "4.2",
+      "note": {
+        "text": "Meaning one particular business instead, it is an ordinary noun again and the ordinary rules apply.",
+        "examples": [
+          "A bank has opened on the corner.",
+          "I waited outside a shop on the high street."
+        ],
+        "rule_ref": "2.1.2"
+      }
+    },
+    "dentist's": {
+      "article": "the",
+      "explanation": "The visit rather than a particular practice: 'go to the dentist's'. American English drops the 's'.",
+      "rule_ref": "4.2",
+      "note": {
+        "text": "Meaning one particular business instead, it is an ordinary noun again and the ordinary rules apply.",
+        "examples": [
+          "A bank has opened on the corner.",
+          "I waited outside a shop on the high street."
+        ],
+        "rule_ref": "2.1.2"
+      }
+    },
+    "dentist": {
+      "article": "the",
+      "explanation": "American English for 'the dentist's': 'go to the dentist'.",
+      "rule_ref": "4.2",
+      "note": {
+        "text": "Meaning one particular business instead, it is an ordinary noun again and the ordinary rules apply.",
+        "examples": [
+          "A bank has opened on the corner.",
+          "I waited outside a shop on the high street."
+        ],
+        "rule_ref": "2.1.2"
+      }
+    },
+    "hairdresser's": {
+      "article": "the",
+      "explanation": "The appointment rather than a particular salon: 'go to the hairdresser's'.",
+      "rule_ref": "4.2",
+      "note": {
+        "text": "Meaning one particular business instead, it is an ordinary noun again and the ordinary rules apply.",
+        "examples": [
+          "A bank has opened on the corner.",
+          "I waited outside a shop on the high street."
+        ],
+        "rule_ref": "2.1.2"
+      }
+    },
+    "baker's": {
+      "article": "the",
+      "explanation": "The errand rather than a particular shop: 'buy bread at the baker's'.",
+      "rule_ref": "4.2",
+      "note": {
+        "text": "Meaning one particular business instead, it is an ordinary noun again and the ordinary rules apply.",
+        "examples": [
+          "A bank has opened on the corner.",
+          "I waited outside a shop on the high street."
+        ],
+        "rule_ref": "2.1.2"
+      }
+    },
+    "mall": {
+      "article": "the",
+      "explanation": "American English, alongside British 'the shops': 'go to the mall'. The outing, not a particular mall.",
+      "rule_ref": "4.2",
+      "note": {
+        "text": "Meaning one particular business instead, it is an ordinary noun again and the ordinary rules apply.",
+        "examples": [
+          "A bank has opened on the corner.",
+          "I waited outside a shop on the high street."
+        ],
+        "rule_ref": "2.1.2"
+      }
+    },
+    "store": {
+      "article": "the",
+      "explanation": "American English, alongside British 'the shops': 'go to the store'. The errand, not a particular store.",
+      "rule_ref": "4.2",
+      "note": {
+        "text": "Meaning one particular business instead, it is an ordinary noun again and the ordinary rules apply.",
+        "examples": [
+          "A bank has opened on the corner.",
+          "I waited outside a shop on the high street."
+        ],
+        "rule_ref": "2.1.2"
+      }
+    },
+    "drugstore": {
+      "article": "the",
+      "explanation": "American English counterpart of British 'the chemist's': 'go to the drugstore'.",
+      "rule_ref": "4.2",
+      "note": {
+        "text": "Meaning one particular business instead, it is an ordinary noun again and the ordinary rules apply.",
+        "examples": [
+          "A bank has opened on the corner.",
+          "I waited outside a shop on the high street."
+        ],
+        "rule_ref": "2.1.2"
+      }
+    },
+    "chemist's": {
+      "article": "the",
+      "explanation": "The errand rather than a particular shop: 'go to the chemist's'. American English says 'the drugstore' or 'the pharmacy'.",
+      "rule_ref": "4.2",
+      "note": {
+        "text": "Meaning one particular business instead, it is an ordinary noun again and the ordinary rules apply.",
+        "examples": [
+          "A bank has opened on the corner.",
+          "I waited outside a shop on the high street."
+        ],
+        "rule_ref": "2.1.2"
+      }
+    },
+    "shops": {
+      "article": "the",
+      "explanation": "The errand rather than particular shops: 'go to the shops'. American English says 'the mall' or 'the store'.",
+      "rule_ref": "4.2",
+      "note": {
+        "text": "Meaning one particular business instead, it is an ordinary noun again and the ordinary rules apply.",
+        "examples": [
+          "A bank has opened on the corner.",
+          "I waited outside a shop on the high street."
+        ],
+        "rule_ref": "2.1.2"
+      }
     }
   },
   "fixed_expressions": {
@@ -938,13 +1154,13 @@
       "article": "no article",
       "group": "zero",
       "rule_ref": "7.3",
-      "explanation": "An institution named for its activity rather than its building takes no article: <em>at school</em> means studying, <em>at the school</em> means standing in the building."
+      "explanation": "An institution named for its activity rather than its building takes no article: <em>in hospital</em> means being ill there, not standing in the building.<br><br>This one splits by dialect. British English drops the article — <em>my neighbour is still in hospital</em> — while American English keeps it: <em>still in the hospital</em>. Both are correct.<br><br>Meaning the building, both dialects follow the ordinary rules: <em>my mother went to the hospital to visit my aunt</em>."
     },
     "to hospital": {
       "article": "no article",
       "group": "zero",
       "rule_ref": "7.3",
-      "explanation": "An institution named for its activity rather than its building takes no article: <em>at school</em> means studying, <em>at the school</em> means standing in the building."
+      "explanation": "An institution named for its activity rather than its building takes no article: <em>in hospital</em> means being ill there, not standing in the building.<br><br>This one splits by dialect. British English drops the article — <em>my neighbour is still in hospital</em> — while American English keeps it: <em>still in the hospital</em>. Both are correct.<br><br>Meaning the building, both dialects follow the ordinary rules: <em>my mother went to the hospital to visit my aunt</em>."
     },
     "at university": {
       "article": "no article",
@@ -2680,14 +2896,19 @@
           "go": "out4e"
         },
         {
-          "label": "4f · There's only one in our shared community",
-          "ex": "the mall · the beach · the park · the gym · the doctor",
-          "go": "q4f"
+          "label": "4f · It's there in the situation we're both in",
+          "ex": "the glass · the window · the market · the river",
+          "go": "out4f"
         },
         {
-          "label": "4g · It's a role that belongs to something",
+          "label": "4g · It's an everyday place we all know",
+          "ex": "the gym · the park · the bank · the doctor's · the mall",
+          "go": "q4g"
+        },
+        {
+          "label": "4h · It's a role that belongs to something",
           "ex": "the government · the president · the economy · the weather",
-          "go": "out4g"
+          "go": "out4h"
         },
         {
           "label": "None of these — my listener can't tell which one",
@@ -2726,42 +2947,17 @@
       "rule_ref": "2.3",
       "why": "Shared world knowledge does the identifying. No context needed at all."
     },
-    "q4f": {
-      "short": "a place, or an activity?",
-      "gate": "Question 4f · check first",
-      "q": "Does the noun name a place, or an institutional activity?",
-      "note": "This is where <em>the mall</em> and <em>at school</em> collide. Both are familiar community places, so the wrong branch is easy to take.",
-      "opts": [
-        {
-          "label": "A place",
-          "ex": "mall · beach · park · gym · bank · airport · library · store",
-          "go": "out4f"
-        },
-        {
-          "label": "An institutional activity or state",
-          "ex": "school · church · class · prison · court · bed · work · sea",
-          "go": "outActivityZero"
-        }
-      ],
-      "warn": "Compare <em>at school</em>, meaning studying, with <em>at the school</em>, meaning standing in the building. The activity set is closed and somewhat arbitrary — <em>I'm at school</em> is available but <em>I'm at library</em> isn't."
-    },
     "out4f": {
       "out": "the",
-      "cat": "4f · only one in our shared community",
+      "cat": "4f · there in the situation we're both in",
       "rule_ref": "2.2",
-      "why": "No specific one has been mentioned, and none needs to be. <em>I'm at the mall</em> doesn't identify which mall — it relies on your listener not needing to ask. This still holds for a mall neither of you has ever visited, because what's required is that the question <em>which one?</em> doesn't arise, not that a particular referent exists."
+      "why": "The place we are both in does the identifying. With one glass on the table, <em>pass me the glass</em> is clear — no other choice arises.<br><br>The situation need not be the room. It can be the building, the town or the country: <em>I went to the cafeteria</em> means the one in our building, and <em>you can buy apples at the market</em> means the market in our town.<br><br>Put more than one in view and <em>which one?</em> comes back, so you are on <em>a/an</em> again: <em>please close the window</em> when one is open, <em>please close a window</em> when three are."
     },
     "outActivityZero": {
       "out": "zero",
-      "cat": "4f · institutional activity, not a place",
+      "cat": "4g · institutional activity, not a place",
       "rule_ref": "7.3",
       "why": "When the noun names the activity an institution exists for rather than its building, English drops the article: <em>at school</em> (studying), <em>in prison</em> (serving a sentence), <em>in bed</em> (sleeping), <em>at work</em> (working), <em>in class</em>, <em>at sea</em>, <em>in court</em>.<br><br>Put <em>the</em> back the moment you mean the building instead: <em>I parked at the school.</em>"
-    },
-    "out4g": {
-      "out": "the",
-      "cat": "4g · a role that belongs to something",
-      "rule_ref": "2.3",
-      "why": "Role nouns are inherently <em>of</em> something: government of a country, capital of a country, manager of a team. The article is licensed because the noun carries an implicit slot that context fills — and the slot can stay unfilled out loud. <em>What should the government do?</em> works between an American and a Spaniard discussing neither country, because it means <em>the government of whatever situation we're discussing</em>. Unique relative to an argument, not unique in the world."
     },
     "q5": {
       "short": "countable, as used here?",
@@ -2803,6 +2999,37 @@
       "cat": "Question 5 · indefinite non-count",
       "rule_ref": "2.1.2",
       "why": "Mass nouns take no article when indefinite. Add a quantifier if you need one: <em>some water</em>, <em>a lot of water</em>."
+    },
+    "out4h": {
+      "out": "the",
+      "cat": "4h · a role that belongs to something",
+      "rule_ref": "2.3",
+      "why": "Role nouns are inherently <em>of</em> something: government of a country, capital of a country, manager of a team. The article is licensed because the noun carries an implicit slot that context fills — and the slot can stay unfilled out loud. <em>What should the government do?</em> works between an American and a Spaniard discussing neither country, because it means <em>the government of whatever situation we're discussing</em>. Unique relative to an argument, not unique in the world."
+    },
+    "q4g": {
+      "short": "a place, or an activity?",
+      "gate": "Question 4g · check first",
+      "q": "Does the noun name a place, or an institutional activity?",
+      "note": "This is where <em>the mall</em> and <em>at school</em> collide. Both are familiar community places, so the wrong branch is easy to take.",
+      "opts": [
+        {
+          "label": "A place",
+          "ex": "mall · beach · park · gym · bank · airport · library · store",
+          "go": "out4g"
+        },
+        {
+          "label": "An institutional activity or state",
+          "ex": "school · church · class · prison · court · bed · work · sea",
+          "go": "outActivityZero"
+        }
+      ],
+      "warn": "Compare <em>at school</em>, meaning studying, with <em>at the school</em>, meaning standing in the building. The activity set is closed and somewhat arbitrary — <em>I'm at school</em> is available but <em>I'm at library</em> isn't."
+    },
+    "out4g": {
+      "out": "the",
+      "cat": "4g · an everyday place we all know",
+      "rule_ref": "4.1",
+      "why": "Not a particular one — the kind of place itself. <em>I like going to the cinema</em> is about cinema-going, not about a building. The book calls this using <em>the</em> for “the category as a general abstract idea” — things everybody knows. It covers entertainment and recreation (4.1) and shops and other businesses (4.2).<br><br>This does not contradict Question 3. There are two ways to generalise: a plural or uncountable noun with no article (<em>dogs</em>, <em>life</em>), or <em>the</em> with a singular noun for a whole category (<em>the cinema</em>, <em>the gym</em>).<br><br><b>An intuition, not a rule in the book:</b> these read like leftovers from when there really was one in town — one hospital, one post office, one mall — so <em>the</em> was literal, and it stuck. Part 2.2 still works that way today: <em>the market</em> means the market in our town.<br><br>Careful: <em>café</em> and <em>restaurant</em> are not used like this. <em>Let's go to the restaurant</em> can only mean a particular one."
     }
   },
   "traces": [
@@ -2847,11 +3074,22 @@
       ]
     },
     {
-      "p": "the mall",
+      "p": "Pass me the glass",
       "path": [
         1,
         1,
-        5,
+        5
+      ]
+    },
+    {
+      "p": "the mall"
+    },
+    {
+      "p": "the barber's",
+      "path": [
+        1,
+        1,
+        6,
         0
       ]
     },
@@ -2863,7 +3101,7 @@
       "path": [
         1,
         1,
-        6
+        7
       ]
     },
     {
@@ -2871,7 +3109,7 @@
       "path": [
         1,
         1,
-        7,
+        8,
         0
       ]
     },
@@ -2880,7 +3118,7 @@
       "path": [
         1,
         1,
-        7,
+        8,
         2
       ]
     },

@@ -102,13 +102,23 @@ rather than about facts you would have to already know:
   "in general" without changing the meaning?)* This is the highest-error node
   for Romance-language speakers — `La vida es dura` is `Life is hard`, not
   `the life` — so it carries an explicit warning and a safe default.
-- **Q4** — can your listener identify **which one**? Broken into seven concrete
-  cues (**4a–4g**), ordered most-mechanical-first: a relative clause or
+- **Q4** — can your listener identify **which one**? Broken into eight concrete
+  cues (**4a–4h**), ordered most-mechanical-first: a relative clause or
   `of`-phrase, a superlative or ordinal, second mention, inference from
-  something already mentioned, uniqueness in the world, uniqueness in the
-  shared community, and role nouns like `the government`. A sub-gate under 4f
-  separates a **place** (`the mall`) from an **institutional activity**
-  (`at school`) — the classic collision.
+  something already mentioned, uniqueness in the world, the situation the two of
+  you are in (2.2), the everyday place taken as an idea (4.1/4.2), and role
+  nouns like `the government`. A sub-gate under 4g separates a **place**
+  (`the mall`) from an **institutional activity** (`at school`) — the classic
+  collision.
+
+  **4f and 4g are different rules**, and were one option until they were split.
+  4f is Part 2.2: the room, building or town you are both in does the
+  identifying — *pass me the glass*, or *the market* meaning the market in our
+  town. 4g is Part 4.1/4.2: `the` + a singular noun for a whole category, the
+  place as an idea rather than a particular building — *go to the cinema*,
+  *the gym*, *the doctor's*. The single option had 2.2's citation, 4.1/4.2's
+  examples and prose that fitted neither, so a learner pointing at a bike
+  matched nothing and fell out to `a bike`.
 - **Q5** — countable or not **in this use**, not as a property of the noun, so
   `coffee` / `a coffee` and `paper` / `a paper` route correctly.
 
@@ -271,16 +281,6 @@ body parts (4.7) and people's names (9.4).
 Only **newspaper headlines** (6.4) are left out, deliberately: dropping
 articles there is a journalist's stylistic choice, not a rule a learner needs.
 
-**Q4 has no cue for the shared physical situation** (source 2.2). A learner
-saying `I want the bike` while pointing at it matches none of 4a-4g: nothing in
-the sentence identifies it, it has not been mentioned, and a bike is not a
-community institution like `the mall`. They fall out to *None of these* and are
-handed `a bike`. 4f carries `rule_ref` 2.2, but its prose has drifted to generic
-community institutions - *"this still holds for a mall neither of you has ever
-visited"* - which is nearly the opposite of an object you are both looking at.
-Either widen 4f or add an option ahead of it. Not yet decided; it is rule
-content, so it goes back to the source doc first.
-
 Two rules answer with a split, because nothing in the input settles them: a
 season takes either `the` or none (6.2.6), and an exclamation takes `a/an`
 before a singular countable noun and nothing before a plural or uncountable
@@ -290,11 +290,18 @@ The constructions are regexes over the input, which is a real limit: they read
 word order, not grammar. An unusual phrasing can miss one, and a loose match
 inside a long sentence is only ever a fallback.
 
-The lookup table is now conditioned (26 of 49 entries), so context-sensitive
+The lookup table is now conditioned (22 of 68 entries), so context-sensitive
 nouns defer instead of guessing. What remains is coverage rather than
 correctness: the conditions are word lists, not grammar, so an unusual phrasing
-can still slip past one. Adding vocabulary to the table means adding its
-conditions at the same time.
+can still slip past one. Adding vocabulary means deciding, for each word,
+whether it is genuinely two-way.
+
+Only some words are. `piano` is: *I bought a piano* is the other sense, so it
+carries conditions and defers. The everyday places of 4.1/4.2 are not — `the
+gym` is `the` under either reading — so they answer outright, and the caveat
+about meaning one particular building rides alongside as a `note`. Having that
+backwards made `the cinema` refuse to answer while `the gym` answered, under the
+same rule.
 
 ### Deploying
 

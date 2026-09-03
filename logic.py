@@ -28,6 +28,12 @@ WORD_PATTERN = re.compile(r"[A-Za-z0-9]+(?:'[A-Za-z]+)?")
 _NOUN_NUMBER_RE = re.compile(PATTERNS["noun_number"]["regex"], re.IGNORECASE)
 
 
+#: an apostrophe between two letters, which survives punctuation stripping
+KEEP_APOSTROPHE = re.compile(r"([A-Za-z0-9])['\u2019]([A-Za-z0-9])")
+#: stands in for that apostrophe while the rest of the punctuation is removed
+_APOSTROPHE_HOLD = "\x01"
+
+
 def _normalize_noun(noun):
     """Return a canonical form of ``noun`` for lookup-table comparisons."""
     if noun is None:
@@ -35,7 +41,13 @@ def _normalize_noun(noun):
 
     normalized = str(noun).strip()
     normalized = re.sub(r"^(?:the|an|a)\s+", "", normalized, flags=re.IGNORECASE)
+    # An apostrophe between two letters stays: Part 4.2 is full of places
+    # spelled that way -- the doctor's, the baker's -- and stripping it cut
+    # those words off from their own lookup entries.
+    normalized = KEEP_APOSTROPHE.sub(
+        lambda m: m.group(1) + _APOSTROPHE_HOLD + m.group(2), normalized)
     normalized = normalized.translate(str.maketrans("", "", string.punctuation))
+    normalized = normalized.replace(_APOSTROPHE_HOLD, "'")
     normalized = re.sub(r"\s+", " ", normalized).strip()
 
     return normalized.lower()
