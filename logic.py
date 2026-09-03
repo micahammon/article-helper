@@ -72,6 +72,10 @@ def _find_lookup_phrase(tokens):
     return _find_phrase(tokens, LOOKUP_TABLE)
 
 
+#: forms of `be`, which put an adjective rather than a noun at the tail
+BE_FORMS = {"is", "are", "was", "were", "am", "be", "been", "being"}
+
+
 def _infer_focus_noun(tokens):
     """Infer a focus noun from free-form text when no lookup phrase matches."""
     if not tokens:
@@ -93,11 +97,28 @@ def _infer_focus_noun(tokens):
         "this", "that", "these", "those", "today", "tomorrow", "yesterday", "now", "then",
     }
 
-    filtered = [token for token in tokens if token not in determiners and token not in stop_words]
-    if filtered:
-        return filtered[-1]
+    filtered = [
+        (index, token)
+        for index, token in enumerate(tokens)
+        if token not in determiners and token not in stop_words
+    ]
+    if not filtered:
+        return ""
 
-    return ""
+    # `Dogs are loyal` ends in an adjective, so the last content word is the
+    # wrong guess. After a copula with no determiner behind it the tail is a
+    # predicate adjective, and the subject in front is what the sentence is
+    # about. A determiner there means a predicate noun -- `is a teacher` --
+    # and the scan above has already returned it.
+    for index, token in enumerate(tokens):
+        if token not in BE_FORMS:
+            continue
+        before = [word for position, word in filtered if position < index]
+        if before:
+            return before[-1]
+        break
+
+    return filtered[-1][1]
 
 
 #: how long an input can be and still be read as a bare noun phrase

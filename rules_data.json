@@ -2648,7 +2648,8 @@
       "short": "can the listener identify it?",
       "gate": "Question 4",
       "q": "Can my listener identify <em>which one</em> I mean?",
-      "note": "Work down the list. The first one that matches is your answer — they all produce <em>the</em>, and the labels just tell you why.",
+      "note": "Take the first option only if nothing below fits. Otherwise work down the list — the first match is your answer, and the labels just tell you why.",
+      "group": "Everything below answers <em>the</em> — pick the first one that matches",
       "style": "checklist",
       "opts": [
         {

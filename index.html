@@ -139,7 +139,14 @@ body{
 
 /* checklist style for the identifiability gate */
 .checklist .opt{border-left:3px solid var(--the)}
-.checklist .opt.none{border-left:3px solid var(--rule);margin-top:6px}
+.checklist .opt.none{border-left:3px solid var(--rule)}
+/* names the block underneath: everything below this line answers `the` */
+.optgroup{
+  display:flex;align-items:center;gap:10px;
+  margin:14px 0 2px;font-size:13px;color:var(--muted);
+}
+.optgroup::after{content:"";flex:1;height:1px;background:var(--rule)}
+.optgroup em{font-family:var(--serif);font-style:italic;font-size:15px;color:var(--the)}
 
 .warn{
   background:var(--fixed-wash);
@@ -566,8 +573,24 @@ function inferFocus(text){
     }
   }
   var cands = focusCandidates(text);
-  return cands.length ? cands[cands.length - 1].word : "";
+  if(!cands.length) return "";
+
+  /* `Dogs are loyal` ends in an adjective, so the last content word is the
+     wrong guess. After a copula with no determiner behind it the tail is a
+     predicate adjective, and the subject in front is what the sentence is
+     about. A determiner there means a predicate noun - `is a teacher` - and
+     the scan above has already returned it. */
+  for(i = 0; i < toks.length; i++){
+    if(BE_FORMS.indexOf(toks[i]) === -1) continue;
+    for(var c = cands.length - 1; c >= 0; c--){
+      if(cands[c].index < i) return cands[c].word;
+    }
+    break;
+  }
+  return cands[cands.length - 1].word;
 }
+
+var BE_FORMS = ["is","are","was","were","am","be","been","being"];
 
 /* Does the data have a rule for this word as a noun? `work` is on the verb
    list and is also a lookup entry, so a word the tool can actually answer
@@ -1085,8 +1108,10 @@ function renderQuestion(n){
   card.innerHTML = h;
 
   var box = document.createElement("div");
-  box.className = "opts" + (n.style === "checklist" ? " checklist" : "");
-  n.opts.forEach(function(o, i){
+  var isChecklist = (n.style === "checklist");
+  box.className = "opts" + (isChecklist ? " checklist" : "");
+
+  function addOption(o, i){
     var b = document.createElement("button");
     b.className = "opt" + (o.cls ? " " + o.cls : "");
     var inner = "";
@@ -1096,7 +1121,28 @@ function renderQuestion(n){
     b.innerHTML = inner;
     b.addEventListener("click", function(){ choose(i); });
     box.appendChild(b);
+  }
+
+  /* On the checklist gate the way out goes first, and the reasons that all
+     end in `the` sit under a heading that says so. Bottom-of-the-list, the
+     escape hatch read as the last resort after seven the-options rather than
+     as the other half of the choice.
+
+     Indexes stay the ones in the data, so saved trace paths and the map do
+     not move with the buttons. */
+  var escapes = [], reasons = [];
+  n.opts.forEach(function(o, i){
+    (isChecklist && o.cls === "none" ? escapes : reasons).push({o:o, i:i});
   });
+
+  if(isChecklist && escapes.length){
+    escapes.forEach(function(e){ addOption(e.o, e.i); });
+    var head = document.createElement("p");
+    head.className = "optgroup";
+    head.innerHTML = n.group || "";
+    box.appendChild(head);
+  }
+  reasons.forEach(function(e){ addOption(e.o, e.i); });
   card.appendChild(box);
 
   if(n.warn){
