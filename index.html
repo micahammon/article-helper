@@ -127,6 +127,15 @@ body{
 .opt:focus-visible{outline:2px solid var(--the);outline-offset:1px}
 .opt .ex{grid-column:1;grid-row:2;font-family:var(--serif);font-style:italic;font-size:15px;color:var(--muted);margin-top:4px}
 .opt .tag{grid-column:2;grid-row:1;font-size:12px;color:var(--muted)}
+/* The generic option carries the note's test already applied to its examples.
+   Setting the inserted words apart - upright, sans, tinted - lets the eye read
+   the original sentence straight through them and see what was added. */
+.opt .ex ins{
+  text-decoration:none;font-style:normal;font-family:var(--sans);
+  font-size:13px;color:var(--the);
+  border-bottom:1px dashed var(--the-edge);
+  padding-bottom:1px;white-space:nowrap;
+}
 
 /* checklist style for the identifiability gate */
 .checklist .opt{border-left:3px solid var(--the)}

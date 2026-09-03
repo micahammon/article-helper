@@ -2579,7 +2579,7 @@
       "opts": [
         {
           "label": "The class as a whole — generic",
-          "ex": "Dogs are loyal. · Life is hard.",
+          "ex": "Dogs, <ins>in general</ins>, are loyal. · Life, <ins>in general</ins>, is hard.",
           "go": "q3a"
         },
         {
