@@ -2767,7 +2767,7 @@
       "opts": [
         {
           "label": "Yes",
-          "ex": "the Netherlands · the Alps · the Republic of Ireland · the Nile · the Mediterranean · the Sahara · the Middle East · the Prado · the Guardian",
+          "ex": "the Netherlands · the Alps · the Nile · the Sahara · the Middle East · the Prado · the Guardian · the Republic of Ireland · the University of Cambridge · the Gulf of Mexico · the Tropic of Capricorn",
           "go": "outPropThe"
         },
         {
