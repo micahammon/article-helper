@@ -179,7 +179,20 @@
     },
     "theatre": {
       "article": "the",
-      "explanation": "As a general concept of entertainment, we say 'go to the theatre'.",
+      "explanation": "As a general concept of entertainment, we say 'go to the theater'.",
+      "rule_ref": "4.1",
+      "note": {
+        "text": "Meaning one particular building or performance instead, it is an ordinary noun again and the ordinary rules apply.",
+        "examples": [
+          "There's a cinema near my house.",
+          "I saw an opera last night."
+        ],
+        "rule_ref": "6.1.4"
+      }
+    },
+    "theater": {
+      "article": "the",
+      "explanation": "As a general concept of entertainment, we say 'go to the theater'.",
       "rule_ref": "4.1",
       "note": {
         "text": "Meaning one particular building or performance instead, it is an ordinary noun again and the ordinary rules apply.",
@@ -1154,13 +1167,13 @@
       "article": "no article",
       "group": "zero",
       "rule_ref": "7.3",
-      "explanation": "An institution named for its activity rather than its building takes no article: <em>in hospital</em> means being ill there, not standing in the building.<br><br>This one splits by dialect. British English drops the article — <em>my neighbour is still in hospital</em> — while American English keeps it: <em>still in the hospital</em>. Both are correct.<br><br>Meaning the building, both dialects follow the ordinary rules: <em>my mother went to the hospital to visit my aunt</em>."
+      "explanation": "An institution named for its activity rather than its building takes no article: <em>in hospital</em> means being ill there, not standing in the building.<br><br>This one splits by dialect. British English drops the article — <em>my neighbor is still in hospital</em> — while American English keeps it: <em>still in the hospital</em>. Both are correct.<br><br>Meaning the building, both dialects follow the ordinary rules: <em>my mother went to the hospital to visit my aunt</em>."
     },
     "to hospital": {
       "article": "no article",
       "group": "zero",
       "rule_ref": "7.3",
-      "explanation": "An institution named for its activity rather than its building takes no article: <em>in hospital</em> means being ill there, not standing in the building.<br><br>This one splits by dialect. British English drops the article — <em>my neighbour is still in hospital</em> — while American English keeps it: <em>still in the hospital</em>. Both are correct.<br><br>Meaning the building, both dialects follow the ordinary rules: <em>my mother went to the hospital to visit my aunt</em>."
+      "explanation": "An institution named for its activity rather than its building takes no article: <em>in hospital</em> means being ill there, not standing in the building.<br><br>This one splits by dialect. British English drops the article — <em>my neighbor is still in hospital</em> — while American English keeps it: <em>still in the hospital</em>. Both are correct.<br><br>Meaning the building, both dialects follow the ordinary rules: <em>my mother went to the hospital to visit my aunt</em>."
     },
     "at university": {
       "article": "no article",
@@ -2004,7 +2017,7 @@
       "regex": "\\b(elect|elects|elected|appoint|appoints|appointed|become|becomes|became|crowned|made|as)\\s+(?:[a-z]+\\s+)?(?:a |an |the )?(captain|chairman|chairwoman|chair|ceo|cfo|cto|director|treasurer|king|queen|president|professor|chief|head|headteacher|principal|dean|ambassador|governor|mayor|pope|chancellor|secretary|manager|coach|prime minister|vice president|head teacher)\\b",
       "article": "no article",
       "rule_ref": "6.5",
-      "explanation": "A job that is the only one of its kind in an organisation takes no article after verbs such as <em>elect</em>, <em>appoint</em>, <em>become</em> and <em>be</em>, or after <em>as</em>.",
+      "explanation": "A job that is the only one of its kind in an organization takes no article after verbs such as <em>elect</em>, <em>appoint</em>, <em>become</em> and <em>be</em>, or after <em>as</em>.",
       "examples": [
         "Julie was appointed headteacher of our school.",
         "She was elected president.",
@@ -2045,7 +2058,7 @@
       "examples": [
         "I'm going to visit my brother next week.",
         "I saw David last week.",
-        "I went on holiday to Bolivia last summer."
+        "I went on vacation to Bolivia last summer."
       ],
       "contrast": "With an ordinary noun they do take <em>the</em>: <em>We'll get on the next bus</em>, <em>He ate the last chocolate</em>."
     },
@@ -2181,7 +2194,7 @@
       "regex": "\\b(a|an|one) (hundred|thousand|million|billion|quarter|third)\\b",
       "article": "a / an",
       "rule_ref": "7.9.1",
-      "explanation": "<em>A/an</em> is the normal choice before <em>hundred</em>, <em>thousand</em>, <em>million</em> and fractions like <em>third</em> and <em>quarter</em>. <em>One</em> is possible but emphasises the number.",
+      "explanation": "<em>A/an</em> is the normal choice before <em>hundred</em>, <em>thousand</em>, <em>million</em> and fractions like <em>third</em> and <em>quarter</em>. <em>One</em> is possible but emphasizes the number.",
       "examples": [
         "My great-aunt is a hundred years old.",
         "It cost a thousand pounds.",
@@ -2231,7 +2244,7 @@
       "explanation": "<em>The</em> + surname + <em>s</em> means that family.",
       "examples": [
         "The Smiths are coming to dinner.",
-        "We've been invited on holiday with the Blacks."
+        "We've been invited on vacation with the Blacks."
       ],
       "case_sensitive": true,
       "not_if_known": true
@@ -2252,7 +2265,7 @@
       "regex": "^(mr|mrs|ms|miss|dr|doctor|professor|president|captain) [a-z]+",
       "article": "no article",
       "rule_ref": "9.4.1",
-      "explanation": "People's names take no article, including a title used with the name, and family words like <em>Mum</em> and <em>Grandpa</em>.",
+      "explanation": "People's names take no article, including a title used with the name, and family words like <em>Mom</em> and <em>Grandpa</em>.",
       "examples": [
         "This is Mr Brown.",
         "Aunt Mary and Uncle David have invited us to lunch."
@@ -2446,7 +2459,7 @@
       "seasons": {
         "article": "either the or no article",
         "rule_ref": "6.2.6",
-        "explanation": "Seasons take either <em>the</em> or no article: <em>She goes to Spain in summer</em>, <em>I don't go to the park in the winter</em>, <em>Autumn is my favourite season</em>.<br><br>With <em>fall</em> (US English) <em>the</em> is the more common choice.",
+        "explanation": "Seasons take either <em>the</em> or no article: <em>She goes to Spain in summer</em>, <em>I don't go to the park in the winter</em>, <em>Autumn is my favorite season</em>.<br><br>With <em>fall</em> (US English) <em>the</em> is the more common choice.",
         "words": [
           "spring",
           "summer",
@@ -2512,7 +2525,7 @@
         "regex": "^(monday|tuesday|wednesday|thursday|friday|saturday|sunday)\\s+(morning|afternoon|evening|night)$",
         "article": "no article",
         "rule_ref": "6.2.5",
-        "explanation": "A part of the day takes no article when you name the day with it: <em>On Wednesday night we went to the theatre</em>, <em>I met John on Friday morning</em>.<br><br>On its own it is different: <em>in the morning</em>, <em>at night</em> (4.12)."
+        "explanation": "A part of the day takes no article when you name the day with it: <em>On Wednesday night we went to the theater</em>, <em>I met John on Friday morning</em>.<br><br>On its own it is different: <em>in the morning</em>, <em>at night</em> (4.12)."
       }
     }
   },
@@ -2570,15 +2583,15 @@
       "islands",
       "museum",
       "hotel",
-      "theatre",
+      "theater",
       "theater",
       "times",
       "post"
     ],
     "contains_of": true,
     "requires_capital": true,
-    "explanation": "Plural names, <em>of</em>-constructions, rivers, seas, oceans, deserts, mountain ranges, regions, hotels, museums, theatres and newspapers take <em>the</em>. This is a closed list — learn it as one group.",
-    "matching_note": "A keyword only counts inside a capitalised name (<em>the Nile River</em>, not <em>a storm crossed the desert</em>), and an <em>of</em>-construction needs a capitalised word on each side (<em>the Republic of Ireland</em>, not <em>a cup of coffee</em>)."
+    "explanation": "Plural names, <em>of</em>-constructions, rivers, seas, oceans, deserts, mountain ranges, regions, hotels, museums, theaters and newspapers take <em>the</em>. This is a closed list — learn it as one group.",
+    "matching_note": "A keyword only counts inside a capitalized name (<em>the Nile River</em>, not <em>a storm crossed the desert</em>), and an <em>of</em>-construction needs a capitalized word on each side (<em>the Republic of Ireland</em>, not <em>a cup of coffee</em>)."
   },
   "nationality_the": {
     "article": "the",
@@ -3029,7 +3042,7 @@
       "out": "the",
       "cat": "4g · an everyday place we all know",
       "rule_ref": "4.1",
-      "why": "Not a particular one — the kind of place itself. <em>I like going to the cinema</em> is about cinema-going, not about a building. The book calls this using <em>the</em> for “the category as a general abstract idea” — things everybody knows. It covers entertainment and recreation (4.1) and shops and other businesses (4.2).<br><br>This does not contradict Question 3. There are two ways to generalise: a plural or uncountable noun with no article (<em>dogs</em>, <em>life</em>), or <em>the</em> with a singular noun for a whole category (<em>the cinema</em>, <em>the gym</em>).<br><br><b>An intuition, not a rule in the book:</b> these read like leftovers from when there really was one in town — one hospital, one post office, one mall — so <em>the</em> was literal, and it stuck. Part 2.2 still works that way today: <em>the market</em> means the market in our town.<br><br>Careful: <em>café</em> and <em>restaurant</em> are not used like this. <em>Let's go to the restaurant</em> can only mean a particular one."
+      "why": "Not a particular one — the kind of place itself. <em>I like going to the cinema</em> is about cinema-going, not about a building. The book calls this using <em>the</em> for “the category as a general abstract idea” — things everybody knows. It covers entertainment and recreation (4.1) and shops and other businesses (4.2).<br><br>This does not contradict Question 3. There are two ways to generalize: a plural or uncountable noun with no article (<em>dogs</em>, <em>life</em>), or <em>the</em> with a singular noun for a whole category (<em>the cinema</em>, <em>the gym</em>).<br><br><b>An intuition, not a rule in the book:</b> these read like leftovers from when there really was one in town — one hospital, one post office, one mall — so <em>the</em> was literal, and it stuck. Part 2.2 still works that way today: <em>the market</em> means the market in our town.<br><br>Careful: <em>café</em> and <em>restaurant</em> are not used like this. <em>Let's go to the restaurant</em> can only mean a particular one."
     }
   },
   "traces": [

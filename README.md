@@ -219,6 +219,22 @@ together, and no code change is needed to correct a rule or add a phrase.
 | A caveat shown alongside an answer | that entry's `note` |
 | An a/an pronunciation exception | `phonetics` |
 
+**Learner-facing prose is American English.** Spelling in every string a
+learner reads — questions, options, examples, explanations, notes — is
+normalized to American: *favorite*, *theater*, *neighbor*, *generalize*, *on
+vacation*. Two places keep British spellings on purpose:
+
+- `source_sections` is the book's own contents page, checked against every
+  `rule_ref`, so it stays verbatim. Nothing renders it to a learner.
+- `phonetics` and the lookup keys are **matching data, not writing**. `honour`
+  sits beside `honor` so a learner who types the British spelling still gets
+  the silent-h rule, and `theatre` stays a key alongside `theater`. Add both
+  spellings when a new word has one.
+
+Where the two dialects differ in the article itself, that is content and both
+belong on the card: `in hospital` / `in the hospital`, `the cinema` / `the
+movies`, `the chemist's` / `the drugstore`.
+
 **Citations are validated, not trusted.** `source_sections` holds the book's
 real contents, and the build refuses to write a `rule_ref` that is not in it.
 This is not hypothetical: an earlier version stamped all 94 fixed expressions
