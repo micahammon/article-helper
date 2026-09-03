@@ -245,13 +245,54 @@
                 "come", "came", "arrive", "arrived", "buy", "bought", "see", "saw", "like", "use",
                 "at", "in", "on", "to", "for", "from", "with", "by", "of", "and", "or", "but",
                 "this", "that", "these", "those", "today", "tomorrow", "yesterday", "now", "then",
+                "lend", "lends", "lent", "send", "sends", "sent", "spend", "spends", "spent",
+                "meet", "meets", "met", "tell", "tells", "told", "bring", "brings", "brought",
+                "catch", "catches", "caught", "teach", "teaches", "taught", "keep", "keeps",
+                "kept", "feel", "feels", "felt", "hold", "holds", "held", "hear", "hears",
+                "heard", "win", "wins", "won", "pay", "pays", "paid", "sell", "sells", "sold",
+                "build", "builds", "built", "mean", "means", "meant", "become", "becomes",
+                "became", "begin", "begins", "began", "choose", "chooses", "chose", "forget",
+                "forgets", "forgot", "understand", "understands", "understood", "borrow",
+                "borrows", "borrowed", "wear", "wears", "wore", "break", "breaks", "broke",
             ]);
 
-            const filtered = tokens.filter((token) => !determiners.has(token) && !stopWords.has(token));
-            if (filtered.length) {
-                return filtered[filtered.length - 1];
+            /* The word straight after a subject pronoun is that pronoun's verb,
+               whatever else it can be. This is the one verb test a word list
+               cannot do: `work`, `play` and `book` are real nouns with real
+               rules, so `I work` can only be settled by where the word sits. */
+            const subjectPronouns = new Set(["i", "you", "he", "she", "it", "we", "they"]);
+            const filtered = [];
+            tokens.forEach((token, index) => {
+                if (determiners.has(token) || stopWords.has(token)) {
+                    return;
+                }
+                if (index > 0 && subjectPronouns.has(tokens[index - 1])) {
+                    return;
+                }
+                filtered.push({ word: token, index });
+            });
+            if (!filtered.length) {
+                return "";
             }
-            return "";
+
+            /* `Dogs are loyal` ends in an adjective, so the last content word is
+               the wrong guess. After a copula with no determiner behind it the
+               tail is a predicate adjective, and the subject in front is what
+               the sentence is about. A determiner there means a predicate noun
+               - `is a teacher` - and the scan above has already returned it. */
+            const beForms = new Set(["is", "are", "was", "were", "am", "be", "been", "being"]);
+            for (let index = 0; index < tokens.length; index += 1) {
+                if (!beForms.has(tokens[index])) {
+                    continue;
+                }
+                const before = filtered.filter((entry) => entry.index < index);
+                if (before.length) {
+                    return before[before.length - 1].word;
+                }
+                break;
+            }
+
+            return filtered[filtered.length - 1].word;
         }
 
         function buildExampleSentence(articleValue, focusNoun) {
