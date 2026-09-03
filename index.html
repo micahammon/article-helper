@@ -1116,6 +1116,36 @@ function asTyped(word){
   return m ? m[0] : word;
 }
 
+/* Is the whole input a bare noun phrase, so the article goes in front of all
+   of it? Same test checkDeterminer uses. */
+var CLAUSE_MARKERS = ["i","you","he","she","it","we","they","me","him","her",
+  "us","them","who","which","that","there"];
+
+function isNounPhrase(text){
+  var toks = tokenize(normalize(text));
+  if(!toks.length || toks.length > NOUN_PHRASE_LIMIT) return false;
+  for(var v = 0; v < toks.length; v++){
+    /* a pronoun is a clause subject or object, never part of the noun phrase
+       being decided: `I work for government` is a sentence, not a phrase */
+    if(CLAUSE_MARKERS.indexOf(toks[v]) !== -1) return false;
+    if(VERB_HINTS.indexOf(toks[v]) !== -1 && !isKnownNoun(toks[v])) return false;
+  }
+  return true;
+}
+
+/* The word the answer is about.
+
+   For `a lovely dinner` that is the whole input - the article goes in front of
+   the phrase. For a sentence it is one noun inside it, so building the answer
+   from the whole input gave `an I work for government`. */
+function resultWord(){
+  var raw = String(phrase.value || "");
+  if(pinned) return asTyped(normalize(pinned));
+  if(isNounPhrase(raw)) return displayWord(raw);
+  var f = inferFocus(raw);
+  return f ? asTyped(f) : displayWord(raw);
+}
+
 function buildPhrase(form, word){
   if(!word) return "";
   if(form === "the") return "the " + word;
@@ -1127,7 +1157,7 @@ function renderResult(n){
   var f = FORM[n.out];
   var card = document.createElement("div");
   card.className = "result " + f.cls;
-  var h = headword(displayWord(phrase.value)) +
+  var h = headword(resultWord()) +
           '<p class="form">' + f.word + '</p>' +
           '<p class="cat">' + n.cat + '</p>' +
           '<p class="why">' + n.why + '</p>';
@@ -1136,7 +1166,7 @@ function renderResult(n){
     n.list.forEach(function(li){ h += "<li>" + li + "</li>"; });
     h += "</ul>";
   }
-  var word = displayWord(phrase.value);
+  var word = resultWord();
   if(word && n.out !== "fixed"){
     h += '<p class="built">' + esc(buildPhrase(n.out, word)) + '</p>';
   }
@@ -1250,6 +1280,9 @@ function renderContext(r){
   go.textContent = "Work it out with the questions";
   go.addEventListener("click", function(){
     hist = []; cur = entry; pendingNote = null;
+    /* the questions are about the word Gate 0 flagged, not whatever the
+       sentence would otherwise infer - keep the answer on that word */
+    pinned = r.match;
     render();
     stage.scrollIntoView({block:"nearest", behavior:"smooth"});
   });
