@@ -210,7 +210,10 @@ body{
 
 /* ---------- traces ---------- */
 .traces{margin-top:34px;border-top:1px solid var(--rule);padding-top:18px}
-.traces h2{font-size:13px;color:var(--muted);font-weight:600;margin:0 0 12px}
+.traces-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:0 0 12px}
+.traces h2{font-size:13px;color:var(--muted);font-weight:600;margin:0}
+.traces-tools{display:flex;gap:8px}
+.btn.sm{font-size:12px;padding:4px 10px}
 .chips{display:flex;flex-wrap:wrap;gap:7px}
 .chip{
   font-family:var(--serif);font-size:15px;font-style:italic;
@@ -219,6 +222,10 @@ body{
 }
 .chip:hover{border-color:var(--ink)}
 .chip:focus-visible{outline:2px solid var(--the);outline-offset:1px}
+/* A chip already run is dimmed and ticked. The mark says "you have seen this
+   one" and nothing else - never which form it lands on. */
+.chip.seen{color:var(--muted);border-style:dashed}
+.chip.seen::before{content:"✓ ";font-style:normal;font-size:12px}
 
 /* ---------- map ---------- */
 .map .mgate{margin-bottom:26px;background:var(--card);border:1px solid var(--rule);border-left:4px solid var(--ink);border-radius:2px;padding:18px 22px}
@@ -378,7 +385,13 @@ body{
     </div>
 
     <div class="traces">
-      <h2>Or watch one of these route itself</h2>
+      <div class="traces-head">
+        <h2>Or watch one of these route itself</h2>
+        <div class="traces-tools">
+          <button class="btn ghost sm" id="shuffle" type="button">Shuffle</button>
+          <button class="btn ghost sm" id="clearseen" type="button">Clear marks</button>
+        </div>
+      </div>
       <div class="chips" id="chips"></div>
     </div>
   </div>
@@ -1522,13 +1535,49 @@ function renderMapRows(n){
 
 /* ---------------- traces ---------------- */
 
+var CHIP_COUNT = 24;
+var SEEN_KEY = "article-helper:seen";
+
+/* Which phrases have already been run. Kept across reloads so the row reads as
+   a checklist, but a seen phrase stays in the pool and can be drawn again. */
+var seen = loadSeen();
+
+function loadSeen(){
+  try{
+    var raw = window.localStorage.getItem(SEEN_KEY);
+    return new Set(raw ? JSON.parse(raw) : []);
+  }catch(e){
+    return new Set();
+  }
+}
+
+function saveSeen(){
+  try{
+    window.localStorage.setItem(SEEN_KEY, JSON.stringify(Array.from(seen)));
+  }catch(e){ /* private mode, file:// quirks - the marks are just not kept */ }
+}
+
+function shuffled(list){
+  var a = list.slice();
+  for(var i = a.length - 1; i > 0; i--){
+    var j = Math.floor(Math.random() * (i + 1));
+    var tmp = a[i]; a[i] = a[j]; a[j] = tmp;
+  }
+  return a;
+}
+
 function buildChips(){
   chipsEl.innerHTML = "";
-  D.traces.forEach(function(t){
+  shuffled(D.traces).slice(0, CHIP_COUNT).forEach(function(t){
     var b = document.createElement("button");
-    b.className = "chip";
+    b.className = "chip" + (seen.has(t.p) ? " seen" : "");
     b.textContent = t.p;
+    if(seen.has(t.p)) b.title = "already run";
     b.addEventListener("click", function(){
+      seen.add(t.p);
+      saveSeen();
+      b.className = "chip seen";
+      b.title = "already run";
       phrase.value = t.p;
       analyze(t.p, t.path || null);
       stage.scrollIntoView({block:"nearest", behavior:"smooth"});
@@ -1536,6 +1585,13 @@ function buildChips(){
     chipsEl.appendChild(b);
   });
 }
+
+document.getElementById("shuffle").addEventListener("click", buildChips);
+document.getElementById("clearseen").addEventListener("click", function(){
+  seen = new Set();
+  saveSeen();
+  buildChips();
+});
 
 /* ---------------- mode toggle ---------------- */
 

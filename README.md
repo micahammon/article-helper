@@ -168,6 +168,13 @@ Or click any of the chips at the bottom to watch a worked example route itself.
 Some are answered instantly by Gate 0, others walk the tree, which is the
 quickest way to see the two halves working.
 
+There are far more examples than fit on screen, so the row is a random draw of
+twenty-four out of the full set, reshuffled on every load and by the `Shuffle`
+button. A chip says nothing about where it lands until you click it. Once run,
+it is ticked and dimmed — a memory aid, kept across reloads, that never hints at
+the form. Marked phrases stay in the pool and can come round again; `Clear
+marks` wipes the ticks.
+
 ### Running Locally
 
 The page reads its rules from `rules_data.json`, so it must be served over HTTP —
