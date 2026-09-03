@@ -135,6 +135,12 @@ homework` either is a fair guess, and nothing on the page said which had been
 chosen. The sentence is now shown back with the targeted word highlighted and
 the other candidates underlined; tapping one re-answers for that word instead.
 
+**Go back a step** unwinds whatever the last step actually was: a question if
+you are walking the tree, otherwise the word you chose — after a Gate 0 match
+there is no walk to undo, so the button reads *Undo word choice* and returns to
+the word the tool picked itself. When there is nothing to undo it is disabled
+rather than inert.
+
 Pinning a word narrows only the *matching*. The sentence still supplies
 context, so `I bought a piano last week` pinned to `piano` still sees the `a`
 in front of it — and `last week` no longer answers a question about the piano.

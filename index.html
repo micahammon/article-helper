@@ -309,6 +309,10 @@ body{
   background:var(--the-wash);border-color:var(--the);color:var(--the);font-weight:600;
 }
 .focushint{margin:8px 0 0;font-size:13px;color:var(--muted)}
+/* "Go back a step" is disabled when there is no step to go back to, rather
+   than sitting there looking clickable and doing nothing */
+.btn:disabled{opacity:.4;cursor:default}
+.btn.ghost:disabled:hover{background:transparent;color:var(--muted)}
 @media (max-width:560px){ .reflist{columns:1} }
 </style>
 </head>
@@ -379,6 +383,7 @@ var phrase   = document.getElementById("phrase");
 var mapEl    = document.getElementById("map");
 var chipsEl  = document.getElementById("chips");
 var focusEl  = document.getElementById("focusbar");
+var backBtn  = document.getElementById("back");
 
 function esc(s){
   return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
@@ -988,7 +993,7 @@ function analyze(text, scriptedPath, focus){
 
   var hitResult = focus ? gate0Pinned(text, focus) : gate0(text);
   renderFocusBar(text, hitResult);
-  if(hitResult){ renderGate0(hitResult); return true; }
+  if(hitResult){ renderGate0(hitResult); updateActions(); return true; }
 
   /* noun adjunct: two bare nouns, nothing matched -> the second noun decides */
   var tokens = tokenize(normalize(text));
@@ -1036,6 +1041,7 @@ function render(){
   }
   if(n.out) renderResult(n); else renderQuestion(n);
   renderTrail();
+  updateActions();
 }
 
 function renderQuestion(n){
@@ -1244,17 +1250,39 @@ phrase.addEventListener("keydown", function(e){
   if(e.key === "Enter"){ e.preventDefault(); runCheck(); }
 });
 
-document.getElementById("back").addEventListener("click", function(){
-  if(!hist.length) return;
-  var last = hist.pop();
-  cur = last.node;
-  render();
+/* "Go back a step" has to mean something at every point. After a Gate 0 match
+   there is no walk to unwind, so the only step the learner has taken is
+   choosing a word - and if they have not done that either, the button is
+   disabled rather than sitting there doing nothing. */
+function stepsAvailable(){
+  return hist.length > 0 || !!pinned;
+}
+
+function updateActions(){
+  backBtn.disabled = !stepsAvailable();
+  backBtn.textContent = (!hist.length && pinned)
+    ? "Undo word choice"
+    : "Go back a step";
+}
+
+backBtn.addEventListener("click", function(){
+  if(hist.length){
+    var last = hist.pop();
+    cur = last.node;
+    render();
+    return;
+  }
+  if(pinned){
+    /* back to the word the tool picked on its own */
+    analyze(phrase.value, null, null);
+    stage.scrollIntoView({block:"nearest", behavior:"smooth"});
+  }
 });
 
 document.getElementById("restart").addEventListener("click", function(){
   hist = []; cur = entry; pendingNote = null; pinned = null; phrase.value = "";
   focusEl.classList.add("hidden"); focusEl.innerHTML = "";
-  render(); phrase.focus();
+  render(); updateActions(); phrase.focus();
 });
 
 /* ---------------- map ---------------- */
