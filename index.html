@@ -309,6 +309,11 @@ body{
   background:var(--the-wash);border-color:var(--the);color:var(--the);font-weight:600;
 }
 .focushint{margin:8px 0 0;font-size:13px;color:var(--muted)}
+.result .headword{
+  font-family:var(--serif);font-size:19px;margin:0 0 2px;
+  text-decoration:underline;text-underline-offset:5px;
+  text-decoration-thickness:1px;
+}
 /* "Go back a step" is disabled when there is no step to go back to, rather
    than sitting there looking clickable and doing nothing */
 .btn:disabled{opacity:.4;cursor:default}
@@ -553,12 +558,29 @@ function inferFocus(text){
   return cands.length ? cands[cands.length - 1].word : "";
 }
 
+/* Does the data have a rule for this word as a noun? `work` is on the verb
+   list and is also a lookup entry, so a word the tool can actually answer
+   about must not be filtered out as a verb. */
+function isKnownNoun(t){
+  if(Object.prototype.hasOwnProperty.call(D.lookup_table, t)) return true;
+  var name;
+  for(name in D.categories){
+    if(Object.prototype.hasOwnProperty.call(D.categories, name) &&
+       D.categories[name].words.indexOf(t) !== -1) return true;
+  }
+  for(name in D.time_words.groups){
+    if(Object.prototype.hasOwnProperty.call(D.time_words.groups, name) &&
+       D.time_words.groups[name].words.indexOf(t) !== -1) return true;
+  }
+  return false;
+}
+
 function focusCandidates(text){
   var seen = {}, out = [], toks = tokenize(text), i, t;
   for(i = 0; i < toks.length; i++){
     t = toks[i];
     if(NOT_A_FOCUS.indexOf(t) !== -1) continue;
-    if(VERB_HINTS.indexOf(t) !== -1) continue;
+    if(VERB_HINTS.indexOf(t) !== -1 && !isKnownNoun(t)) continue;
     if(t.length < 2) continue;
     if(Object.prototype.hasOwnProperty.call(seen, t)) continue;
     seen[t] = 1;
@@ -1075,6 +1097,25 @@ function renderQuestion(n){
   stage.appendChild(card);
 }
 
+/* The word this card is about, set as a heading. The card reads like a
+   reference entry, so the entry needs a headword - otherwise the only clue
+   that "work" was chosen over "government" is a line of small grey caps. */
+function headword(word){
+  if(!word) return "";
+  return '<p class="headword">' + esc(asTyped(word)) + '</p>';
+}
+
+/* Matched keys are normalised, so `the Netherlands` comes back as
+   "netherlands". Show it the way the learner wrote it. */
+function asTyped(word){
+  var raw = String(phrase.value || "");
+  if(!raw || !word) return word;
+  var escaped = String(word).replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
+                            .replace(/\s+/g, "\\s+");
+  var m = new RegExp("\\b" + escaped + "\\b", "i").exec(raw);
+  return m ? m[0] : word;
+}
+
 function buildPhrase(form, word){
   if(!word) return "";
   if(form === "the") return "the " + word;
@@ -1086,7 +1127,8 @@ function renderResult(n){
   var f = FORM[n.out];
   var card = document.createElement("div");
   card.className = "result " + f.cls;
-  var h = '<p class="form">' + f.word + '</p>' +
+  var h = headword(displayWord(phrase.value)) +
+          '<p class="form">' + f.word + '</p>' +
           '<p class="cat">' + n.cat + '</p>' +
           '<p class="why">' + n.why + '</p>';
   if(n.list){
@@ -1129,7 +1171,8 @@ function renderGate0(r){
   var f = FORM[r.form];
   var card = document.createElement("div");
   card.className = "result " + f.cls;
-  var h = '<p class="form">' + f.word + '</p>' +
+  var h = headword(r.match) +
+          '<p class="form">' + f.word + '</p>' +
           '<p class="cat">' + r.cat + '</p>' +
           '<p class="why">' + r.why + '</p>';
   if(r.note){
@@ -1180,7 +1223,8 @@ function renderContext(r){
   card.className = "result " + f.cls;
 
   var fixedForm = FORM[formOf(r.fixedSense.article)];
-  var h = '<p class="form">' + f.word + '</p>' +
+  var h = headword(r.match) +
+          '<p class="form">' + f.word + '</p>' +
           '<p class="cat">' + r.cat + '</p>' +
           '<p class="why">' + r.why + '</p>' +
           '<div class="senses">' +

@@ -158,6 +158,23 @@ _NOT_A_FOCUS = {
 }
 
 
+def is_known_noun(token):
+    """Does the data have a rule for this word as a noun?
+
+    `work` is on the verb list and is also a lookup entry, so a word the tool
+    can actually answer about must not be filtered out as a verb.
+    """
+    if token in LOOKUP_TABLE:
+        return True
+    for category in CATEGORIES.values():
+        if token in category["words"]:
+            return True
+    for group in TIME_WORDS["groups"].values():
+        if token in group["words"]:
+            return True
+    return False
+
+
 def focus_candidates(text):
     """
     The words a learner might be asking about, in the order they appear.
@@ -170,7 +187,10 @@ def focus_candidates(text):
     """
     seen, candidates = set(), []
     for index, token in enumerate(_tokenize_words(text)):
-        if token in _NOT_A_FOCUS or token in _VERB_HINTS or len(token) < 2:
+        if token in _NOT_A_FOCUS or len(token) < 2:
+            continue
+        # a verb is only skipped when the data has no noun rule for it
+        if token in _VERB_HINTS and not is_known_noun(token):
             continue
         if token in seen:
             continue

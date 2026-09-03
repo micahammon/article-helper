@@ -11,7 +11,8 @@ import re
 import unittest
 from pathlib import Path
 
-from logic import ArticleLogic, choose_a_or_an, focus_candidates
+from logic import (ArticleLogic, _VERB_HINTS, choose_a_or_an, focus_candidates,
+                   is_known_noun)
 from rules import DECISION_TREE, ENTRY_NODE
 
 DATA = json.loads((Path(__file__).resolve().parents[1] / "rules_data.json").read_text(encoding="utf-8"))
@@ -702,6 +703,28 @@ class FocusTests(unittest.TestCase):
         """Not the whole sentence - the page highlights this."""
         analysis = self.logic.analyze_input("There is a problem with my computer.")
         self.assertEqual(analysis["focus_noun"], "there is")
+
+    def test_a_verb_that_is_also_a_listed_noun_stays_a_candidate(self):
+        """`I work for government` targets `work`, which is a lookup entry.
+
+        It was filtered out as a verb, so the only candidate was `government`
+        - one candidate hides the bar, and the page showed neither the word it
+        had chosen nor the alternative.
+        """
+        analysis = self.logic.analyze_input("I work for government.")
+        self.assertEqual(analysis["focus_noun"], "work")
+        self.assertEqual([c["word"] for c in analysis["candidates"]],
+                         ["work", "government"])
+
+    def test_known_nouns_are_recognised_despite_the_verb_list(self):
+        for word in ["work", "play", "study"]:
+            self.assertIn(word, _VERB_HINTS)
+        self.assertTrue(is_known_noun("work"))
+        self.assertFalse(is_known_noun("bought"))
+
+    def test_an_ordinary_verb_is_still_not_a_candidate(self):
+        words = [c["word"] for c in focus_candidates("I bought a piano last week.")]
+        self.assertNotIn("bought", words)
 
     def test_pinned_results_are_marked(self):
         analysis = self.logic.analyze_input("I have a doubt about the homework.",
