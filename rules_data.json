@@ -2896,7 +2896,7 @@
           "go": "out4e"
         },
         {
-          "label": "4f · It's there in the situation we're both in",
+          "label": "4f · The place we're both in makes it obvious which one",
           "ex": "Pass me the glass (the one on our table) · I went to the cafeteria (the one in our building) · apples at the market (the one in our town)",
           "go": "out4f"
         },
@@ -2949,7 +2949,7 @@
     },
     "out4f": {
       "out": "the",
-      "cat": "4f · there in the situation we're both in",
+      "cat": "4f · the place we're both in",
       "rule_ref": "2.2",
       "why": "The place we are both in does the identifying. With one glass on the table, <em>pass me the glass</em> is clear — no other choice arises.<br><br>The situation need not be the room. It can be the building, the town or the country: <em>I went to the cafeteria</em> means the one in our building, and <em>you can buy apples at the market</em> means the market in our town.<br><br>Put more than one in view and <em>which one?</em> comes back, so you are on <em>a/an</em> again: <em>please close the window</em> when one is open, <em>please close a window</em> when three are."
     },
