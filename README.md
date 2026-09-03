@@ -235,8 +235,14 @@ Where the two dialects differ in the article itself, that is content and both
 belong on the card: `in hospital` / `in the hospital`, `the cinema` / `the
 movies`, `the chemist's` / `the drugstore`.
 
-`classic.html` and `rules_data.classic.json` are swept the same way. They are
-frozen, but `/classic.html` is still served, so a learner can still read them.
+`classic.html` and `rules_data.classic.json` had their prose swept the same
+way — they are frozen, but `/classic.html` is still served, so a learner can
+still read them. **Do not add keys to `rules_data.classic.json`.** It is not
+only classic.html's data: `test_all_49_original_lookup_entries_survive` reads it
+as the frozen baseline proving the live table never drops an inherited entry or
+changes its article. A new key there breaks that count. So `theater` joins
+`theatre` in `rules_data.json` but not in the classic file, and classic.html
+answers only the British spelling.
 
 **Citations are validated, not trusted.** `source_sections` holds the book's
 real contents, and the build refuses to write a `rule_ref` that is not in it.
