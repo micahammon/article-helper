@@ -326,9 +326,12 @@ body{
 }
 .focushint{margin:8px 0 0;font-size:13px;color:var(--muted)}
 .result .headword{
-  /* the underline sits 5px below the text, so a 2px margin left it almost
-     touching the form word underneath */
-  font-family:var(--serif);font-size:19px;margin:0 0 14px;
+  /* A dictionary headword, not a title. Grey rather than ink, so it names
+     the entry without competing with the article underneath, and the rule
+     goes grey with it. The underline sits 5px down, so the margin below has
+     to clear it. */
+  font-family:var(--serif);font-size:17px;margin:0 0 14px;
+  color:var(--muted);
   text-decoration:underline;text-underline-offset:5px;
   text-decoration-thickness:1px;
 }
