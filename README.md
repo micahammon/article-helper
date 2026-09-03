@@ -271,6 +271,16 @@ body parts (4.7) and people's names (9.4).
 Only **newspaper headlines** (6.4) are left out, deliberately: dropping
 articles there is a journalist's stylistic choice, not a rule a learner needs.
 
+**Q4 has no cue for the shared physical situation** (source 2.2). A learner
+saying `I want the bike` while pointing at it matches none of 4a-4g: nothing in
+the sentence identifies it, it has not been mentioned, and a bike is not a
+community institution like `the mall`. They fall out to *None of these* and are
+handed `a bike`. 4f carries `rule_ref` 2.2, but its prose has drifted to generic
+community institutions - *"this still holds for a mall neither of you has ever
+visited"* - which is nearly the opposite of an object you are both looking at.
+Either widen 4f or add an option ahead of it. Not yet decided; it is rule
+content, so it goes back to the source doc first.
+
 Two rules answer with a split, because nothing in the input settles them: a
 season takes either `the` or none (6.2.6), and an exclamation takes `a/an`
 before a singular countable noun and nothing before a plural or uncountable
