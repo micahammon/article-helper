@@ -235,6 +235,9 @@ Where the two dialects differ in the article itself, that is content and both
 belong on the card: `in hospital` / `in the hospital`, `the cinema` / `the
 movies`, `the chemist's` / `the drugstore`.
 
+`classic.html` and `rules_data.classic.json` are swept the same way. They are
+frozen, but `/classic.html` is still served, so a learner can still read them.
+
 **Citations are validated, not trusted.** `source_sections` holds the book's
 real contents, and the build refuses to write a `rule_ref` that is not in it.
 This is not hypothetical: an earlier version stamped all 94 fixed expressions

@@ -12,7 +12,12 @@
         },
         "theatre": {
             "article": "the",
-            "explanation": "As a general concept of entertainment, we say 'go to the theatre'.",
+            "explanation": "As a general concept of entertainment, we say 'go to the theater'.",
+            "rule_ref": "4.1"
+        },
+        "theater": {
+            "article": "the",
+            "explanation": "As a general concept of entertainment, we say 'go to the theater'.",
             "rule_ref": "4.1"
         },
         "ballet": {
