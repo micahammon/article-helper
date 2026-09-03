@@ -2,7 +2,7 @@
   "meta": {
     "entry_node": "q2",
     "source": "Seonaid Beckwith, 'A' and 'The' Explained — see docs/",
-    "note": "Gate 0 is matched automatically in this order: determiners, fixed_expressions, noun_number, lookup_table, nationality_the, proper_noun_the. The decision_tree is only entered on a Gate 0 miss.",
+    "note": "Set phrases and known names are matched automatically in this order: determiners, fixed_expressions, noun_number, lookup_table, nationality_the, proper_noun_the. The decision_tree is only entered when none of them match.",
     "gate_zero_order": [
       "constructions",
       "determiners",
@@ -122,6 +122,73 @@
     "Appendix 1": "Pronunciation",
     "Appendix 2": "Countable and uncountable nouns",
     "Appendix 3": "Some / Any / 'No article'"
+  },
+  "rule_names": {
+    "2.1.2": "Known and unknown",
+    "2.2": "The listener's surroundings",
+    "2.3": "Things there is only one of",
+    "2.4": "Information elsewhere in the sentence",
+    "2.4.4": "Adjectives that call for the",
+    "2.4.5": "Superlatives",
+    "2.5": "Something we've already talked about",
+    "2.6": "We've talked about something connected",
+    "2.7": "There is / there are",
+    "3.1": "No article with plurals and uncountables, to generalize",
+    "3.2.1": "Words added before or after the noun",
+    "3.3": "A or an with a singular noun, to generalize",
+    "3.4": "The with a singular noun, for a whole species",
+    "3.5": "The with an adjective, for a group of people",
+    "3.6": "The with a nationality word",
+    "4.1": "The with entertainment and recreation",
+    "4.10": "The with geographical expressions",
+    "4.14": "Everyday places that take the",
+    "4.15": "Places that do not work this way",
+    "4.2": "The with shops and other businesses",
+    "4.3": "The with musical instruments",
+    "4.5": "The with communication and media",
+    "4.7": "The with parts of the body",
+    "5.3": "Exclamations",
+    "6.1.1": "Languages",
+    "6.1.2": "Meals",
+    "6.1.3": "Sports",
+    "6.1.4": "A meal, sport or language used in an unusual way",
+    "6.2": "Time words",
+    "6.2.1": "Months",
+    "6.2.2": "Days of the week",
+    "6.2.3": "Holidays and special days",
+    "6.2.4": "Dates",
+    "6.2.5": "Parts of the day",
+    "6.2.6": "Seasons",
+    "6.2.7": "Years, decades, centuries and historical periods",
+    "6.3": "A noun followed by a classifying letter or number",
+    "6.5": "Unique roles",
+    "7.1": "Two nouns side by side",
+    "7.10": "A or an meaning per",
+    "7.11": "Next and last with time expressions",
+    "7.12": "First, second, third",
+    "7.13": "The with comparatives",
+    "7.3": "Institutions (church, university, school etc.)",
+    "7.4.1": "The word bed",
+    "7.4.2": "The word home",
+    "7.4.3": "Work, used as a noun",
+    "7.4.4": "The word town",
+    "7.5": "Illnesses",
+    "7.6.1": "Initialisms",
+    "7.6.2": "Acronyms",
+    "7.7": "A little and little, a few and few",
+    "7.8": "Most and the most",
+    "7.9.1": "Choosing a or an over one",
+    "7.9.2": "A or an, and one, with half",
+    "8.1": "Prepositional phrases",
+    "8.2": "Idioms",
+    "8.3": "Parallel structures",
+    "9.2.1": "Place names without an article",
+    "9.2.2": "Place names that take the",
+    "9.4.1": "People's names without an article",
+    "9.4.2": "People's names that take the",
+    "9.4.3": "A or an with a person's name",
+    "Appendix 1": "A or an, decided by sound",
+    "Appendix 3": "Some, any, and no article"
   },
   "lookup_ref_corrections": {
     "netherlands": {
@@ -1777,8 +1844,8 @@
     }
   },
   "fixed_reference": {
-    "title": "Gate 0 · fixed expressions",
-    "note": "Checked automatically before any question is asked. Set phrases override every rule below, so they get caught first. Each one carries the section it comes from.",
+    "title": "Set phrases and known names",
+    "note": "Checked automatically before any question is asked. Set phrases override every rule below, so they get caught first. Each one carries the rule it comes from.",
     "groups": [
       {
         "form": "zero",
@@ -2024,7 +2091,7 @@
         "He became king in 1781.",
         "Luke started working as CEO last week."
       ],
-      "contrast": "An ordinary job takes <em>a/an</em>, and a role identified for the listener takes <em>the</em>: <em>Julie is a headteacher</em>, <em>Julie is the headteacher of our school</em>. (5.2)",
+      "contrast": "An ordinary job takes <em>a/an</em>, and a role identified for the listener takes <em>the</em>: <em>Julie is a headteacher</em>, <em>Julie is the headteacher of our school</em>.",
       "frame": true
     },
     {
@@ -2054,7 +2121,7 @@
       "regex": "\\b(next|last) (week|weekend|month|year|night|morning|afternoon|evening|summer|winter|spring|autumn|fall|term|semester|decade|century|monday|tuesday|wednesday|thursday|friday|saturday|sunday|january|february|march|april|may|june|july|august|september|october|november|december)\\b",
       "article": "no article",
       "rule_ref": "7.11",
-      "explanation": "<em>Next</em> and <em>last</em> with a time expression take no article, even though they usually take <em>the</em> as adjectives (2.4.4).",
+      "explanation": "<em>Next</em> and <em>last</em> with a time expression take no article, even though they usually take <em>the</em> as adjectives.",
       "examples": [
         "I'm going to visit my brother next week.",
         "I saw David last week.",
@@ -2104,7 +2171,7 @@
         "We'll get on the next bus.",
         "I can't believe he ate the last chocolate!"
       ],
-      "contrast": "With a time expression they take no article instead: <em>next week</em>, <em>last summer</em>. (7.11)"
+      "contrast": "With a time expression they take no article instead: <em>next week</em>, <em>last summer</em>."
     },
     {
       "name": "ordinal_noun",
@@ -2135,7 +2202,7 @@
       "regex": "\\bthe most\\b",
       "article": "the",
       "rule_ref": "7.8",
-      "explanation": "<em>The most</em> is part of a superlative with a long adjective, and implies a comparison (2.4.5). With a noun it means 'the largest number of'.",
+      "explanation": "<em>The most</em> is part of a superlative with a long adjective, and implies a comparison. With a noun it means 'the largest number of'.",
       "examples": [
         "Lucy is the most intelligent student in the class.",
         "James has the most books of the people in the class."
@@ -2277,7 +2344,7 @@
       "article": "no article",
       "rule_ref": "6.1.1",
       "explanation": "Languages take no article: <em>She speaks Japanese</em>, <em>They're studying Spanish</em>.<br><br>Note that the word <em>language</em> itself is an ordinary noun: <em>the language I speak at home</em>, <em>a new language</em>.",
-      "unusual": "If the word is used in an unusual way it stops being an exception and the ordinary rules apply again: <em>the French that they speak in Montreal</em>, <em>a beautiful Spanish</em>, <em>the football they play in the USA</em>. (6.1.4)",
+      "unusual": "If the word is used in an unusual way it stops being an exception and the ordinary rules apply again: <em>the French that they speak in Montreal</em>, <em>a beautiful Spanish</em>, <em>the football they play in the USA</em>.",
       "words": [
         "english",
         "french",
@@ -2332,7 +2399,7 @@
       "article": "no article",
       "rule_ref": "6.1.2",
       "explanation": "Meals take no article: <em>What shall we have for dinner?</em>, <em>I didn't eat breakfast</em>.",
-      "unusual": "A special occasion, or an adjective before the meal, brings the article back: <em>The lunch we had after the wedding</em>, <em>There will be a dinner for her birthday</em>, <em>an early supper</em>. (6.1.4)",
+      "unusual": "A special occasion, or an adjective before the meal, brings the article back: <em>The lunch we had after the wedding</em>, <em>There will be a dinner for her birthday</em>, <em>an early supper</em>.",
       "words": [
         "breakfast",
         "lunch",
@@ -2346,7 +2413,7 @@
       "article": "no article",
       "rule_ref": "6.1.3",
       "explanation": "Sports and games take no article: <em>I don't like golf</em>, <em>He often plays tennis</em>, <em>John loves playing rugby</em>.",
-      "unusual": "If the word is used in an unusual way it stops being an exception and the ordinary rules apply again: <em>the French that they speak in Montreal</em>, <em>a beautiful Spanish</em>, <em>the football they play in the USA</em>. (6.1.4)",
+      "unusual": "If the word is used in an unusual way it stops being an exception and the ordinary rules apply again: <em>the French that they speak in Montreal</em>, <em>a beautiful Spanish</em>, <em>the football they play in the USA</em>.",
       "words": [
         "football",
         "soccer",
@@ -2388,7 +2455,7 @@
     }
   },
   "time_words": {
-    "unusual": "A time word used in an unusual way - a particular one you both know - takes <em>the</em>: <em>Do you remember the Monday we met?</em>, <em>The June when we got married</em>. And <em>a</em> with a day means 'any': <em>Could we meet on a Monday?</em> (6.2.8)",
+    "unusual": "A time word used in an unusual way - a particular one you both know - takes <em>the</em>: <em>Do you remember the Monday we met?</em>, <em>The June when we got married</em>. And <em>a</em> with a day means 'any': <em>Could we meet on a Monday?</em>",
     "groups": {
       "months": {
         "article": "no article",
@@ -2525,7 +2592,7 @@
         "regex": "^(monday|tuesday|wednesday|thursday|friday|saturday|sunday)\\s+(morning|afternoon|evening|night)$",
         "article": "no article",
         "rule_ref": "6.2.5",
-        "explanation": "A part of the day takes no article when you name the day with it: <em>On Wednesday night we went to the theater</em>, <em>I met John on Friday morning</em>.<br><br>On its own it is different: <em>in the morning</em>, <em>at night</em> (4.12)."
+        "explanation": "A part of the day takes no article when you name the day with it: <em>On Wednesday night we went to the theater</em>, <em>I met John on Friday morning</em>.<br><br>On its own it is different: <em>in the morning</em>, <em>at night</em>."
       }
     }
   },
@@ -2756,7 +2823,7 @@
   "decision_tree": {
     "q2": {
       "short": "a proper noun?",
-      "gate": "Question 2",
+      "gate": "Names",
       "q": "Is it a proper noun — a name?",
       "note": "A name picks out one particular person, place, day, language or brand — and it is written with a capital letter.",
       "opts": [
@@ -2774,7 +2841,7 @@
     },
     "q2a": {
       "short": "in the the-taking class?",
-      "gate": "Question 2a",
+      "gate": "Which kind of name",
       "q": "Is it in the <em>the</em>-taking class of names?",
       "note": "Plural names, <em>of</em>-constructions, water and landforms, regions, buildings and publications.",
       "opts": [
@@ -2792,19 +2859,19 @@
     },
     "outPropThe": {
       "out": "the",
-      "cat": "Question 2a · name in the the-taking class",
+      "cat": "A name that takes the",
       "rule_ref": "9.2.2",
       "why": "Plural names, <em>of</em>-constructions, rivers, seas, oceans, deserts, mountain ranges, regions, hotels, museums, theaters and newspapers take <em>the</em>. This is a closed list — learn it as one."
     },
     "outPropZero": {
       "out": "zero",
-      "cat": "Question 2a · ordinary name",
+      "cat": "An ordinary name",
       "rule_ref": "9.2.1",
       "why": "People, cities, single countries, single mountains, streets, continents, languages and companies take no article. Also titles used with a name: <em>President Sánchez</em>, <em>Doctor Ruiz</em> — but <em>the president</em> on its own is a role noun and routes to 4g."
     },
     "q3": {
       "short": "whole class, or instances?",
-      "gate": "Question 3",
+      "gate": "A whole class, or particular ones",
       "q": "Am I talking about the whole class, or about particular instances?",
       "note": "Test: can you insert <em>in general</em> without changing the meaning? If yes, it's generic.",
       "opts": [
@@ -2823,7 +2890,7 @@
     },
     "q3a": {
       "short": "how is it behaving?",
-      "gate": "Question 3a",
+      "gate": "How the noun is behaving",
       "q": "How is the noun behaving here?",
       "note": "All three forms can be generic in English. This is the one place where <em>the</em> and <em>a</em> and zero are all live options for the same meaning.",
       "opts": [
@@ -2853,73 +2920,73 @@
     },
     "outGenZeroPl": {
       "out": "zero",
-      "cat": "Question 3a · generic plural",
+      "cat": "A whole class, said in the plural",
       "rule_ref": "3.1",
       "why": "The default way to talk about a whole class in English. Reach for this first when the generic reading is what you want."
     },
     "outGenZeroNc": {
       "out": "zero",
-      "cat": "Question 3a · generic non-count",
+      "cat": "A whole class, said as an uncountable",
       "rule_ref": "3.1",
-      "why": "Abstractions and mass nouns take no article in their generic sense: <em>water, life, music, economics, happiness, advice</em>. This is the single biggest source of article errors for Romance-language speakers.<br><br>One exception worth knowing: in formal or literary English you can put <em>a/an</em> on an uncountable noun when you name a <em>particular type</em> of it, almost always with an adjective — <em>a profound sadness</em>, <em>an excellent knowledge of history</em>. (7.2)"
+      "why": "Abstractions and mass nouns take no article in their generic sense: <em>water, life, music, economics, happiness, advice</em>. This is the single biggest source of article errors for Romance-language speakers.<br><br>One exception worth knowing: in formal or literary English you can put <em>a/an</em> on an uncountable noun when you name a <em>particular type</em> of it, almost always with an adjective — <em>a profound sadness</em>, <em>an excellent knowledge of history</em>."
     },
     "outGenA": {
       "out": "an",
-      "cat": "Question 3a · representative singular",
+      "cat": "Any one of the class, standing for all",
       "rule_ref": "3.3",
       "why": "Picks out any arbitrary member to stand for the class. Slightly more formal than the plural, and it won't work with every predicate — <em>A dog is widespread</em> fails, because being widespread is true of the species and not of any individual."
     },
     "outGenThe": {
       "out": "the",
-      "cat": "Question 3a · the species",
+      "cat": "The species as a whole",
       "rule_ref": "3.4",
-      "why": "Names the class as a single entity. Formal and mostly scientific: <em>The blue whale is endangered.</em> It does not work with every predicate — <em>The tiger is endangered</em> is fine, <em>The tiger is everywhere</em> is not. Note this reading is only reachable from Question 3."
+      "why": "Names the class as a single entity. Formal and mostly scientific: <em>The blue whale is endangered.</em> It does not work with every predicate — <em>The tiger is endangered</em> is fine, <em>The tiger is everywhere</em> is not. Note this reading is only reachable from the question about whole classes."
     },
     "q4": {
       "short": "can the listener identify it?",
-      "gate": "Question 4",
+      "gate": "Identifying which one",
       "q": "Can my listener identify <em>which one</em> I mean?",
       "note": "Take the first option only if nothing below fits. Otherwise work down the list — the first match is your answer, and the labels just tell you why.",
       "group": "Everything below answers <em>the</em> — pick the first one that matches",
       "style": "checklist",
       "opts": [
         {
-          "label": "4a · The sentence itself specifies it",
+          "label": "The sentence itself specifies it",
           "ex": "the book I lent you · the man in the corner · the capital of Spain",
           "go": "out4a"
         },
         {
-          "label": "4b · There's a superlative, ordinal or uniqueness word",
+          "label": "There's a superlative, ordinal or uniqueness word",
           "ex": "the best · the first · the only · the same · the next",
           "go": "out4b"
         },
         {
-          "label": "4c · We've mentioned it already",
+          "label": "We've mentioned it already",
           "ex": "I bought a car. The car was red.",
           "go": "out4c"
         },
         {
-          "label": "4d · It's inferable from something we mentioned",
+          "label": "It's inferable from something we mentioned",
           "ex": "I bought a car. The engine was noisy.",
           "go": "out4d"
         },
         {
-          "label": "4e · There's only one in the world",
+          "label": "There's only one in the world",
           "ex": "the sun · the equator · the internet",
           "go": "out4e"
         },
         {
-          "label": "4f · The place we're both in makes it obvious which one",
+          "label": "The place we're both in makes it obvious which one",
           "ex": "Pass me the glass (the one on our table) · I went to the cafeteria (the one in our building) · apples at the market (the one in our town)",
           "go": "out4f"
         },
         {
-          "label": "4g · It's an everyday place we all know",
+          "label": "It's an everyday place we all know",
           "ex": "the gym · the park · the bank · the doctor's · the mall",
           "go": "q4g"
         },
         {
-          "label": "4h · It's a role that belongs to something",
+          "label": "It's a role that belongs to something",
           "ex": "the government · the president · the economy · the weather",
           "go": "out4h"
         },
@@ -2932,49 +2999,49 @@
     },
     "out4a": {
       "out": "the",
-      "cat": "4a · specified by the sentence",
+      "cat": "Specified by the sentence itself",
       "rule_ref": "2.4",
-      "why": "A relative clause (2.4.1), a prepositional phrase (2.4.2) or an <em>of</em>-phrase (2.4.3) narrows the noun to one referent, so the identification happens inside the sentence itself.<br><br>Careful: a modifier alone is not enough. It has to make the referent <em>identifiable</em>. <em>I met a woman who speaks Icelandic</em> keeps <em>a</em>, because the clause describes her rather than picking out which woman is meant."
+      "why": "A relative clause, a prepositional phrase or an <em>of</em>-phrase narrows the noun to one referent, so the identification happens inside the sentence itself.<br><br>Careful: a modifier alone is not enough. It has to make the referent <em>identifiable</em>. <em>I met a woman who speaks Icelandic</em> keeps <em>a</em>, because the clause describes her rather than picking out which woman is meant."
     },
     "out4b": {
       "out": "the",
-      "cat": "4b · superlative, ordinal or uniqueness word",
+      "cat": "A superlative, ordinal or uniqueness word",
       "rule_ref": "2.4.5",
       "why": "<em>Best, first, only, same, next, last, main</em> all entail that there's exactly one, so <em>the</em> follows automatically."
     },
     "out4c": {
       "out": "the",
-      "cat": "4c · second mention",
+      "cat": "Mentioned once already",
       "rule_ref": "2.5",
       "why": "The classic <em>a</em> → <em>the</em> switch. First mention introduces, second mention points back."
     },
     "out4d": {
       "out": "the",
-      "cat": "4d · inferable from what we mentioned",
+      "cat": "Inferable from what we mentioned",
       "rule_ref": "2.6",
       "why": "Part-whole and possession relations license this without any prior mention of the noun itself. A car has one engine, a room has one ceiling, so naming the whole makes the part identifiable."
     },
     "out4e": {
       "out": "the",
-      "cat": "4e · only one in the world",
+      "cat": "The only one in the world",
       "rule_ref": "2.3",
       "why": "Shared world knowledge does the identifying. No context needed at all."
     },
     "out4f": {
       "out": "the",
-      "cat": "4f · the place we're both in",
+      "cat": "The place we are both in",
       "rule_ref": "2.2",
       "why": "The place we are both in does the identifying. With one glass on the table, <em>pass me the glass</em> is clear — no other choice arises.<br><br>The situation need not be the room. It can be the building, the town or the country: <em>I went to the cafeteria</em> means the one in our building, and <em>you can buy apples at the market</em> means the market in our town.<br><br>Put more than one in view and <em>which one?</em> comes back, so you are on <em>a/an</em> again: <em>please close the window</em> when one is open, <em>please close a window</em> when three are."
     },
     "outActivityZero": {
       "out": "zero",
-      "cat": "4g · institutional activity, not a place",
+      "cat": "An institutional activity, not a place",
       "rule_ref": "7.3",
       "why": "When the noun names the activity an institution exists for rather than its building, English drops the article: <em>at school</em> (studying), <em>in prison</em> (serving a sentence), <em>in bed</em> (sleeping), <em>at work</em> (working), <em>in class</em>, <em>at sea</em>, <em>in court</em>.<br><br>Put <em>the</em> back the moment you mean the building instead: <em>I parked at the school.</em>"
     },
     "q5": {
       "short": "countable, as used here?",
-      "gate": "Question 5",
+      "gate": "Countable or not",
       "q": "How am I using the noun here — countable or not?",
       "note": "Ask about this use, not about the noun. <em>Coffee</em> and <em>a coffee</em>. <em>Experience</em> and <em>an experience</em>. <em>Paper</em> and <em>a paper</em>. A noun-property question sends dual-membership nouns down the wrong branch and keeps them there.",
       "opts": [
@@ -2997,31 +3064,31 @@
     },
     "out5a": {
       "out": "an",
-      "cat": "Question 5 · indefinite singular",
+      "cat": "One of many, singular",
       "rule_ref": "2.1.2",
-      "why": "Countable, singular, and your listener can't yet tell which one. Covers first mention, non-specific <em>any</em> uses, and classifying after <em>be</em> — <em>She is a doctor</em> (5.2)."
+      "why": "Countable, singular, and your listener can't yet tell which one. Covers first mention, non-specific <em>any</em> uses, and classifying after <em>be</em> — <em>She is a doctor</em>."
     },
     "out5zPl": {
       "out": "zero",
-      "cat": "Question 5 · indefinite plural",
+      "cat": "Some of many, plural",
       "rule_ref": "2.1.2",
-      "why": "The plural counterpart of <em>a</em>. English has no plural indefinite article, so the slot stays empty. Add <em>some</em> if you need to signal quantity (Appendix 3)."
+      "why": "The plural counterpart of <em>a</em>. English has no plural indefinite article, so the slot stays empty. Add <em>some</em> if you need to signal quantity."
     },
     "out5zNc": {
       "out": "zero",
-      "cat": "Question 5 · indefinite non-count",
+      "cat": "An uncountable amount",
       "rule_ref": "2.1.2",
       "why": "Mass nouns take no article when indefinite. Add a quantifier if you need one: <em>some water</em>, <em>a lot of water</em>."
     },
     "out4h": {
       "out": "the",
-      "cat": "4h · a role that belongs to something",
+      "cat": "A role that belongs to something",
       "rule_ref": "2.3",
       "why": "Role nouns are inherently <em>of</em> something: government of a country, capital of a country, manager of a team. The article is licensed because the noun carries an implicit slot that context fills — and the slot can stay unfilled out loud. <em>What should the government do?</em> works between an American and a Spaniard discussing neither country, because it means <em>the government of whatever situation we're discussing</em>. Unique relative to an argument, not unique in the world."
     },
     "q4g": {
       "short": "a place, or an activity?",
-      "gate": "Question 4g · check first",
+      "gate": "A place, or an activity",
       "q": "Does the noun name a place, or an institutional activity?",
       "note": "This is where <em>the mall</em> and <em>at school</em> collide. Both are familiar community places, so the wrong branch is easy to take.",
       "opts": [
@@ -3040,9 +3107,9 @@
     },
     "out4g": {
       "out": "the",
-      "cat": "4g · an everyday place we all know",
+      "cat": "An everyday place we all know",
       "rule_ref": "4.1",
-      "why": "Not a particular one — the kind of place itself. <em>I like going to the cinema</em> is about cinema-going, not about a building. The book calls this using <em>the</em> for “the category as a general abstract idea” — things everybody knows. It covers entertainment and recreation (4.1) and shops and other businesses (4.2).<br><br>This does not contradict Question 3. There are two ways to generalize: a plural or uncountable noun with no article (<em>dogs</em>, <em>life</em>), or <em>the</em> with a singular noun for a whole category (<em>the cinema</em>, <em>the gym</em>).<br><br><b>An intuition, not a rule in the book:</b> these read like leftovers from when there really was one in town — one hospital, one post office, one mall — so <em>the</em> was literal, and it stuck. Part 2.2 still works that way today: <em>the market</em> means the market in our town.<br><br>Careful: <em>café</em> and <em>restaurant</em> are not used like this. <em>Let's go to the restaurant</em> can only mean a particular one."
+      "why": "Not a particular one — the kind of place itself. <em>I like going to the cinema</em> is about cinema-going, not about a building. This is <em>the</em> used for a whole category as a general idea — things everybody knows. It covers entertainment and recreation, and shops and other businesses.<br><br>This does not contradict the question about whole classes. There are two ways to generalize: a plural or uncountable noun with no article (<em>dogs</em>, <em>life</em>), or <em>the</em> with a singular noun for a whole category (<em>the cinema</em>, <em>the gym</em>).<br><br><b>An intuition, not a rule:</b> these read like leftovers from when there really was one in town — one hospital, one post office, one mall — so <em>the</em> was literal, and it stuck. The same instinct still works today: <em>the market</em> means the market in our town.<br><br>Careful: <em>café</em> and <em>restaurant</em> are not used like this. <em>Let's go to the restaurant</em> can only mean a particular one."
     }
   },
   "traces": [

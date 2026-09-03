@@ -165,6 +165,8 @@
             return normalized.toLowerCase();
         }
 
+        let RULE_NAMES = {};
+
         function normalizeRulesData(rawData) {
             if (!rawData || typeof rawData !== "object") {
                 return { lookup_table: {}, decision_tree: {} };
@@ -399,6 +401,7 @@
 
             const initializeApp = (data) => {
                 const normalizedData = normalizeRulesData(data);
+                RULE_NAMES = normalizedData.rule_names || {};
                 const lookupTable = normalizedData.lookup_table;
                 const decisionTree = normalizedData.decision_tree;
 
@@ -441,9 +444,10 @@
                     const explanationCopy = (resultData && resultData.explanation) ? resultData.explanation : '';
                     const exampleCopy = buildExampleSentence(articleValue, focusNoun);
                     const focusCopy = focusNoun ? `<span>Focus noun:</span> ${focusNoun}<br><br>` : '';
-                    const ruleRef = (resultData && resultData.rule_ref)
-                        ? `<br><br><span>(Reference: ${resultData.rule_ref})</span>`
-                        : '';
+                    const ruleName = (resultData && resultData.rule_ref)
+                        ? RULE_NAMES[resultData.rule_ref]
+                        : null;
+                    const ruleRef = ruleName ? `<br><br><span>${ruleName}</span>` : '';
                     const guidancePrefix = isGuidance ? '<strong>Guidance:</strong> ' : '';
                     const exampleSection = exampleCopy ? `<br><br>${exampleCopy}` : '';
                     explanationEl.innerHTML = `${focusCopy}${guidancePrefix}${explanationCopy}${exampleSection}${ruleRef}`;

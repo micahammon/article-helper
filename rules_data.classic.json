@@ -385,5 +385,34 @@
             "explanation": "Use 'the' with nationality adjectives ending in -ish, -ch, or -ese to refer to the people of that country as a group (e.g., 'the British', 'the French').",
             "rule_ref": "3.6"
         }
+    },
+    "rule_names": {
+        "2.1.2": "Known and unknown",
+        "2.3": "Things there is only one of",
+        "3.1": "No article with plurals and uncountables, to generalize",
+        "3.3": "A or an with a singular noun, to generalize",
+        "3.4": "The with a singular noun, for a whole species",
+        "3.5": "The with an adjective, for a group of people",
+        "3.6": "The with a nationality word",
+        "4.1": "The with entertainment and recreation",
+        "4.10": "The with geographical expressions",
+        "4.14": "Everyday places that take the",
+        "4.15": "Places that do not work this way",
+        "4.3": "The with musical instruments",
+        "4.5": "The with communication and media",
+        "5.2": "Naming someone's job or role",
+        "6.1.2": "Meals",
+        "6.1.3": "Sports",
+        "6.3": "A noun followed by a classifying letter or number",
+        "7.1": "Two nouns side by side",
+        "7.2": "Uncountable nouns",
+        "7.3": "Institutions (church, university, school etc.)",
+        "7.4.1": "The word bed",
+        "7.4.2": "The word home",
+        "7.4.3": "Work, used as a noun",
+        "7.5": "Illnesses",
+        "9.2.1": "Place names",
+        "9.2.2": "Place names that take the",
+        "Section 2": "Known and unknown"
     }
 }

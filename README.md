@@ -122,13 +122,16 @@ rather than about facts you would have to already know:
 - **Q5** — countable or not **in this use**, not as a property of the noun, so
   `coffee` / `a coffee` and `paper` / `a paper` route correctly.
 
-Categories and time words carry the book's **unusual use** contrast (6.1.4,
-6.2.8) alongside the answer: used in a different way the word stops being an
+Categories and time words carry an **unusual use** contrast alongside the
+answer: used in a different way the word stops being an
 exception, and the ordinary rules apply again — *the football they play in the
 USA*, *the Monday we met*.
 
-Every outcome — from Gate 0 or from the tree — names a form and cites the
-section of the source guide it comes from.
+Every outcome — from Gate 0 or from the tree — names a form and names the
+rule it comes from. Learners never see a rule *number*: `rule_ref` stays in the
+data for us, and `rule_names` holds the wording that reaches the screen. Nothing
+a student reads cites a section, a gate, or the book — they have none of those
+to hand.
 
 `Walk the tree` steps through it one question at a time; `See the whole map`
 renders the entire thing at once, generated from the same data, so the map can
@@ -157,10 +160,10 @@ in front of it — and `last week` no longer answers a question about the piano.
 
 3. **Otherwise, answer the questions** until you reach a form.
 4. **Read the result** — the recommended article, why it applies, the phrase
-   built for you, and the rule reference.
+   built for you, and the name of the rule behind it.
 
 Every step you take is recorded in **Your path**, naming both the question and
-your answer — `Question 3 · whole class, or instances? — Particular instances` —
+your answer — `Whole class, or instances? — Particular instances` —
 so the route to an answer stays readable after the fact. `Go back a step` walks
 it backwards.
 

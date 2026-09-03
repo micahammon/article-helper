@@ -79,6 +79,9 @@ CATEGORIES = _rules_data["categories"]
 CONSTRUCTIONS = _rules_data["constructions"]
 TIME_WORDS = _rules_data["time_words"]
 SOURCE_SECTIONS = _rules_data["source_sections"]
+# What a rule is called when a learner sees it. SOURCE_SECTIONS keeps the
+# numbering for us; RULE_NAMES is the half that reaches the screen.
+RULE_NAMES = _rules_data["rule_names"]
 PATTERNS = _rules_data["patterns"]
 FORM_LABELS = _rules_data["form_labels"]
 ENTRY_NODE = _rules_data.get("meta", {}).get("entry_node", "q2")
@@ -96,6 +99,7 @@ __all__ = [
     "CONSTRUCTIONS",
     "TIME_WORDS",
     "SOURCE_SECTIONS",
+    "RULE_NAMES",
     "PATTERNS",
     "FORM_LABELS",
     "ENTRY_NODE",

@@ -5,7 +5,7 @@ from tkinter import messagebox
 import customtkinter as ctk
 
 from logic import ArticleLogic
-from rules import GUIDANCE_NODE_TYPE
+from rules import GUIDANCE_NODE_TYPE, RULE_NAMES
 
 ctk.set_appearance_mode("System")
 ctk.set_default_color_theme("blue")
@@ -134,8 +134,8 @@ class ArticleApp(ctk.CTk):
 
         explanation_text = result_data.get("explanation", "")
         example_line = self._build_example_sentence(article_value, focus_noun)
-        rule_reference = result_data.get("rule_ref")
-        reference_text = f"\n\n(Reference: {rule_reference})" if rule_reference else ""
+        rule_name = RULE_NAMES.get(result_data.get("rule_ref") or "")
+        reference_text = f"\n\n{rule_name}" if rule_name else ""
         focus_text = f"Focus noun: {focus_noun}\n\n" if focus_noun else ""
         example_text = f"\n\n{example_line}" if example_line else ""
         result_body = f"{focus_text}{body_prefix}{explanation_text}{example_text}{reference_text}"

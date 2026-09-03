@@ -711,14 +711,14 @@ function gate0(text){
   if(key){
     e = D.fixed_expressions[key];
     return {form:formOf(e.article), why:e.explanation, ref:e.rule_ref,
-            cat:"Gate 0 \u00b7 fixed expression", match:key, fixed:true};
+            cat:"Fixed expression", match:key, fixed:true};
   }
 
   /* 2. noun + classifying number or letter */
   var np = D.patterns.noun_number;
   if(new RegExp(np.regex, "i").test(norm)){
     return {form:formOf(np.article), why:np.explanation, ref:np.rule_ref,
-            cat:"Gate 0 \u00b7 noun with a classifying number", match:norm};
+            cat:"Noun with a classifying number", match:norm};
   }
 
   /* 3. the lookup table, direct then longest phrase - subject to conditions */
@@ -743,7 +743,7 @@ function gate0(text){
                            need.indexOf(tokens[natSpan[0] - 1]) !== -1);
     if(okPrev){
       return {form:formOf(nat.article), why:nat.explanation, ref:nat.rule_ref,
-              cat:"Gate 0 \u00b7 nationality adjective", match:norm};
+              cat:"Nationality adjective", match:norm};
     }
   }
 
@@ -755,7 +755,7 @@ function gate0(text){
   if(isTheTakingName(text, norm)){
     var pn = D.proper_noun_the;
     return {form:formOf(pn.article), why:pn.explanation, ref:pn.rule_ref,
-            cat:"Gate 0 \u00b7 name in the the-taking class", match:norm};
+            cat:"Name in the the-taking class", match:norm};
   }
 
   /* last: a construction inside a longer sentence. An incidental match loses
@@ -791,7 +791,7 @@ function checkConstructions(text, tokens, wholeOnly){
        adjunct inside it, so it belongs in the first pass even when partial */
     if(wholeOnly !== (covers || !!rule.frame)) continue;
     return {form:formOf(rule.article), why:rule.explanation, ref:rule.rule_ref,
-            cat:"Gate 0 \u00b7 construction",
+            cat:"Construction",
             /* what the rule actually matched: the page highlights this, and a
                pinned focus is checked against it */
             match:(m[0] || "").replace(/^\s+|\s+$/g, "") || phrase,
@@ -824,7 +824,7 @@ function checkTimeWords(norm, tokens){
     p = T2.patterns[name];
     if(new RegExp(p.regex, "i").test(norm)){
       return {form:formOf(p.article), why:p.explanation, ref:p.rule_ref,
-              cat:"Gate 0 \u00b7 time expression", match:norm,
+              cat:"Time expression", match:norm,
               either:(p.article.indexOf("either") === 0)};
     }
   }
@@ -834,7 +834,7 @@ function checkTimeWords(norm, tokens){
     key = (g.words.indexOf(norm) !== -1) ? norm : findIn(tokens, g.words);
     if(key){
       return {form:formOf(g.article), why:g.explanation, ref:g.rule_ref,
-              cat:"Gate 0 \u00b7 " + name.replace(/s$/, ""), match:key,
+              cat:cap(name.replace(/s$/, "")), match:key,
               either:(g.article.indexOf("either") === 0),
               unusual:T2.unusual};
     }
@@ -851,7 +851,7 @@ function checkCategories(norm, tokens){
     key = (c.words.indexOf(norm) !== -1) ? norm : findIn(tokens, c.words);
     if(key){
       return {form:formOf(c.article), why:c.explanation, ref:c.rule_ref,
-              cat:"Gate 0 \u00b7 " + name.replace(/s$/, ""), match:key,
+              cat:cap(name.replace(/s$/, "")), match:key,
               unusual:c.unusual};
     }
   }
@@ -899,7 +899,7 @@ function lookupResult(key, tokens){
   function deferred(reason, why){
     return {form:"context", context:true, reason:reason, why:why,
             ref:(cond && cond.contrast_rule_ref) || e.rule_ref,
-            cat:"Gate 0 \u00b7 depends on the sentence", match:key,
+            cat:"Depends on the sentence", match:key,
             fixed:null,
             fixedSense:{article:e.article, why:e.explanation, ref:e.rule_ref},
             sense:cond ? cond.sense : null,
@@ -920,7 +920,7 @@ function lookupResult(key, tokens){
       if(D.determiners.groups[g].indexOf(governing) !== -1){
         return {form:"blocked", blocked:true, why:D.determiners.explanation,
                 ref:(g === "some_any" ? D.determiners.some_any_rule_ref : D.determiners.rule_ref),
-                cat:"Gate 0 \u00b7 the slot is already taken", match:key};
+                cat:"The slot is already taken", match:key};
       }
     }
     if(forms[governing] && forms[governing] !== e.article){
@@ -947,7 +947,7 @@ function lookupResult(key, tokens){
   }
 
   return {form:formOf(e.article), why:e.explanation, ref:e.rule_ref,
-          cat:"Gate 0 \u00b7 listed noun", match:key, note:e.note || null};
+          cat:"Listed noun", match:key, note:e.note || null};
 }
 
 /* how long an input can be and still read as a bare noun phrase, and the verbs
@@ -993,7 +993,7 @@ function gate0Pinned(text, focus){
     if(Object.prototype.hasOwnProperty.call(D.fixed_expressions, word)){
       var fx = D.fixed_expressions[word];
       return {form:formOf(fx.article), why:fx.explanation, ref:fx.rule_ref,
-              cat:"Gate 0 \u00b7 fixed expression", match:word, fixed:true};
+              cat:"Fixed expression", match:word, fixed:true};
     }
     if(Object.prototype.hasOwnProperty.call(D.lookup_table, word)){
       return lookupResult(word, tokens);
@@ -1007,13 +1007,13 @@ function gate0Pinned(text, focus){
   if(nat.examples.indexOf(word) !== -1 && span[0] > 0 &&
      (nat.requires_prev || ["the"]).indexOf(tokens[span[0] - 1]) !== -1){
     return {form:formOf(nat.article), why:nat.explanation, ref:nat.rule_ref,
-            cat:"Gate 0 \u00b7 nationality adjective", match:word};
+            cat:"Nationality adjective", match:word};
   }
 
   if(isTheTakingName(text, word)){
     var pn = D.proper_noun_the;
     return {form:formOf(pn.article), why:pn.explanation, ref:pn.rule_ref,
-            cat:"Gate 0 \u00b7 name in the the-taking class", match:word};
+            cat:"Name in the the-taking class", match:word};
   }
   return null;
 }
@@ -1038,7 +1038,7 @@ function checkDeterminer(text, tokens){
     if(words.indexOf(first) !== -1){
       return {form:"blocked", why:det.explanation, blocked:true,
               ref:(group === "some_any" ? det.some_any_rule_ref : det.rule_ref),
-              cat:"Gate 0 \u00b7 the slot is already taken",
+              cat:"The slot is already taken",
               match:tokens.slice(1).join(" ") || first};
     }
   }
@@ -1051,7 +1051,7 @@ function checkDeterminer(text, tokens){
   if(CONTRACTIONS.indexOf(stem) === -1 &&
      /^\s*\S+['\u2019]s\s+\S+/.test(String(text || ""))){
     return {form:"blocked", why:det.explanation, blocked:true, ref:det.rule_ref,
-            cat:"Gate 0 \u00b7 the slot is already taken",
+            cat:"The slot is already taken",
             match:tokens.slice(1).join(" ") || tokens[0]};
   }
   return null;
@@ -1112,8 +1112,7 @@ function analyze(text, scriptedPath, focus){
       return true;
     }
     pendingNote = "<b>Noun-noun pair.</b> " + D.patterns.noun_adjunct.explanation +
-                  " Deciding about <em>" + esc(second) + "</em>. (" +
-                  D.patterns.noun_adjunct.rule_ref + ")";
+                  " Deciding about <em>" + esc(second) + "</em>.";
   }
 
   if(scriptedPath && scriptedPath.length){
@@ -1142,7 +1141,7 @@ function render(){
   if(!hist.length){
     var badge = document.createElement("div");
     badge.className = "gate0 g-miss";
-    badge.textContent = "Gate 0 \u2014 no fixed expression or listed name matched";
+    badge.textContent = "No set phrase or known name \u2014 working through the questions";
     stage.appendChild(badge);
   }
   if(n.out) renderResult(n); else renderQuestion(n);
@@ -1277,7 +1276,7 @@ function renderResult(n){
   if(word && n.out !== "fixed"){
     h += '<p class="built">' + esc(buildPhrase(n.out, word)) + '</p>';
   }
-  if(n.rule_ref) h += '<span class="ref">Rule ' + esc(n.rule_ref) + '</span>';
+  h += refPill(n.rule_ref);
   card.innerHTML = h;
   stage.appendChild(card);
 }
@@ -1290,8 +1289,8 @@ function renderGate0(r){
   var badge = document.createElement("div");
   badge.className = "gate0 g-hit";
   badge.textContent = r.context
-    ? "Gate 0 \u2014 \u201c" + r.match + "\u201d has more than one reading"
-    : "Gate 0 \u2014 matched \u201c" + r.match + "\u201d before any question";
+    ? "\u201c" + r.match + "\u201d has more than one reading"
+    : "Matched \u201c" + r.match + "\u201d before any question";
   stage.appendChild(badge);
 
   if(r.adjunct){
@@ -1299,7 +1298,7 @@ function renderGate0(r){
     nc.className = "note-card";
     nc.innerHTML = "<b>Noun-noun pair.</b> " + D.patterns.noun_adjunct.explanation +
                    " So <em>" + esc(r.adjunct) + "</em> is ignored and <em>" +
-                   esc(r.match) + "</em> decides. (" + D.patterns.noun_adjunct.rule_ref + ")";
+                   esc(r.match) + "</em> decides.";
     stage.appendChild(nc);
   }
 
@@ -1347,7 +1346,7 @@ function renderGate0(r){
     var word = (normalize(typed) === r.match) ? typed : r.match;
     h += '<p class="built">' + esc(buildPhrase(r.form, word)) + '</p>';
   }
-  if(r.ref) h += '<span class="ref">Rule ' + esc(r.ref) + '</span>';
+  h += refPill(r.ref);
   card.innerHTML = h;
   stage.appendChild(card);
 }
@@ -1377,7 +1376,7 @@ function renderContext(r){
          '</span></div></div>';
   }
   h += '</div>';
-  if(r.ref) h += '<span class="ref">Rule ' + esc(r.ref) + '</span>';
+  h += refPill(r.ref);
   card.innerHTML = h;
   stage.appendChild(card);
 
@@ -1403,10 +1402,10 @@ function renderTrail(){
   hist.forEach(function(step){
     var n = T[step.node], o = n.opts[step.opt];
     var li = document.createElement("li");
-    /* the gate number alone says nothing ("Question 2 - No"), so carry the
-       question with it */
-    var gate = n.short ? n.gate.split(" \u00b7 ")[0] : n.gate;
-    var asked = gate + (n.short ? " \u00b7 " + n.short : "");
+    /* short is the question in a few words - "can the listener identify it?"
+       - which is what the reader needs to see beside their answer */
+    var asked = n.short || n.gate;
+    asked = asked.charAt(0).toUpperCase() + asked.slice(1);
     li.innerHTML = '<span class="q">' + asked + ' \u2014 </span>' +
                    '<span class="a">' + o.label.replace(/^\d[a-z]? \u00b7 /, "") + '</span>';
     trail.appendChild(li);
@@ -1495,12 +1494,21 @@ function buildMap(){
     var n = T[id];
     var d = document.createElement("div");
     d.className = "mgate";
-    var h = "<h3>" + n.gate + " \u2014 " + n.q + "</h3>";
+    var h = "<h3>" + n.q + "</h3>";
     if(n.note) h += '<p class="mq">' + n.note + "</p>";
     h += renderMapRows(n);
     d.innerHTML = h;
     mapEl.appendChild(d);
   });
+}
+
+/* A rule reaches the reader by name. The number it carries internally is
+   for us, not for a student who has no numbered rules to look up. */
+function cap(s){ return s.charAt(0).toUpperCase() + s.slice(1); }
+
+function refPill(ref){
+  var name = ref && D.rule_names ? D.rule_names[ref] : null;
+  return name ? '<span class="ref">' + esc(name) + "</span>" : "";
 }
 
 function pillFor(nodeId){

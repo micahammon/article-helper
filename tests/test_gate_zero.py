@@ -359,7 +359,7 @@ class ProductiveCategoryTests(unittest.TestCase):
     def test_categories_carry_the_unusual_use_contrast(self):
         analysis = self.logic.analyze_input("rugby")
         self.assertIn("unusual", analysis)
-        self.assertIn("6.1.4", analysis["unusual"])
+        self.assertIn("the ordinary rules apply again", analysis["unusual"])
 
 
 class TimeWordTests(unittest.TestCase):
@@ -406,7 +406,7 @@ class TimeWordTests(unittest.TestCase):
     def test_time_words_carry_the_unusual_use_contrast(self):
         analysis = self.logic.analyze_input("Mondays")
         self.assertIn("unusual", analysis)
-        self.assertIn("6.2.8", analysis["unusual"])
+        self.assertIn("used in an unusual way", analysis["unusual"])
 
 
 class ConstructionTests(unittest.TestCase):
@@ -835,6 +835,67 @@ class TreeIntegrityTests(unittest.TestCase):
                 continue
             analysis = logic.analyze_input(trace["p"])
             self.assertEqual(analysis["mode"], "question", f"{trace['p']!r} is shadowed by Gate 0")
+
+
+class LearnerFacingLanguageTests(unittest.TestCase):
+    """Students have no numbered rules and no book. Neither may reach them."""
+
+    # Numbering that stays: the changelog, the faithful record of the source,
+    # and the name map keyed by those numbers.
+    SKIP_PREFIXES = (
+        ".lookup_ref_corrections",
+        ".source_sections",
+        ".rule_names",
+        ".meta.source",
+    )
+    REF_FIELDS = ("rule_ref", "some_any_rule_ref", "contrast_rule_ref")
+    LEAK = re.compile(r"\bGate 0\b|\bthe book\b|\(\d+\.\d|Question \d|\bRule \d")
+
+    def _strings(self, obj, path=""):
+        if isinstance(obj, dict):
+            for key, value in obj.items():
+                for found in self._strings(value, path + "." + str(key)):
+                    yield found
+        elif isinstance(obj, list):
+            for index, value in enumerate(obj):
+                for found in self._strings(value, path + "[%d]" % index):
+                    yield found
+        elif isinstance(obj, str):
+            yield path, obj
+
+    def _data_files(self):
+        root = Path(__file__).resolve().parents[1]
+        for name in ("rules_data.json", "rules_data.classic.json"):
+            yield name, json.loads((root / name).read_text(encoding="utf-8"))
+
+    def test_every_reachable_rule_has_a_learner_facing_name(self):
+        for name, data in self._data_files():
+            names = data["rule_names"]
+            for path, value in self._strings(data):
+                if path.startswith(self.SKIP_PREFIXES):
+                    continue
+                if not path.endswith(self.REF_FIELDS):
+                    continue
+                self.assertIn(value, names, f"{name} {path} has no rule_names entry")
+
+    def test_no_rule_numbers_gates_or_book_in_learner_prose(self):
+        for name, data in self._data_files():
+            for path, value in self._strings(data):
+                if path.startswith(self.SKIP_PREFIXES):
+                    continue
+                if path.endswith(self.REF_FIELDS):
+                    continue
+                # "the book I lent you" is an example phrase, not a citation.
+                match = self.LEAK.search(value.replace("the book", "a volume"))
+                self.assertIsNone(match, f"{name} {path} leaks {value[:90]!r}")
+
+    def test_option_labels_and_categories_carry_no_tree_codes(self):
+        code = re.compile(r"^\d[a-z]? \u00b7 ")
+        for node_id, node in RAW_TREE.items():
+            if node.get("cat"):
+                self.assertIsNone(code.search(node["cat"]), node_id)
+            for option in node.get("opts", []):
+                self.assertIsNone(code.search(option["label"]), node_id)
 
 
 if __name__ == "__main__":
