@@ -147,7 +147,20 @@ _VERB_HINTS = {
     "work", "works", "worked", "study", "studies", "studied", "speak",
     "speaks", "spoke", "read", "reads", "write", "writes", "wrote", "gave",
     "give", "gives", "put", "puts", "know", "knows", "knew", "found", "find",
+    "lend", "lends", "lent", "send", "sends", "sent", "spend", "spends",
+    "spent", "meet", "meets", "met", "tell", "tells", "told", "bring",
+    "brings", "brought", "catch", "catches", "caught", "teach", "teaches",
+    "taught", "keep", "keeps", "kept", "feel", "feels", "felt", "hold",
+    "holds", "held", "hear", "hears", "heard", "win", "wins", "won", "pay",
+    "pays", "paid", "sell", "sells", "sold", "build", "builds", "built",
+    "mean", "means", "meant", "become", "becomes", "became", "begin",
+    "begins", "began", "choose", "chooses", "chose", "forget", "forgets",
+    "forgot", "understand", "understands", "understood", "borrow", "borrows",
+    "borrowed", "wear", "wears", "wore", "break", "breaks", "broke",
 }
+
+#: a pronoun that can head a clause; the word straight after one is its verb
+_SUBJECT_PRONOUNS = {"i", "you", "he", "she", "it", "we", "they"}
 
 #: words that end the search for a determiner sitting in front of a noun
 _LOOKBACK_BOUNDARY = {
@@ -219,10 +232,18 @@ def focus_candidates(text):
     changed.
     """
     seen, candidates = set(), []
-    for index, token in enumerate(_tokenize_words(text)):
+    tokens = _tokenize_words(text)
+    for index, token in enumerate(tokens):
         if token in _NOT_A_FOCUS or len(token) < 2:
             continue
-        # a verb is only skipped when the data has no noun rule for it
+        # The word straight after a subject pronoun is that pronoun's verb,
+        # whatever else it can be. This is the one test a word list cannot do:
+        # `work`, `play` and `book` are real nouns with real rules, so `I
+        # work`, `did you book a table` and `the book I lent you` can only be
+        # settled by where the word sits.
+        if index and tokens[index - 1] in _SUBJECT_PRONOUNS:
+            continue
+        # otherwise a verb is only skipped when the data has no noun rule for it
         if token in _VERB_HINTS and not is_known_noun(token):
             continue
         if token in seen:

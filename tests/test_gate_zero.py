@@ -710,17 +710,41 @@ class FocusTests(unittest.TestCase):
         analysis = self.logic.analyze_input("There is a problem with my computer.")
         self.assertEqual(analysis["focus_noun"], "there is")
 
-    def test_a_verb_that_is_also_a_listed_noun_stays_a_candidate(self):
-        """`I work for government` targets `work`, which is a lookup entry.
+    def test_a_verb_after_its_subject_is_not_a_candidate(self):
+        """`I work for government`: Gate 0 answers about `work`, but the
+        learner is not offered it as a noun to decide about.
 
-        It was filtered out as a verb, so the only candidate was `government`
-        - one candidate hides the bar, and the page showed neither the word it
-        had chosen nor the alternative.
+        `work` was kept as a candidate for a while, because dropping it left
+        one candidate and one candidate hid the bar - so the page showed
+        neither the word it had chosen nor the alternative. The bar now stays
+        up whenever the Gate 0 target is not itself a candidate, which is the
+        real fix, so the verb can go.
         """
         analysis = self.logic.analyze_input("I work for government.")
         self.assertEqual(analysis["focus_noun"], "work")
-        self.assertEqual([c["word"] for c in analysis["candidates"]],
-                         ["work", "government"])
+        words = [c["word"] for c in analysis["candidates"]]
+        self.assertEqual(words, ["government"])
+
+    def test_position_beats_the_word_list(self):
+        """The one verb test a word list cannot do.
+
+        `work`, `play` and `book` are real nouns with real rules, so they
+        cannot simply be listed as verbs. After a subject pronoun they can
+        only be verbs.
+        """
+        for text, expected in [
+            ("the book I lent you", ["book"]),
+            ("did you book a table", ["table"]),
+            ("we play tennis on Sundays", ["tennis", "sundays"]),
+            ("I have a doubt about the homework", ["doubt", "homework"]),
+        ]:
+            words = [c["word"] for c in focus_candidates(text)]
+            self.assertEqual(words, expected, text)
+
+    def test_an_irregular_past_is_on_the_verb_list(self):
+        """`lent` was not, so `the book I lent you` offered it as the noun."""
+        for verb in ["lent", "sent", "met", "told", "brought", "kept", "paid"]:
+            self.assertIn(verb, _VERB_HINTS)
 
     def test_known_nouns_are_recognised_despite_the_verb_list(self):
         for word in ["work", "play", "study"]:

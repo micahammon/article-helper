@@ -504,13 +504,22 @@ function renderFocusBar(text, hitResult){
   var cands = focusCandidates(raw);
   focusEl.innerHTML = "";
 
-  /* nothing to disambiguate: one candidate or none */
-  if(!raw || cands.length < 2){ focusEl.classList.add("hidden"); return; }
-  focusEl.classList.remove("hidden");
-
   var target = pinned ? normalize(pinned)
              : (hitResult ? String(hitResult.match || "") : inferFocus(raw));
   var targetWords = target ? target.split(" ") : [];
+
+  /* The word Gate 0 matched is not always a candidate: in `I work for
+     government` the verb filter drops `work`, but Gate 0 still answers about
+     it, so the bar has to stay up or there is no way off that answer. */
+  var targetIsCandidate = false;
+  for(var k = 0; k < cands.length; k++){
+    if(targetWords.indexOf(cands[k].word) !== -1) targetIsCandidate = true;
+  }
+  var choices = cands.length + ((target && !targetIsCandidate) ? 1 : 0);
+
+  /* nothing to disambiguate: one word to choose from, or none */
+  if(!raw || choices < 2){ focusEl.classList.add("hidden"); return; }
+  focusEl.classList.remove("hidden");
 
   var head = document.createElement("h3");
   head.textContent = pinned ? "Deciding about" : "Deciding about \u2014 tap another word to change";
@@ -620,11 +629,19 @@ function isKnownNoun(t){
   return false;
 }
 
+/* A pronoun that can head a clause. The word straight after one of these is
+   that pronoun's verb, whatever else the word can be, which is the one verb
+   test a word list cannot do: `work`, `play` and `book` are all real nouns
+   with real rules, so `I work`, `did you book a table` and `the book I lent
+   you` can only be settled by where the word sits. */
+var SUBJECT_PRONOUNS = ["i","you","he","she","it","we","they"];
+
 function focusCandidates(text){
   var seen = {}, out = [], toks = tokenize(text), i, t;
   for(i = 0; i < toks.length; i++){
     t = toks[i];
     if(NOT_A_FOCUS.indexOf(t) !== -1) continue;
+    if(i > 0 && SUBJECT_PRONOUNS.indexOf(toks[i - 1]) !== -1) continue;
     if(VERB_HINTS.indexOf(t) !== -1 && !isKnownNoun(t)) continue;
     if(t.length < 2) continue;
     if(Object.prototype.hasOwnProperty.call(seen, t)) continue;
@@ -930,7 +947,16 @@ var VERB_HINTS = ["is","are","was","were","am","be","been","being","have","has",
   "makes","made","come","comes","came","play","plays","played","eat","eats",
   "ate","live","lives","lived","work","works","worked","study","studies",
   "studied","speak","speaks","spoke","read","reads","write","writes","wrote",
-  "gave","give","gives","put","puts","know","knows","knew","found","find"];
+  "gave","give","gives","put","puts","know","knows","knew","found","find",
+  "lend","lends","lent","send","sends","sent","spend","spends","spent",
+  "meet","meets","met","tell","tells","told","bring","brings","brought",
+  "catch","catches","caught","teach","teaches","taught","keep","keeps","kept",
+  "feel","feels","felt","hold","holds","held","hear","hears","heard",
+  "win","wins","won","pay","pays","paid","sell","sells","sold",
+  "build","builds","built","mean","means","meant","become","becomes","became",
+  "begin","begins","began","choose","chooses","chose","forget","forgets",
+  "forgot","understand","understands","understood","borrow","borrows",
+  "borrowed","wear","wears","wore","break","breaks","broke"];
 
 /* Gate 0 for a noun the learner picked, inside the sentence they typed.
    The sentence still supplies context - the determiner in front of the word,
