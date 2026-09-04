@@ -186,19 +186,23 @@ marks` wipes the ticks.
 
 ### Running Locally
 
-The page reads its rules from `rules_data.json`, so it must be served over HTTP —
-opening the `.html` from disk will not work (the page says so if you try).
+Open `index.html`. That is the whole procedure — it carries its rules inside it,
+so it works from a `file://` document, from a USB stick, or out of an email
+attachment, with no server and no network.
+
+A server is only needed for `classic.html`, which still fetches its own data:
 
 1. Clone the repository.
 2. From the project directory: `python -m http.server`
-3. Open `http://localhost:8000/`.
+3. Open `http://localhost:8000/classic.html`.
 
 ### Project Layout
 
 | File | What it is |
 |---|---|
-| `index.html` | The tool. Gate 0 + the walkable tree + the map view. |
+| `index.html` | The tool. Gate 0 + the walkable tree + the map view, rules included. |
 | `rules_data.json` | All rules and all prose. Shared with the desktop app. |
+| `tools/inline_rules.py` | Copies `rules_data.json` into `index.html`. |
 | `classic.html` | The previous web version, kept for reference. |
 | `rules_data.classic.json` | Frozen data for `classic.html`. |
 | `app.py`, `logic.py`, `rules.py` | Tkinter desktop app, reading the same JSON. |
@@ -207,6 +211,20 @@ opening the `.html` from disk will not work (the page says so if you try).
 The desktop app and the browser read the same `rules_data.json`, so they stay in
 sync. `rules.py` adapts the browser-shaped nodes into the plain-text shape the
 Tkinter GUI expects.
+
+**`rules_data.json` is where rules are written; `index.html` carries a copy.**
+The page used to fetch the file, which a browser refuses to do for a `file://`
+document — so a learner who was sent the `.html` and opened it got an
+instruction to install a web server instead of an answer. After editing the
+data, run:
+
+```
+python tools/inline_rules.py
+```
+
+`tests/test_gate_zero.py` compares the copy in the page against the file and
+fails if they differ, so a forgotten run cannot ship a page that answers from
+stale rules.
 
 ### Changing the Rules
 
@@ -359,11 +377,10 @@ same rule.
 The site is served by GitHub Pages from `main` at `/`, so pushing to `main`
 publishes it. Two things to know:
 
-- `index.html` and `rules_data.json` are cached separately for ten minutes. The
-  page fetches its rules with `cache: "no-cache"` so the data can never be older
-  than the code reading it, but a returning visitor may still see the previous
-  version of the page itself until that expires. First-time visitors are
-  unaffected, and a hard reload gets the latest immediately. GitHub Pages does
-  not allow custom cache headers, so this is a floor rather than a bug.
+- `index.html` is cached for ten minutes, and it now carries its own rules, so
+  code and data can no longer disagree: a returning visitor sees the previous
+  version of both, or the new version of both, never a mix. First-time visitors
+  are unaffected, and a hard reload gets the latest immediately. GitHub Pages
+  does not allow custom cache headers, so the delay is a floor rather than a bug.
 - Mismatches degrade quietly rather than erroring, so verify a deploy by
   exercising the live page — not just by checking that the build went green.

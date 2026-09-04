@@ -976,6 +976,24 @@ class LearnerFacingLanguageTests(unittest.TestCase):
                         any(word in example.lower() for example in examples),
                         f"{name} {key!r} {field} illustrates itself with {examples}")
 
+    def test_the_page_carries_the_same_rules_as_the_data_file(self):
+        """index.html holds a copy so it works from a file:// document.
+
+        rules_data.json is where the rules are written; tools/inline_rules.py
+        copies them in. A forgotten run would ship a page answering from stale
+        rules, with nothing on screen to say so.
+        """
+        root = Path(__file__).resolve().parents[1]
+        page = (root / "index.html").read_text(encoding="utf-8")
+        opener = '<script id="rules-data" type="application/json">'
+        start = page.find(opener)
+        self.assertNotEqual(start, -1, "index.html has no rules-data block")
+        start += len(opener)
+        end = page.find("</script>", start)
+        inlined = json.loads(page[start:end])
+        self.assertEqual(inlined, DATA,
+                         "index.html is out of date: run tools/inline_rules.py")
+
     def test_sibling_groups_do_not_share_an_unusual_use_note(self):
         """The panel appears under the word asked about, so a shared one lies.
 
