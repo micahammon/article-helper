@@ -230,7 +230,7 @@ body{
 /* ---------- map ---------- */
 .map .mgate{margin-bottom:26px;background:var(--card);border:1px solid var(--rule);border-left:4px solid var(--ink);border-radius:2px;padding:18px 22px}
 .map .mgate-label{font-size:12px;font-weight:600;color:var(--muted);margin:0 0 4px}
-.map h3{font-family:var(--serif);font-weight:400;font-size:21px;margin:0 0 4px}
+.map h2{font-family:var(--serif);font-weight:400;font-size:21px;margin:0 0 4px}
 .map .mq{font-size:14px;color:var(--muted);margin:0 0 14px}
 .map .row{display:flex;gap:12px;padding:8px 0;border-top:1px solid var(--rule);font-size:14px;align-items:flex-start}
 .map .row .lead{flex:1 1 auto}
@@ -297,7 +297,7 @@ body{
   break-inside:avoid;padding:2px 0;color:var(--ink);
 }
 .refgroup{margin-bottom:18px}
-.refgroup h4{margin:0;font-size:13px;font-weight:600;color:var(--muted);
+.refgroup h3{margin:0;font-size:13px;font-weight:600;color:var(--muted);
   display:flex;align-items:center;gap:8px}
 .senses{margin-top:16px;border-top:1px solid var(--rule)}
 .senses .sense{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--rule);
@@ -312,7 +312,7 @@ body{
   background:var(--card);border:1px solid var(--rule);border-radius:2px;
   padding:12px 16px;margin-bottom:16px;
 }
-.focusbar h3{
+.focusbar h2{
   margin:0 0 8px;font-size:11px;font-weight:600;letter-spacing:.06em;
   text-transform:uppercase;color:var(--muted);
 }
@@ -539,7 +539,7 @@ function renderFocusBar(text, hitResult){
   if(!raw || !alternatives){ focusEl.classList.add("hidden"); return; }
   focusEl.classList.remove("hidden");
 
-  var head = document.createElement("h3");
+  var head = document.createElement("h2");
   head.textContent = pinned ? "Deciding about" : "Deciding about \u2014 tap another word to change";
   focusEl.appendChild(head);
 
@@ -1612,11 +1612,11 @@ function buildMap(){
   var fr = D.fixed_reference;
   var g0 = document.createElement("div");
   g0.className = "mgate";
-  var gh = "<h3>" + fr.title + "</h3><p class=\"mq\">" + fr.note + "</p>";
+  var gh = "<h2>" + fr.title + "</h2><p class=\"mq\">" + fr.note + "</p>";
   fr.groups.forEach(function(grp){
-    gh += '<div class="refgroup"><h4>' +
+    gh += '<div class="refgroup"><h3>' +
           '<span class="pill p-' + (grp.form === "an" ? "an" : grp.form) + '">' +
-          FORM[grp.form].word + '</span></h4><ul class="reflist">';
+          FORM[grp.form].word + '</span></h3><ul class="reflist">';
     grp.items.forEach(function(it){ gh += "<li>" + esc(it) + "</li>"; });
     gh += "</ul></div>";
   });
@@ -1629,7 +1629,7 @@ function buildMap(){
     var n = T[id];
     var d = document.createElement("div");
     d.className = "mgate";
-    var h = "<h3>" + n.q + "</h3>";
+    var h = "<h2>" + n.q + "</h2>";
     if(n.note) h += '<p class="mq">' + n.note + "</p>";
     h += renderMapRows(n);
     d.innerHTML = h;
