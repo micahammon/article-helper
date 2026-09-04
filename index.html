@@ -320,6 +320,9 @@ body{
 .sentence .w{
   padding:1px 3px;border-radius:2px;color:var(--ink);
   border:1px solid transparent;background:none;font:inherit;
+  /* a word with no break in it - a compound, a pasted URL - used to push the
+     whole page sideways rather than wrap */
+  overflow-wrap:anywhere;
 }
 .sentence button.w{
   cursor:pointer;color:var(--muted);
