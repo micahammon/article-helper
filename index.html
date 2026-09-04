@@ -243,6 +243,30 @@ body{
 .p-zero{background:var(--zero-wash);color:var(--zero)}
 .p-fixed{background:var(--fixed-wash);color:var(--fixed)}
 .p-next{background:var(--rule);color:var(--ink)}
+
+/* ---------- the readings list ---------- */
+/* Each reading is a button, because choosing one is the whole point of the
+   mode. It borrows the result card's wash so the form it recommends is
+   readable before the text under it is. */
+.reading{
+  display:block;width:100%;text-align:left;cursor:pointer;font:inherit;color:inherit;
+  border:1px solid var(--rule);border-radius:2px;padding:16px 18px;margin-bottom:10px;
+}
+.reading:hover,.reading:focus-visible{border-color:var(--ink)}
+.reading .top{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
+.reading .built{font-family:var(--serif);font-size:24px;margin:0}
+.reading .cat{font-size:13px;font-weight:600;margin:8px 0 0}
+.reading .why{font-size:14px;margin:6px 0 0;max-width:44em}
+.reading .why em{font-family:var(--serif);font-size:15px}
+.reading .when{font-size:13px;color:var(--muted);margin:6px 0 0}
+.reading .ex{font-family:var(--serif);font-style:italic;color:var(--muted);
+  display:block;font-size:14px;margin-top:6px}
+.readhead{
+  margin:22px 0 10px;font-size:11px;font-weight:600;letter-spacing:.06em;
+  text-transform:uppercase;color:var(--muted);
+  border-top:1px solid var(--rule);padding-top:14px;
+}
+.readhead:first-child{border-top:0;margin-top:0;padding-top:0}
 .hidden{display:none}
 .foot{margin-top:40px;font-size:13px;color:var(--muted);border-top:1px solid var(--rule);padding-top:14px}
 @media (max-width:560px){
@@ -360,6 +384,7 @@ body{
     <div class="modes" role="group" aria-label="View">
       <button id="m-walk" aria-pressed="true">Walk the tree</button>
       <button id="m-map" aria-pressed="false">See the whole map</button>
+      <button id="m-senses" aria-pressed="false">Look a word up</button>
     </div>
   </div>
 
@@ -402,6 +427,18 @@ body{
   <!-- ============ MAP ============ -->
   <div id="map" class="map hidden"></div>
 
+  <!-- ============ LOOK A WORD UP ============ -->
+  <div id="senses" class="hidden">
+    <div class="phrasebar">
+      <label for="sword">Word you want every reading of</label>
+      <div class="row">
+        <input id="sword" type="text" placeholder="radio" autocomplete="off">
+        <button class="btn" id="scheck">Show the readings</button>
+      </div>
+    </div>
+    <div id="sstage" aria-live="polite"></div>
+  </div>
+
   <p class="foot">Fixed expressions and known names are matched automatically. Everything else answers the first question that matches and stops as soon as it reaches a form.</p>
 </div>
 
@@ -424,6 +461,9 @@ var pinned = null;
    or because they came through the two-readings card. Going back means
    something different in each case. */
 var pinnedBy = null;
+/* the word the readings list is showing, kept so a walk started from a
+   reading has somewhere to go back to */
+var readWord = null, readDisp = null;
 
 var stage    = document.getElementById("stage");
 var trail    = document.getElementById("trail");
@@ -1440,9 +1480,6 @@ function renderGate0(r){
 
   if(r.context){ renderContext(r); return; }
 
-  var f = FORM[r.form];
-  var card = document.createElement("div");
-  card.className = "result " + f.cls;
   /* The phrase this card is about, ready to read. A construction matches a
      pattern rather than a word - "what a", "one of the", "half an" - so the
      fragment it matched would make a poor name for the card; the reader's own
@@ -1467,6 +1504,17 @@ function renderGate0(r){
      phrase says, one of them is noise - "Page 42" over "Page 42". */
   var name = r.construction ? "" : asTyped(r.match);
   if(name && normalize(name) === normalize(built)) name = "";
+
+  stage.appendChild(resultCard(r, built, name));
+}
+
+/* The answer card itself, given the phrase to show and the headword to put
+   over it. Gate 0 works both out from the sentence; the readings mode already
+   knows them, because the learner chose them. */
+function resultCard(r, built, name){
+  var f = FORM[r.form];
+  var card = document.createElement("div");
+  card.className = "result " + f.cls;
 
   var h = headword(name) +
           '<p class="form">' + f.word + '</p>' +
@@ -1499,7 +1547,7 @@ function renderGate0(r){
   h += '<p class="built">' + esc(built) + '</p>';
   h += refPill(r.ref, r.rule_name);
   card.innerHTML = h;
-  stage.appendChild(card);
+  return card;
 }
 
 /* Two readings, and no guess between them. Shows the fixed sense, the sense
@@ -1622,7 +1670,9 @@ function updateActions(){
   restartBtn.disabled = !hist.length && !pinned && !String(phrase.value || "").trim();
   backBtn.disabled = !stepsAvailable();
   backBtn.textContent = (!hist.length && pinned)
-    ? (pinnedBy === "context" ? "Back to the two readings" : "Undo word choice")
+    ? (pinnedBy === "context" ? "Back to the two readings"
+      : pinnedBy === "readings" ? "Back to the readings"
+      : "Undo word choice")
     : "Go back a step";
 }
 
@@ -1631,6 +1681,13 @@ backBtn.addEventListener("click", function(){
     var last = hist.pop();
     cur = last.node;
     render();
+    return;
+  }
+  if(pinnedBy === "readings" && readWord){
+    /* the walk was entered from the readings list, so that list is the step
+       before this one - not whatever the sentence would infer */
+    mode("senses");
+    renderReadings(readWord, readDisp);
     return;
   }
   if(pinned){
@@ -1797,19 +1854,230 @@ document.getElementById("clearseen").addEventListener("click", function(){
   buildChips();
 });
 
+
+/* ---------------- every reading of a word ---------------- */
+
+/* The walk answers with one reading and has to guess which one was meant.
+   Here the learner says. Nothing below is new advice: every reading is
+   assembled out of rules already written in rules_data.json, and a word that
+   is on no list still gets the three ordinary ones, so the mode never ends
+   with an empty page. */
+
+var READ_CAP = 6;
+
+/* the words that switch a conditional entry on, said as a cue */
+function cueFor(cond){
+  var list = cond.requires_any || cond.requires_prev || null;
+  if(!list || !list.length) return null;
+  var shown = list.slice(0, 5).map(function(w){ return "<em>" + esc(w) + "</em>"; });
+  return "Used after " + shown.join(", ") +
+         (list.length > 5 ? " and the like" : "") + ".";
+}
+
+function readingsFor(word, disp){
+  var out = [], seenKey = {}, k;
+
+  function add(r){
+    /* the phrase is built on what the learner typed - `the French`, not `the
+       french` - while every lookup below runs on the normalized word */
+    r.title = r.title || buildPhrase(r.form, disp);
+    k = r.form + "|" + (r.ref || "") + "|" + r.title;
+    if(seenKey[k]) return;
+    seenKey[k] = 1;
+    out.push(r);
+  }
+
+  /* 1. the listed noun, and whatever it says about its other sense */
+  var e = Object.prototype.hasOwnProperty.call(D.lookup_table, word)
+        ? D.lookup_table[word] : null;
+  if(e){
+    var cond = e.conditions || null;
+    add({kind:"listed", pick:"answer", form:formOf(e.article),
+         cat:(cond && cond.sense) ? cap(cond.sense) : "Listed noun",
+         why:e.explanation, ref:e.rule_ref, when:cond ? cueFor(cond) : null,
+         examples:[]});
+    if(cond){
+      add({kind:"listed", pick:"walk", form:"context", title:"anything else",
+           cat:"Any other use", why:cond.contrast || "The ordinary rules apply.",
+           ref:cond.contrast_rule_ref || null, when:null,
+           examples:cond.examples || []});
+    }
+    if(e.note){
+      add({kind:"listed", pick:"walk", form:"context", title:"a different sense",
+           cat:"A different sense", why:e.note.text, ref:e.note.rule_ref || null,
+           when:null, examples:e.note.examples || []});
+    }
+  }
+
+  /* 2. fixed expressions the word appears in - `by car`, `at night` */
+  var fixed = [], key;
+  for(key in D.fixed_expressions){
+    if(!Object.prototype.hasOwnProperty.call(D.fixed_expressions, key)) continue;
+    if(/\d/.test(key)) continue;
+    if(key.split(" ").indexOf(word) !== -1) fixed.push(key);
+  }
+  fixed.sort(function(a, b){ return a.length - b.length; });
+  fixed.slice(0, READ_CAP).forEach(function(f){
+    var fx = D.fixed_expressions[f];
+    add({kind:"listed", pick:"answer", form:formOf(fx.article), title:f,
+         cat:"Fixed expression", why:fx.explanation, ref:fx.rule_ref,
+         when:null, examples:[], match:f});
+  });
+
+  /* 3. the productive groups: languages, meals, sports, months, days, ... */
+  function fromGroups(map){
+    var name, g;
+    for(name in map){
+      if(!Object.prototype.hasOwnProperty.call(map, name)) continue;
+      g = map[name];
+      if(!g.words || g.words.indexOf(word) === -1) continue;
+      add({kind:"listed", pick:"answer", form:formOf(g.article),
+           cat:cap(name.replace(/s$/, "")), why:g.explanation, ref:g.rule_ref,
+           when:null, examples:[]});
+    }
+  }
+  fromGroups(D.categories);
+  fromGroups(D.time_words.groups);
+
+  /* 4. names, and nationality adjectives standing for a whole people */
+  if(D.nationality_the.examples.indexOf(word) !== -1){
+    add({kind:"listed", pick:"answer", form:formOf(D.nationality_the.article),
+         cat:"A whole people", why:D.nationality_the.explanation,
+         ref:D.nationality_the.rule_ref, when:null, examples:[]});
+  }
+  if(D.proper_noun_the.named.indexOf(word) !== -1){
+    add({kind:"listed", pick:"answer", form:formOf(D.proper_noun_the.article),
+         cat:"A name that takes the", why:D.proper_noun_the.explanation,
+         ref:D.proper_noun_the.rule_ref, when:null, examples:[]});
+  }
+
+  /* 5. the ordinary readings, always. These are doorways rather than answers:
+        which one is right depends on the sentence, so they hand the word to
+        the questions instead of asserting a form. */
+  /* except where the learner typed the article themselves - `the Hague` takes
+     no other shape, so three cards saying `the Hague` would only be noise */
+  if(/^(?:the|an?)\s/i.test(disp) && out.length) return out;
+
+  var a = T.out5a, z = T.outGenZeroPl;
+  add({kind:"ordinary", pick:"walk", form:"an", cat:a.cat, why:a.why,
+       ref:a.rule_ref, when:null, examples:[]});
+  add({kind:"ordinary", pick:"walk", form:"the", cat:T.q4.gate,
+       /* the question itself, not its note - the note is advice about working
+          down the list on the question page, which is not what this card is */
+       why:T.q4.q, ref:null, when:null, examples:[]});
+  add({kind:"ordinary", pick:"walk", form:"zero", cat:z.cat, why:z.why,
+       ref:z.rule_ref, when:null, examples:[]});
+
+  return out;
+}
+
+function renderReadings(word, disp){
+  sstage.innerHTML = "";
+  var list = readingsFor(word, disp), lastKind = null;
+  readWord = word; readDisp = disp;
+
+  var lead = document.createElement("p");
+  lead.className = "readhead";
+  lead.textContent = "Readings of \u201c" + disp + "\u201d \u2014 pick the one you meant";
+  sstage.appendChild(lead);
+
+  list.forEach(function(r){
+    if(r.kind === "ordinary" && lastKind !== "ordinary"){
+      var h2 = document.createElement("p");
+      h2.className = "readhead";
+      h2.textContent = "Or, as an ordinary noun \u2014 these open the questions";
+      sstage.appendChild(h2);
+    }
+    lastKind = r.kind;
+
+    var f = FORM[r.form];
+    var b = document.createElement("button");
+    b.type = "button";
+    b.className = "reading " + f.cls;
+    var h = '<div class="top"><p class="built">' + esc(r.title) + '</p>' +
+            '<span class="pill ' + f.cls.replace("r-", "p-") + '">' + f.word + '</span></div>' +
+            '<p class="cat">' + esc(r.cat) + '</p>';
+    if(r.when) h += '<p class="when">' + r.when + '</p>';
+    h += '<p class="why">' + r.why + '</p>';
+    if(r.examples && r.examples.length){
+      h += '<span class="ex">' + r.examples.map(esc).join(" \u00b7 ") + '</span>';
+    }
+    h += refPill(r.ref, null);
+    b.innerHTML = h;
+    b.addEventListener("click", function(){ chooseReading(word, disp, r); });
+    sstage.appendChild(b);
+  });
+}
+
+function chooseReading(word, disp, r){
+  if(r.pick === "walk"){
+    /* the same handoff the "it depends" card makes: the questions run on the
+       word the learner named, not on whatever a sentence would infer */
+    mode("walk");
+    phrase.value = disp;
+    hist = []; cur = entry; pendingNote = null;
+    pinned = word; pinnedBy = "readings";
+    render();
+    stage.scrollIntoView({block:"nearest", behavior:"smooth"});
+    return;
+  }
+
+  sstage.innerHTML = "";
+  var built = r.match ? r.match : buildPhrase(r.form, disp);
+  /* the headword would only repeat the phrase when the two are the same */
+  var name = (normalize(built) === word) ? "" : disp;
+  sstage.appendChild(resultCard({form:r.form, why:r.why, cat:r.cat, ref:r.ref},
+                                built, name));
+
+  var again = document.createElement("button");
+  again.className = "btn ghost";
+  again.style.marginTop = "14px";
+  again.type = "button";
+  again.textContent = "Choose again";
+  again.addEventListener("click", function(){ renderReadings(word, disp); });
+  sstage.appendChild(again);
+}
+
+function readingsEmpty(msg){
+  sstage.innerHTML = '<div class="note-card">' + msg + "</div>";
+}
+
+function runReadings(){
+  var tokens = tokenize(sword.value);
+  if(!tokens.length){
+    readingsEmpty("Type a word first \u2014 something like <em>radio</em>, " +
+                  "<em>cinema</em> or <em>night</em>.");
+    return;
+  }
+  renderReadings(tokens.join(" "), String(sword.value).replace(/^\s+|\s+$/g, ""));
+}
+
+var sword  = document.getElementById("sword");
+var sstage = document.getElementById("sstage");
+document.getElementById("scheck").addEventListener("click", runReadings);
+sword.addEventListener("keydown", function(e){
+  if(e.key === "Enter"){ e.preventDefault(); runReadings(); }
+});
+
 /* ---------------- mode toggle ---------------- */
 
-var walkEl = document.getElementById("walk");
-var bWalk  = document.getElementById("m-walk");
-var bMap   = document.getElementById("m-map");
-function mode(isWalk){
-  walkEl.classList.toggle("hidden", !isWalk);
-  mapEl.classList.toggle("hidden", isWalk);
-  bWalk.setAttribute("aria-pressed", String(isWalk));
-  bMap.setAttribute("aria-pressed", String(!isWalk));
+/* Three panels now, so the toggle is a name rather than a boolean. */
+var PANELS = {
+  walk:   ["walk", "m-walk"],
+  map:    ["map", "m-map"],
+  senses: ["senses", "m-senses"]
+};
+function mode(name){
+  var k;
+  for(k in PANELS){
+    if(!Object.prototype.hasOwnProperty.call(PANELS, k)) continue;
+    document.getElementById(PANELS[k][0]).classList.toggle("hidden", k !== name);
+    document.getElementById(PANELS[k][1]).setAttribute("aria-pressed", String(k === name));
+  }
 }
-bWalk.addEventListener("click", function(){ mode(true); });
-bMap.addEventListener("click", function(){ mode(false); });
+Object.keys(PANELS).forEach(function(k){
+  document.getElementById(PANELS[k][1]).addEventListener("click", function(){ mode(k); });
+});
 
 /* ---------------- boot ---------------- */
 
@@ -1833,6 +2101,8 @@ try{
   buildChips();
   buildMap();
   renderEmpty();
+  readingsEmpty("Type a word to see every reading the rules hold for it \u2014 " +
+                "try <em>radio</em>, <em>cinema</em> or <em>night</em>.");
 }catch(err){
   stage.innerHTML = '<div class="err"><b>This page is missing its rules.</b><br><br>' +
     'It cannot answer anything without them, so it needs to be downloaded ' +

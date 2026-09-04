@@ -27,6 +27,13 @@
       it, now that it has eight cues instead of seven.
 
 ## done
+- [x] Add a third view, "Look a word up": type a word and see every reading the
+      rules hold for it -- the listed sense with the words that switch it on,
+      the contrast sense, any fixed expressions it appears in, its category or
+      time group -- plus the three ordinary readings, and pick the one you
+      meant. Listed senses answer straight away; the ordinary ones open the
+      questions pinned to the word, and the back button returns to the list.
+      Browser only, assembled from rules_data.json as it already stands.
 - [x] Split Q4's 4f into two rules: 4f is Part 2.2 (the situation we're both
       in), 4g is Part 4.1/4.2 (the everyday place as an idea), role nouns move
       to 4h. The one option cited 2.2, showed 4.1/4.2 examples and explained
