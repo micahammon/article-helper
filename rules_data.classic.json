@@ -343,7 +343,7 @@
         "result_the_specific": {
             "article": "the",
             "explanation": "Use 'the' when it's clear which specific thing(s) you mean. This can be because it's unique (the sun), previously mentioned, or identified by other words in the sentence (the girl I met).",
-            "rule_ref": "Section 2"
+            "rule_ref": "2.1.2"
         },
         "result_a_an_specific": {
             "article": "a / an",
@@ -412,7 +412,6 @@
         "7.4.3": "Work, used as a noun",
         "7.5": "Illnesses",
         "9.2.1": "Place names without an article",
-        "9.2.2": "Place names that take the",
-        "Section 2": "Known and unknown"
+        "9.2.2": "Place names that take the"
     }
 }

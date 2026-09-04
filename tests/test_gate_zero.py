@@ -889,6 +889,19 @@ class LearnerFacingLanguageTests(unittest.TestCase):
                 match = self.LEAK.search(value.replace("the book", "a volume"))
                 self.assertIsNone(match, f"{name} {path} leaks {value[:90]!r}")
 
+    def test_every_reference_names_a_real_section(self):
+        """Both files, not just the live one: a ref nobody can look up is a
+        ref nobody can check. The classic tree carried "Section 2" for years
+        precisely because nothing validated its side."""
+        sections = DATA["source_sections"]
+        for name, data in self._data_files():
+            for path, value in self._strings(data):
+                if path.startswith(self.SKIP_PREFIXES):
+                    continue
+                if not path.endswith(self.REF_FIELDS):
+                    continue
+                self.assertIn(value, sections, f"{name} {path} cites no real section")
+
     def test_outcome_name_overrides_are_real_and_needed(self):
         """A leaf may name itself when its section is narrower than its reach.
 
