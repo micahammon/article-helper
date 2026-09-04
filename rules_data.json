@@ -3077,6 +3077,7 @@
       "out": "the",
       "cat": "A role that belongs to something",
       "rule_ref": "2.3",
+      "rule_name": "Roles that belong to something",
       "why": "Role nouns are inherently <em>of</em> something: government of a country, capital of a country, manager of a team. <em>The</em> is allowed because the noun leaves a gap that the situation fills, and the gap can stay unspoken. <em>What should the government do?</em> works between an American and a Spaniard discussing neither country, because it means <em>the government of whatever situation we're discussing</em>. There is only one of it in the conversation, not only one of it in the world."
     },
     "q4g": {

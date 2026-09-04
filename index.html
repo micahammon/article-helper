@@ -414,6 +414,10 @@ var D = null, T = null, FORM = null;
 var cur = null, hist = [], entry = "q2";
 var pendingNote = null;
 var pinned = null;
+/* Why the answer is pinned to one word: because the reader tapped that word,
+   or because they came through the two-readings card. Going back means
+   something different in each case. */
+var pinnedBy = null;
 
 var stage    = document.getElementById("stage");
 var trail    = document.getElementById("trail");
@@ -608,6 +612,7 @@ function renderFocusBar(text, hitResult){
       b.title = "Decide about \u201c" + bare + "\u201d instead";
       (function(word){
         b.addEventListener("click", function(){
+          pinnedBy = "word";
           analyze(phrase.value, null, word);
           stage.scrollIntoView({block:"nearest", behavior:"smooth"});
         });
@@ -1185,6 +1190,7 @@ function analyze(text, scriptedPath, focus){
   pendingNote = null;
   cur = entry;
   pinned = focus || null;
+  if(!pinned) pinnedBy = null;
 
   var hitResult = focus ? gate0Pinned(text, focus) : gate0(text);
   renderFocusBar(text, hitResult);
@@ -1489,6 +1495,7 @@ function renderContext(r){
     /* the questions are about the word Gate 0 flagged, not whatever the
        sentence would otherwise infer - keep the answer on that word */
     pinned = r.match;
+    pinnedBy = "context";
     render();
     stage.scrollIntoView({block:"nearest", behavior:"smooth"});
   });
@@ -1570,7 +1577,7 @@ function updateActions(){
   restartBtn.disabled = !hist.length && !pinned && !String(phrase.value || "").trim();
   backBtn.disabled = !stepsAvailable();
   backBtn.textContent = (!hist.length && pinned)
-    ? "Undo word choice"
+    ? (pinnedBy === "context" ? "Back to the two readings" : "Undo word choice")
     : "Go back a step";
 }
 
@@ -1652,7 +1659,19 @@ function pillFor(nodeId){
 
 function renderMapRows(n){
   var h = "";
-  n.opts.forEach(function(o){
+  /* The walk shows the way out first and heads the rest with what they all
+     answer. The map read the raw order, so the same question came out in two
+     different shapes depending on which view you were in. */
+  var opts = n.opts, heading = -1;
+  if(n.style === "checklist"){
+    opts = n.opts.filter(function(o){ return o.cls === "none"; });
+    heading = opts.length;
+    opts = opts.concat(n.opts.filter(function(o){ return o.cls !== "none"; }));
+  }
+  opts.forEach(function(o, oi){
+    if(oi === heading && n.group){
+      h += '<p class="optgroup">' + n.group + "</p>";
+    }
     var target = T[o.go], rows;
     /* expand a sub-question inline so the map stays flat and readable */
     if(target && target.opts && (o.go === "q2a" || o.go === "q3a" || o.go === "q4g")){
