@@ -847,9 +847,14 @@ function gate0(text){
     }
   }
 
-  /* 4.5 productive categories: languages, meals, sports */
+  /* 4.5 productive categories: languages, meals, sports.
+
+     The word has to be what the phrase is about. `french fries`, `a german
+     car` and `the english teacher` all carry a language word in front of the
+     noun they modify, and answering "languages take no article" there is the
+     wrong reason and, with a determiner in front, the wrong article. */
   var catHit = checkCategories(norm, tokens);
-  if(catHit) return catHit;
+  if(catHit && (tokens.length < 2 || catHit.match === inferFocus(text))) return catHit;
 
   /* 5. names in the the-taking class */
   if(isTheTakingName(text, norm)){

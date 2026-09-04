@@ -755,8 +755,15 @@ class ArticleLogic:
         # 4.5 Productive categories: languages, meals, sports. These are rules
         #     about a category, not a closed vocabulary, so `rugby`, `Arabic`
         #     and `brunch` are covered without being listed individually.
+        #
+        #     The word has to be what the phrase is about. `french fries`, `a
+        #     german car` and `the english teacher` all carry a language word
+        #     in front of the noun it modifies, and answering "languages take
+        #     no article" there is the wrong reason and, with a determiner in
+        #     front, the wrong article.
         category_hit = self.check_categories(normalized, tokens)
-        if category_hit:
+        if category_hit and (len(tokens) < 2
+                             or category_hit.get("focus_noun") == _infer_focus_noun(tokens)):
             return category_hit
 
         # 5. Names in the the-taking class.

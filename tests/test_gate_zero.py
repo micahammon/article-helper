@@ -356,6 +356,30 @@ class ProductiveCategoryTests(unittest.TestCase):
         self.assertEqual(self.logic.analyze_input("She speaks French")["source"],
                          "category:languages")
 
+    def test_a_category_word_modifying_a_noun_is_not_the_subject(self):
+        """`a german car` is about the car, not about German.
+
+        The matcher took a language, meal or sport word from anywhere in the
+        input, so a nationality in front of a noun answered "languages take no
+        article" -- the wrong reason, and with a determiner in front the wrong
+        article as well.
+        """
+        for text in ["a german car", "the english teacher", "a french lesson",
+                     "french fries", "I ate a spanish omelette", "I had chinese food"]:
+            analysis = self.logic.analyze_input(text)
+            self.assertNotEqual(analysis.get("source", ""), "category:languages", text)
+            self.assertEqual(analysis["mode"], "question",
+                             f"{text!r} was answered by Gate 0")
+
+    def test_a_category_word_on_its_own_still_answers(self):
+        for text, source in [("rugby", "category:sports"),
+                             ("brunch", "category:meals"),
+                             ("She speaks Japanese", "category:languages"),
+                             ("French is difficult", "category:languages"),
+                             ("Do you speak French", "category:languages")]:
+            analysis = self.logic.analyze_input(text)
+            self.assertEqual(analysis.get("source"), source, text)
+
     def test_categories_carry_the_unusual_use_contrast(self):
         analysis = self.logic.analyze_input("rugby")
         self.assertIn("unusual", analysis)
