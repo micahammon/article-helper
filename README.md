@@ -188,13 +188,11 @@ marks` wipes the ticks.
 
 Open `index.html`. That is the whole procedure — it carries its rules inside it,
 so it works from a `file://` document, from a USB stick, or out of an email
-attachment, with no server and no network.
+attachment, with no server and no network. `classic.html` works the same way.
 
-A server is only needed for `classic.html`, which still fetches its own data:
-
-1. Clone the repository.
-2. From the project directory: `python -m http.server`
-3. Open `http://localhost:8000/classic.html`.
+No server is needed for anything, but if you want one — to test the deployed
+paths, say — `python -m http.server` from the project directory still serves
+both at `http://localhost:8000/`.
 
 ### Project Layout
 
@@ -202,8 +200,8 @@ A server is only needed for `classic.html`, which still fetches its own data:
 |---|---|
 | `index.html` | The tool. Gate 0 + the walkable tree + the map view, rules included. |
 | `rules_data.json` | All rules and all prose. Shared with the desktop app. |
-| `tools/inline_rules.py` | Copies `rules_data.json` into `index.html`. |
-| `classic.html` | The previous web version, kept for reference. |
+| `tools/inline_rules.py` | Copies each rules file into the page that reads it. |
+| `classic.html` | The previous web version, kept for reference. Rules included. |
 | `rules_data.classic.json` | Frozen data for `classic.html`. |
 | `app.py`, `logic.py`, `rules.py` | Tkinter desktop app, reading the same JSON. |
 | `tests/` | Suite guarding the tree and Gate 0. |
@@ -212,19 +210,19 @@ The desktop app and the browser read the same `rules_data.json`, so they stay in
 sync. `rules.py` adapts the browser-shaped nodes into the plain-text shape the
 Tkinter GUI expects.
 
-**`rules_data.json` is where rules are written; `index.html` carries a copy.**
-The page used to fetch the file, which a browser refuses to do for a `file://`
-document — so a learner who was sent the `.html` and opened it got an
-instruction to install a web server instead of an answer. After editing the
-data, run:
+**The JSON files are where rules are written; the pages carry a copy.**
+Both pages used to fetch their data, which a browser refuses to do for a
+`file://` document — so a learner who was sent the `.html` and opened it got an
+instruction to install a web server instead of an answer. After editing either
+`rules_data.json` or `rules_data.classic.json`, run:
 
 ```
 python tools/inline_rules.py
 ```
 
-`tests/test_gate_zero.py` compares the copy in the page against the file and
-fails if they differ, so a forgotten run cannot ship a page that answers from
-stale rules.
+`tests/test_gate_zero.py` compares each page's copy against its file and fails
+if they differ, so a forgotten run cannot ship a page that answers from stale
+rules.
 
 ### Changing the Rules
 

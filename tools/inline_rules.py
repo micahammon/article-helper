@@ -1,16 +1,17 @@
-"""Copy rules_data.json into index.html, so the page works from disk.
+"""Copy each rules file into the page that reads it, so the pages work from disk.
 
-`index.html` used to fetch its rules, which a browser refuses to do for a
+Both pages used to fetch their rules, which a browser refuses to do for a
 `file://` document -- so a learner who was sent the .html and opened it saw an
-instruction to run a Python web server. The rules now travel inside the page.
+instruction to run a Python web server. The rules now travel inside the pages.
 
-`rules_data.json` stays the source of truth: the Python side reads it, the
-tests read it, and edits are made there. Run this after changing it:
+The JSON files stay the source of truth: the Python side reads
+`rules_data.json`, the tests read both, and edits are made there. Run this
+after changing either:
 
     python tools/inline_rules.py
 
-`tests/test_gate_zero.py` fails if the copy in the page has drifted, so a
-forgotten run cannot ship.
+`tests/test_gate_zero.py` fails if a copy in a page has drifted, so a forgotten
+run cannot ship.
 """
 import io
 import json
@@ -19,13 +20,15 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-DATA = ROOT / "rules_data.json"
-PAGE = ROOT / "index.html"
+
+PAIRS = [
+    ("rules_data.json", "index.html"),
+    ("rules_data.classic.json", "classic.html"),
+]
 
 OPEN = '<script id="rules-data" type="application/json">'
 CLOSE = "</script>"
-BLOCK = re.compile(
-    re.escape(OPEN) + r".*?" + re.escape(CLOSE), re.DOTALL)
+BLOCK = re.compile(re.escape(OPEN) + r".*?" + re.escape(CLOSE), re.DOTALL)
 
 
 def payload(data):
@@ -38,23 +41,28 @@ def payload(data):
                       separators=(",", ":")).replace("<", "\\u003c")
 
 
-def main():
-    data = json.loads(DATA.read_text(encoding="utf-8"))
-    page = PAGE.read_text(encoding="utf-8")
+def inline(data_name, page_name):
+    data = json.loads((ROOT / data_name).read_text(encoding="utf-8"))
+    page_path = ROOT / page_name
+    page = page_path.read_text(encoding="utf-8")
 
     if not BLOCK.search(page):
-        print("no rules-data block in index.html", file=sys.stderr)
-        return 1
+        print("no rules-data block in %s" % page_name, file=sys.stderr)
+        return False
 
-    updated = BLOCK.sub(
-        lambda _: OPEN + "\n" + payload(data) + "\n" + CLOSE, page, count=1)
+    body = payload(data)
+    updated = BLOCK.sub(lambda _: OPEN + "\n" + body + "\n" + CLOSE, page, count=1)
     if updated == page:
-        print("index.html already up to date")
-        return 0
+        print("%-12s already up to date" % page_name)
+        return True
 
-    io.open(PAGE, "w", encoding="utf-8", newline="").write(updated)
-    print("inlined %d bytes of rules into index.html" % len(payload(data)))
-    return 0
+    io.open(page_path, "w", encoding="utf-8", newline="").write(updated)
+    print("%-12s <- %s (%d bytes)" % (page_name, data_name, len(body)))
+    return True
+
+
+def main():
+    return 0 if all(inline(*pair) for pair in PAIRS) else 1
 
 
 if __name__ == "__main__":
