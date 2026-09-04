@@ -170,9 +170,12 @@ your answer — `Whole class, or instances? — Particular instances` —
 so the route to an answer stays readable after the fact. `Go back a step` walks
 it backwards.
 
-Or click any of the chips at the bottom to watch a worked example route itself.
-Some are answered instantly by Gate 0, others walk the tree, which is the
-quickest way to see the two halves working.
+Or click any of the chips at the bottom to set a worked example going. Most
+finish on their own — some answered instantly by Gate 0, some walking the tree
+to a form — which is the quickest way to see the two halves working. `bus
+station` is the one that stops and asks: a noun-noun pair defers to its second
+noun, so the chip hands the reader Question 1 about `station`. The heading says
+*set going* rather than *route itself* for that reason.
 
 There are far more examples than fit on screen, so the row is a random draw of
 twenty-four out of the full set, reshuffled on every load and by the `Shuffle`
