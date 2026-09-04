@@ -577,8 +577,14 @@ function renderFocusBar(text, hitResult){
     if(/^\s+$/.test(parts[i])){ line.appendChild(document.createTextNode(parts[i])); continue; }
     bare = normalizeWord(parts[i]);
     isTarget = !!on[i];
-    isCand = false;
-    for(var c = 0; c < cands.length; c++){ if(cands[c].word === bare) isCand = true; }
+    /* A second copy of the word already being decided about is not another
+       choice - tapping "book" in "the book I lent you" when "book" is already
+       the subject changes nothing - so it is text, not a button. */
+    isCand = targetWords.indexOf(bare) === -1;
+    if(isCand){
+      isCand = false;
+      for(var c = 0; c < cands.length; c++){ if(cands[c].word === bare) isCand = true; }
+    }
 
     /* A match of more than one word is one thing, not several: "half an
        hour" and "Page 42" get a single highlight, not a box per word. */
