@@ -515,9 +515,8 @@
         "sense": "the abstract idea",
         "contrast": "A particular instance, or a modified use, takes an article.",
         "examples": [
-          "the history of art",
           "a history of Rome",
-          "the music of Bach"
+          "the history of art"
         ],
         "contrast_rule_ref": "3.2.1"
       }
@@ -533,9 +532,8 @@
         "sense": "the abstract idea",
         "contrast": "A particular instance, or a modified use, takes an article.",
         "examples": [
-          "the history of art",
-          "a history of Rome",
-          "the music of Bach"
+          "the art of conversation",
+          "a work of art"
         ],
         "contrast_rule_ref": "3.2.1"
       }
@@ -551,9 +549,8 @@
         "sense": "the abstract idea",
         "contrast": "A particular instance, or a modified use, takes an article.",
         "examples": [
-          "the history of art",
-          "a history of Rome",
-          "the music of Bach"
+          "the music of Bach",
+          "a music teacher"
         ],
         "contrast_rule_ref": "3.2.1"
       }
