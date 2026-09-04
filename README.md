@@ -129,7 +129,10 @@ USA*, *the Monday we met*.
 
 Every outcome — from Gate 0 or from the tree — names a form and names the
 rule it comes from. Learners never see a rule *number*: `rule_ref` stays in the
-data for us, and `rule_names` holds the wording that reaches the screen. Nothing
+data for us, and `rule_names` holds the wording that reaches the screen. Where a
+tree outcome is reached by more than its cited section covers — the
+ordinary-name leaf answers for people and companies, not only places — the node
+carries its own `rule_name`, which wins over the one the ref implies. Nothing
 a student reads cites a section, a gate, or the book — they have none of those
 to hand.
 

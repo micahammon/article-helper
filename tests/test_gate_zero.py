@@ -889,6 +889,26 @@ class LearnerFacingLanguageTests(unittest.TestCase):
                 match = self.LEAK.search(value.replace("the book", "a volume"))
                 self.assertIsNone(match, f"{name} {path} leaks {value[:90]!r}")
 
+    def test_outcome_name_overrides_are_real_and_needed(self):
+        """A leaf may name itself when its section is narrower than its reach.
+
+        The override exists because the ref alone mislabels the outcome, so it
+        has to differ from the name the ref would give - an override equal to
+        it is dead weight, and one on a leaf with no ref is unreachable.
+        """
+        names = DATA["rule_names"]
+        overrides = {node_id: node["rule_name"]
+                     for node_id, node in RAW_TREE.items() if "rule_name" in node}
+        self.assertTrue(overrides, "no overrides left to check")
+        for node_id, override in overrides.items():
+            node = RAW_TREE[node_id]
+            self.assertTrue(node.get("out"), f"{node_id} names a rule but is not an outcome")
+            ref = node.get("rule_ref")
+            self.assertTrue(ref, f"{node_id} has a rule_name but no rule_ref")
+            self.assertIn(ref, names, node_id)
+            self.assertNotEqual(override, names[ref],
+                                f"{node_id} override repeats the name its ref already gives")
+
     def test_option_labels_and_categories_carry_no_tree_codes(self):
         code = re.compile(r"^\d[a-z]? \u00b7 ")
         for node_id, node in RAW_TREE.items():

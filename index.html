@@ -1276,7 +1276,7 @@ function renderResult(n){
   if(word && n.out !== "fixed"){
     h += '<p class="built">' + esc(buildPhrase(n.out, word)) + '</p>';
   }
-  h += refPill(n.rule_ref);
+  h += refPill(n.rule_ref, n.rule_name);
   card.innerHTML = h;
   stage.appendChild(card);
 }
@@ -1502,12 +1502,16 @@ function buildMap(){
   });
 }
 
-/* A rule reaches the reader by name. The number it carries internally is
-   for us, not for a student who has no numbered rules to look up. */
 function cap(s){ return s.charAt(0).toUpperCase() + s.slice(1); }
 
-function refPill(ref){
-  var name = ref && D.rule_names ? D.rule_names[ref] : null;
+/* A rule reaches the reader by name. The number it carries internally is for
+   us, not for a student who has no numbered rules to look up.
+
+   Some outcomes are reached by more than their cited section covers - the
+   ordinary-name leaf answers for people and companies, not only places - so
+   they carry a name of their own, and it wins over the one the ref implies. */
+function refPill(ref, override){
+  var name = override || (ref && D.rule_names ? D.rule_names[ref] : null);
   return name ? '<span class="ref">' + esc(name) + "</span>" : "";
 }
 

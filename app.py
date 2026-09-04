@@ -134,7 +134,8 @@ class ArticleApp(ctk.CTk):
 
         explanation_text = result_data.get("explanation", "")
         example_line = self._build_example_sentence(article_value, focus_noun)
-        rule_name = RULE_NAMES.get(result_data.get("rule_ref") or "")
+        rule_name = (result_data.get("rule_name")
+                     or RULE_NAMES.get(result_data.get("rule_ref") or ""))
         reference_text = f"\n\n{rule_name}" if rule_name else ""
         focus_text = f"Focus noun: {focus_noun}\n\n" if focus_noun else ""
         example_text = f"\n\n{example_line}" if example_line else ""

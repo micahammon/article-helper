@@ -2861,12 +2861,14 @@
       "out": "the",
       "cat": "A name that takes the",
       "rule_ref": "9.2.2",
+      "rule_name": "Names that take the",
       "why": "Plural names, <em>of</em>-constructions, rivers, seas, oceans, deserts, mountain ranges, regions, hotels, museums, theaters and newspapers take <em>the</em>. This is a closed list — learn it as one."
     },
     "outPropZero": {
       "out": "zero",
       "cat": "An ordinary name",
       "rule_ref": "9.2.1",
+      "rule_name": "Names that take no article",
       "why": "People, cities, single countries, single mountains, streets, continents, languages and companies take no article. Also titles used with a name: <em>President Sánchez</em>, <em>Doctor Ruiz</em> — but <em>the president</em> on its own is a role noun and routes to 4g."
     },
     "q3": {
@@ -3007,6 +3009,7 @@
       "out": "the",
       "cat": "A superlative, ordinal or uniqueness word",
       "rule_ref": "2.4.5",
+      "rule_name": "Superlatives, ordinals and uniqueness words",
       "why": "<em>Best, first, only, same, next, last, main</em> all entail that there's exactly one, so <em>the</em> follows automatically."
     },
     "out4c": {
@@ -3109,6 +3112,7 @@
       "out": "the",
       "cat": "An everyday place we all know",
       "rule_ref": "4.1",
+      "rule_name": "The with everyday places",
       "why": "Not a particular one — the kind of place itself. <em>I like going to the cinema</em> is about cinema-going, not about a building. This is <em>the</em> used for a whole category as a general idea — things everybody knows. It covers entertainment and recreation, and shops and other businesses.<br><br>This does not contradict the question about whole classes. There are two ways to generalize: a plural or uncountable noun with no article (<em>dogs</em>, <em>life</em>), or <em>the</em> with a singular noun for a whole category (<em>the cinema</em>, <em>the gym</em>).<br><br><b>An intuition, not a rule:</b> these read like leftovers from when there really was one in town — one hospital, one post office, one mall — so <em>the</em> was literal, and it stuck. The same instinct still works today: <em>the market</em> means the market in our town.<br><br>Careful: <em>café</em> and <em>restaurant</em> are not used like this. <em>Let's go to the restaurant</em> can only mean a particular one."
     }
   },
