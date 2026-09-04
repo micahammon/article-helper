@@ -1429,7 +1429,9 @@ function renderGate0(r){
     var typed = displayWord(phrase.value);
     var bare = String(r.match).replace(/^(?:the|an?)\s+/i, "");
     var same = normalize(typed) === r.match || normalize(typed) === bare;
-    built = buildPhrase(r.form, same ? typed : r.match);
+    /* the match is normalized and lower case; asTyped finds it back in the
+       input, so a name keeps its capital - `in June` built `june` */
+    built = buildPhrase(r.form, same ? typed : asTyped(r.match));
   }
 
   /* The headword names what was matched. When that is already what the built
