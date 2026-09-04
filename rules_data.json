@@ -702,11 +702,11 @@
           "into",
           "off"
         ],
-        "sense": "the state or activity, not the object",
-        "contrast": "The physical object, or a particular job, follows the ordinary rules.",
+        "sense": "the state of sleeping, not the object",
+        "contrast": "The piece of furniture follows the ordinary rules.",
         "examples": [
           "I bought a bed.",
-          "The work I did last week."
+          "The bed in the spare room is broken."
         ],
         "contrast_rule_ref": "2.1.2"
       }
@@ -729,11 +729,11 @@
           "into",
           "off"
         ],
-        "sense": "the state or activity, not the object",
-        "contrast": "The physical object, or a particular job, follows the ordinary rules.",
+        "sense": "the place you live, not a particular building",
+        "contrast": "A particular house or apartment follows the ordinary rules.",
         "examples": [
-          "I bought a bed.",
-          "The work I did last week."
+          "They bought a home near the coast.",
+          "The home we grew up in has been sold."
         ],
         "contrast_rule_ref": "2.1.2"
       }
@@ -756,11 +756,11 @@
           "into",
           "off"
         ],
-        "sense": "the state or activity, not the object",
-        "contrast": "The physical object, or a particular job, follows the ordinary rules.",
+        "sense": "the place you go to, not a particular task",
+        "contrast": "A particular job, task or piece of writing follows the ordinary rules.",
         "examples": [
-          "I bought a bed.",
-          "The work I did last week."
+          "The work I did last week took three days.",
+          "She published a work of fiction."
         ],
         "contrast_rule_ref": "2.1.2"
       }

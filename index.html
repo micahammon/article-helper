@@ -1423,7 +1423,32 @@ function choose(i){
 
 /* ---------------- controls ---------------- */
 
+/* Nothing to decide about yet. The questions are about a word, so asking
+   them before there is one walks the reader through a tree about nothing. */
+function renderEmpty(message){
+  hist = []; cur = entry; pendingNote = null; pinned = null;
+  trailbox.classList.add("hidden");
+  trail.innerHTML = "";
+  focusEl.classList.add("hidden");
+  focusEl.innerHTML = "";
+  stage.innerHTML = "";
+  var card = document.createElement("div");
+  card.className = "note-card";
+  card.innerHTML = message || ("Type a noun or phrase above, then press " +
+    "<b>Check</b>. Try <em>car</em>, <em>the Netherlands</em> or " +
+    "<em>go to school</em> \u2014 or pick one of the examples below.");
+  stage.appendChild(card);
+  updateActions();
+}
+
 function runCheck(){
+  /* tokenize keeps only word characters, so this catches an empty box,
+     stray punctuation, and text in a script the rules cannot read */
+  if(!tokenize(phrase.value).length){
+    renderEmpty("Type a noun or phrase first \u2014 something like <em>car</em>, " +
+                "<em>the Netherlands</em> or <em>go to school</em>.");
+    return;
+  }
   analyze(phrase.value, null);
   stage.scrollIntoView({block:"nearest", behavior:"smooth"});
 }
@@ -1463,9 +1488,9 @@ backBtn.addEventListener("click", function(){
 });
 
 document.getElementById("restart").addEventListener("click", function(){
-  hist = []; cur = entry; pendingNote = null; pinned = null; phrase.value = "";
-  focusEl.classList.add("hidden"); focusEl.innerHTML = "";
-  render(); updateActions(); phrase.focus();
+  phrase.value = "";
+  renderEmpty();
+  phrase.focus();
 });
 
 /* ---------------- map ---------------- */
@@ -1638,7 +1663,7 @@ fetch("rules_data.json", {cache: "no-cache"})
     cur = entry;
     buildChips();
     buildMap();
-    render();
+    renderEmpty();
   })
   .catch(function(err){
     stage.innerHTML = '<div class="err"><b>Could not load rules_data.json.</b><br><br>' +
