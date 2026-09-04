@@ -39,6 +39,13 @@
       by the node they lead to, and out of the <em> phrases the lookup
       explanations already name -- `go to the cinema`, `listen to the radio`.
       An example that only repeats the card's phrase is dropped.
+- [x] Give `the` its eight readings in the readings mode instead of one. Q4's
+      cues are each a leaf with its own name, rule and examples, and collapsing
+      them into a single "identifying which one" card hid the reading a learner
+      most often wants -- `government` is a role that belongs to something, and
+      that reading could not be reached from the mode at all. Picking a cue
+      answers; the one cue that opens a further question opens at that
+      question, not at the top of the tree.
 - [x] Split Q4's 4f into two rules: 4f is Part 2.2 (the situation we're both
       in), 4g is Part 4.1/4.2 (the everyday place as an idea), role nouns move
       to 4h. The one option cited 2.2, showed 4.1/4.2 examples and explained

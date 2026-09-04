@@ -275,6 +275,10 @@ body{
   border-top:1px solid var(--rule);padding-top:14px;
 }
 .readhead:first-child{border-top:0;margin-top:0;padding-top:0}
+/* A cue says why `the` is right, so it repeats neither the phrase nor the
+   form: the heading above the run of them has said both once. */
+.reading.cue{padding:14px 18px}
+.reading.cue .lead-ex{margin-top:0}
 .hidden{display:none}
 .foot{margin-top:40px;font-size:13px;color:var(--muted);border-top:1px solid var(--rule);padding-top:14px}
 @media (max-width:560px){
@@ -1943,7 +1947,9 @@ function readingsFor(word, disp){
     /* the phrase is built on what the learner typed - `the French`, not `the
        french` - while every lookup below runs on the normalized word */
     r.title = r.title || buildPhrase(r.form, disp);
-    k = r.form + "|" + (r.ref || "") + "|" + r.title;
+    /* the label is part of the identity: two of Q4's cues cite 2.3, and
+       keying on the rule alone dropped the second one */
+    k = r.form + "|" + (r.ref || "") + "|" + r.title + "|" + (r.cat || "");
     if(seenKey[k]) return;
     seenKey[k] = 1;
     out.push(r);
@@ -2026,10 +2032,26 @@ function readingsFor(word, disp){
   var a = T.out5a, z = T.outGenZeroPl;
   add({kind:"ordinary", pick:"walk", form:"an", cat:a.cat, why:a.why,
        ref:a.rule_ref, when:null, ex:firstItems(exFor("out5a"), 2)});
-  add({kind:"ordinary", pick:"walk", form:"the", cat:T.q4.gate,
-       /* the question itself, not its note - the note is advice about working
-          down the list on the question page, which is not what this card is */
-       why:T.q4.q, ref:null, when:null, ex:exFor("q4")});
+  /* `the` is not one reading, it is eight. Collapsing Q4's cues into a
+     single card hid the one a learner most often wants - `government` is a
+     role that belongs to something, and that reading was unreachable here.
+     Each cue is a leaf with its own name, rule and examples, so each is a
+     reading in its own right, and picking one is the choice Q4 would have
+     asked for. */
+  T.q4.opts.forEach(function(o){
+    var leaf = T[o.go];
+    /* the last cue is "none of these", which is the a/an card above */
+    if(!leaf || o.go === "q5") return;
+    if(leaf.out){
+      add({kind:"cue", pick:"answer", form:leaf.out, title:buildPhrase(leaf.out, disp),
+           cat:leaf.cat, why:leaf.why, ref:leaf.rule_ref, ruleName:leaf.rule_name || null,
+           when:null, ex:o.ex});
+    }else{
+      /* one cue opens a further question rather than answering */
+      add({kind:"cue", pick:"walk", node:o.go, form:"the", title:buildPhrase("the", disp),
+           cat:o.label, why:leaf.q, ref:null, when:null, ex:o.ex});
+    }
+  });
   add({kind:"ordinary", pick:"walk", form:"zero", cat:z.cat, why:z.why,
        ref:z.rule_ref, when:null,
        ex:[firstItems(exFor("outGenZeroPl"), 1), firstItems(exFor("outGenZeroNc"), 1)]
@@ -2048,6 +2070,13 @@ function exceptTitle(text, title){
   return keep.length ? keep.join(" \u00b7 ") : null;
 }
 
+function readHead(text){
+  var el = document.createElement("p");
+  el.className = "readhead";
+  el.textContent = text;
+  return el;
+}
+
 function renderReadings(word, disp){
   sstage.innerHTML = "";
   var list = readingsFor(word, disp), lastKind = null;
@@ -2058,19 +2087,23 @@ function renderReadings(word, disp){
   lead.textContent = "Readings of \u201c" + disp + "\u201d \u2014 pick the one you meant";
   sstage.appendChild(lead);
 
+  var saidOrdinary = false, saidCue = false;
   list.forEach(function(r){
-    if(r.kind === "ordinary" && lastKind !== "ordinary"){
-      var h2 = document.createElement("p");
-      h2.className = "readhead";
-      h2.textContent = "Or, as an ordinary noun \u2014 these open the questions";
-      sstage.appendChild(h2);
+    if(r.kind !== "listed" && !saidOrdinary){
+      saidOrdinary = true;
+      sstage.appendChild(readHead("Or, as an ordinary noun"));
+    }
+    if(r.kind === "cue" && !saidCue){
+      saidCue = true;
+      sstage.appendChild(readHead("\u201c" + buildPhrase("the", disp) +
+        "\u201d \u2014 pick why your listener can tell which one"));
     }
     lastKind = r.kind;
 
     var f = FORM[r.form];
     var b = document.createElement("button");
     b.type = "button";
-    b.className = "reading " + f.cls;
+    b.className = "reading " + f.cls + (r.kind === "cue" ? " cue" : "");
     /* An example of its own comes first; failing that, a worked phrase that
        uses the word. A card with neither closes up. */
     var ex = exceptTitle(r.ex, r.title) ||
@@ -2079,8 +2112,11 @@ function renderReadings(word, disp){
                 ? exceptTitle(traceExamples(word, r.title).map(esc).join(" \u00b7 "), r.title)
                 : null);
 
-    var h = '<div class="top"><p class="built">' + esc(r.title) + '</p>' +
-            '<span class="pill ' + f.cls.replace("r-", "p-") + '">' + f.word + '</span></div>';
+    var h = "";
+    if(r.kind !== "cue"){
+      h += '<div class="top"><p class="built">' + esc(r.title) + '</p>' +
+           '<span class="pill ' + f.cls.replace("r-", "p-") + '">' + f.word + '</span></div>';
+    }
     if(ex) h += '<p class="lead-ex">' + ex + '</p>';
     h += '<p class="cat">' + esc(r.cat) + '</p>';
     if(r.when) h += '<p class="when">' + r.when + '</p>';
@@ -2094,11 +2130,12 @@ function renderReadings(word, disp){
 
 function chooseReading(word, disp, r){
   if(r.pick === "walk"){
+    /* a cue that opens a further question starts there, not at the top */
     /* the same handoff the "it depends" card makes: the questions run on the
        word the learner named, not on whatever a sentence would infer */
     mode("walk");
     phrase.value = disp;
-    hist = []; cur = entry; pendingNote = null;
+    hist = []; cur = r.node || entry; pendingNote = null;
     pinned = word; pinnedBy = "readings";
     render();
     stage.scrollIntoView({block:"nearest", behavior:"smooth"});
@@ -2109,8 +2146,8 @@ function chooseReading(word, disp, r){
   var built = r.match ? r.match : buildPhrase(r.form, disp);
   /* the headword would only repeat the phrase when the two are the same */
   var name = (normalize(built) === word) ? "" : disp;
-  sstage.appendChild(resultCard({form:r.form, why:r.why, cat:r.cat, ref:r.ref},
-                                built, name));
+  sstage.appendChild(resultCard({form:r.form, why:r.why, cat:r.cat, ref:r.ref,
+                                 rule_name:r.ruleName || null}, built, name));
 
   var again = document.createElement("button");
   again.className = "btn ghost";
