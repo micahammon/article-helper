@@ -330,10 +330,10 @@
           "heard"
         ],
         "sense": "the medium",
-        "contrast": "The physical device follows the ordinary rules.",
+        "contrast": "Other senses of <em>post</em> — a wooden post, a job post — follow the ordinary rules.",
         "examples": [
-          "I bought a radio.",
-          "My phone is broken."
+          "They put a post in the ground.",
+          "She applied for a post at the university."
         ],
         "contrast_rule_ref": "2.1.2"
       }
@@ -397,8 +397,8 @@
         "sense": "the instrument, played",
         "contrast": "As a physical object it follows the ordinary rules instead.",
         "examples": [
-          "I bought a piano.",
-          "The piano needs tuning."
+          "I bought a guitar.",
+          "The guitar needs new strings."
         ],
         "contrast_rule_ref": "2.1.2"
       }
@@ -417,8 +417,8 @@
         "sense": "the instrument, played",
         "contrast": "As a physical object it follows the ordinary rules instead.",
         "examples": [
-          "I bought a piano.",
-          "The piano needs tuning."
+          "She owns a violin.",
+          "The violin was made in 1890."
         ],
         "contrast_rule_ref": "2.1.2"
       }
@@ -464,9 +464,8 @@
         "sense": "the abstract idea",
         "contrast": "A particular instance, or a modified use, takes an article.",
         "examples": [
-          "the history of art",
-          "a history of Rome",
-          "the music of Bach"
+          "the nature of the problem",
+          "a nature documentary"
         ],
         "contrast_rule_ref": "3.2.1"
       }
@@ -482,9 +481,8 @@
         "sense": "the abstract idea",
         "contrast": "A particular instance, or a modified use, takes an article.",
         "examples": [
-          "the history of art",
-          "a history of Rome",
-          "the music of Bach"
+          "the society we live in",
+          "a society for the protection of birds"
         ],
         "contrast_rule_ref": "3.2.1"
       }
@@ -500,9 +498,8 @@
         "sense": "the abstract idea",
         "contrast": "A particular instance, or a modified use, takes an article.",
         "examples": [
-          "the history of art",
-          "a history of Rome",
-          "the music of Bach"
+          "a space for your bag",
+          "the space between the seats"
         ],
         "contrast_rule_ref": "3.2.1"
       }
@@ -583,8 +580,8 @@
         "sense": "the meal itself",
         "contrast": "A particular occasion can take an article.",
         "examples": [
-          "We had a lovely dinner.",
-          "The lunch they served was cold."
+          "We had a big breakfast.",
+          "The breakfast they served was cold."
         ],
         "contrast_rule_ref": "6.1.4"
       }
@@ -877,9 +874,8 @@
         "sense": "the whole group of people",
         "contrast": "Used as an ordinary adjective it takes no article of its own.",
         "examples": [
-          "poor people",
-          "a rich sauce",
-          "an elderly man"
+          "an unemployed engineer",
+          "unemployed workers"
         ],
         "contrast_rule_ref": "3.5"
       }
