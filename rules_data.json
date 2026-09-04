@@ -2407,7 +2407,7 @@
       "article": "no article",
       "rule_ref": "6.1.3",
       "explanation": "Sports and games take no article: <em>I don't like golf</em>, <em>He often plays tennis</em>, <em>John loves playing rugby</em>.",
-      "unusual": "If the word is used in an unusual way it stops being an exception and the ordinary rules apply again: <em>the French that they speak in Montreal</em>, <em>a beautiful Spanish</em>, <em>the football they play in the USA</em>.",
+      "unusual": "If the word is used in an unusual way it stops being an exception and the ordinary rules apply again: <em>the football they play in America</em>, <em>a game of tennis we still talk about</em>, <em>the golf was better than the weather</em>.",
       "words": [
         "football",
         "soccer",
@@ -2878,7 +2878,7 @@
           "go": "q4"
         }
       ],
-      "warn": "<strong>Highest-error node for a Spanish speaker.</strong> <em>La vida es dura</em> becomes <em>Life is hard</em>, not <em>the life</em>. When you're unsure at this question, generic plus zero is the safer guess."
+      "warn": "<strong>The most common mistake here</strong>, and an easy one if your own language uses <em>the</em> for a whole class: <em>La vida es dura</em> becomes <em>Life is hard</em>, not <em>the life</em>. When you're unsure at this question, the whole class with no article is the safer guess."
     },
     "q3a": {
       "short": "how is it behaving?",
@@ -2926,13 +2926,13 @@
       "out": "an",
       "cat": "Any one of the class, standing for all",
       "rule_ref": "3.3",
-      "why": "Picks out any arbitrary member to stand for the class. Slightly more formal than the plural, and it won't work with every predicate — <em>A dog is widespread</em> fails, because being widespread is true of the species and not of any individual."
+      "why": "Picks out any arbitrary member to stand for the class. Slightly more formal than the plural, and it won't work with everything you might say — <em>A dog is widespread</em> fails, because being widespread is true of the species and not of any individual."
     },
     "outGenThe": {
       "out": "the",
       "cat": "The species as a whole",
       "rule_ref": "3.4",
-      "why": "Names the class as a single entity. Formal and mostly scientific: <em>The blue whale is endangered.</em> It does not work with every predicate — <em>The tiger is endangered</em> is fine, <em>The tiger is everywhere</em> is not. Note this reading is only reachable from the question about whole classes."
+      "why": "Names the class as a single entity. Formal and mostly scientific: <em>The blue whale is endangered.</em> It does not work with everything you might say — <em>The tiger is endangered</em> is fine, <em>The tiger is everywhere</em> is not. Note this reading is only reachable from the question about whole classes."
     },
     "q4": {
       "short": "can the listener identify it?",
@@ -2993,7 +2993,7 @@
       "out": "the",
       "cat": "Specified by the sentence itself",
       "rule_ref": "2.4",
-      "why": "A relative clause, a prepositional phrase or an <em>of</em>-phrase narrows the noun to one referent, so the identification happens inside the sentence itself.<br><br>Careful: a modifier alone is not enough. It has to make the referent <em>identifiable</em>. <em>I met a woman who speaks Icelandic</em> keeps <em>a</em>, because the clause describes her rather than picking out which woman is meant."
+      "why": "A relative clause, a prepositional phrase or an <em>of</em>-phrase narrows the noun to one particular thing, so the sentence itself says which one.<br><br>Careful: a modifier alone is not enough. It has to make clear <em>which one</em> is meant. <em>I met a woman who speaks Icelandic</em> keeps <em>a</em>, because the clause describes her rather than picking out which woman is meant."
     },
     "out4b": {
       "out": "the",
@@ -3036,7 +3036,7 @@
       "short": "countable, as used here?",
       "gate": "Countable or not",
       "q": "How am I using the noun here — countable or not?",
-      "note": "Ask about this use, not about the noun. <em>Coffee</em> and <em>a coffee</em>. <em>Experience</em> and <em>an experience</em>. <em>Paper</em> and <em>a paper</em>. A noun-property question sends dual-membership nouns down the wrong branch and keeps them there.",
+      "note": "Ask about this use, not about the noun. <em>Coffee</em> and <em>a coffee</em>. <em>Experience</em> and <em>an experience</em>. <em>Paper</em> and <em>a paper</em>. Asking what kind of noun it is, rather than how it is used here, sends the words that work both ways down the wrong path and keeps them there.",
       "opts": [
         {
           "label": "Singular countable",
@@ -3077,13 +3077,13 @@
       "out": "the",
       "cat": "A role that belongs to something",
       "rule_ref": "2.3",
-      "why": "Role nouns are inherently <em>of</em> something: government of a country, capital of a country, manager of a team. The article is licensed because the noun carries an implicit slot that context fills — and the slot can stay unfilled out loud. <em>What should the government do?</em> works between an American and a Spaniard discussing neither country, because it means <em>the government of whatever situation we're discussing</em>. Unique relative to an argument, not unique in the world."
+      "why": "Role nouns are inherently <em>of</em> something: government of a country, capital of a country, manager of a team. <em>The</em> is allowed because the noun leaves a gap that the situation fills, and the gap can stay unspoken. <em>What should the government do?</em> works between an American and a Spaniard discussing neither country, because it means <em>the government of whatever situation we're discussing</em>. There is only one of it in the conversation, not only one of it in the world."
     },
     "q4g": {
       "short": "a place, or an activity?",
       "gate": "A place, or an activity",
       "q": "Does the noun name a place, or an institutional activity?",
-      "note": "This is where <em>the mall</em> and <em>at school</em> collide. Both are familiar community places, so the wrong branch is easy to take.",
+      "note": "This is where <em>the mall</em> and <em>at school</em> collide. Both are familiar community places, so it is easy to take the wrong one.",
       "opts": [
         {
           "label": "A place",

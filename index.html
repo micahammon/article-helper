@@ -1567,6 +1567,7 @@ function stepsAvailable(){
 }
 
 function updateActions(){
+  restartBtn.disabled = !hist.length && !pinned && !String(phrase.value || "").trim();
   backBtn.disabled = !stepsAvailable();
   backBtn.textContent = (!hist.length && pinned)
     ? "Undo word choice"
@@ -1587,9 +1588,11 @@ backBtn.addEventListener("click", function(){
   }
 });
 
-document.getElementById("restart").addEventListener("click", function(){
+var restartBtn = document.getElementById("restart");
+restartBtn.addEventListener("click", function(){
   phrase.value = "";
   renderEmpty();
+  updateActions();
   phrase.focus();
 });
 

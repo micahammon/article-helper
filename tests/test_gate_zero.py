@@ -976,6 +976,25 @@ class LearnerFacingLanguageTests(unittest.TestCase):
                         any(word in example.lower() for example in examples),
                         f"{name} {key!r} {field} illustrates itself with {examples}")
 
+    def test_sibling_groups_do_not_share_an_unusual_use_note(self):
+        """The panel appears under the word asked about, so a shared one lies.
+
+        `sports` carried a verbatim copy of `languages`, and asking about rugby
+        was answered with two languages and a football.
+        """
+        for name, data in self._data_files():
+            groups = dict(data.get("categories", {}))
+            groups.update(data.get("time_words", {}).get("groups", {}))
+            seen = {}
+            for key, group in groups.items():
+                note = (group or {}).get("unusual")
+                if not note:
+                    continue
+                self.assertNotIn(note, seen,
+                                 f"{name} {key!r} shares its unusual-use note with "
+                                 f"{seen.get(note)!r}")
+                seen[note] = key
+
     def test_option_labels_and_categories_carry_no_tree_codes(self):
         code = re.compile(r"^\d[a-z]? \u00b7 ")
         for node_id, node in RAW_TREE.items():
