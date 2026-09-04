@@ -524,14 +524,15 @@ function renderFocusBar(text, hitResult){
   /* The word Gate 0 matched is not always a candidate: in `I work for
      government` the verb filter drops `work`, but Gate 0 still answers about
      it, so the bar has to stay up or there is no way off that answer. */
-  var targetIsCandidate = false;
+  var alternatives = 0;
   for(var k = 0; k < cands.length; k++){
-    if(targetWords.indexOf(cands[k].word) !== -1) targetIsCandidate = true;
+    if(targetWords.indexOf(cands[k].word) === -1) alternatives++;
   }
-  var choices = cands.length + ((target && !targetIsCandidate) ? 1 : 0);
 
-  /* nothing to disambiguate: one word to choose from, or none */
-  if(!raw || choices < 2){ focusEl.classList.add("hidden"); return; }
+  /* Nothing to disambiguate unless some other word could have been the
+     subject. A multi-word match like "Page 42" covers every candidate there
+     is, so the bar would offer a choice it cannot honour. */
+  if(!raw || !alternatives){ focusEl.classList.add("hidden"); return; }
   focusEl.classList.remove("hidden");
 
   var head = document.createElement("h3");
@@ -543,14 +544,57 @@ function renderFocusBar(text, hitResult){
 
   /* walk the original text so capitalisation and punctuation survive */
   var parts = raw.split(/(\s+)/), i, bare, isTarget, isCand;
+
+  /* Where the match actually sits. Testing each word for membership lights up
+     any repeat of it, so "in the morning" also lit the `the` in "the post
+     office" earlier in the sentence. Find the run instead, and only fall back
+     to membership when the words are not adjacent in the text. */
+  var wordAt = [];
+  for(var w = 0; w < parts.length; w++){
+    if(!/^\s+$/.test(parts[w])) wordAt.push(w);
+  }
+  var on = {}, start, step, matched;
+  for(start = 0; start + targetWords.length <= wordAt.length; start++){
+    matched = true;
+    for(step = 0; step < targetWords.length; step++){
+      if(normalizeWord(parts[wordAt[start + step]]) !== targetWords[step]){ matched = false; break; }
+    }
+    if(matched){
+      for(step = 0; step < targetWords.length; step++) on[wordAt[start + step]] = true;
+      break;
+    }
+  }
+  if(targetWords.length && !matched){
+    for(step = 0; step < wordAt.length; step++){
+      if(targetWords.indexOf(normalizeWord(parts[wordAt[step]])) !== -1) on[wordAt[step]] = true;
+    }
+  }
+
+  function targetAt(n){ return !!on[n]; }
+
+  var spanWords = 0;
   for(i = 0; i < parts.length; i++){
     if(/^\s+$/.test(parts[i])){ line.appendChild(document.createTextNode(parts[i])); continue; }
     bare = normalizeWord(parts[i]);
-    isTarget = targetWords.indexOf(bare) !== -1;
+    isTarget = !!on[i];
     isCand = false;
     for(var c = 0; c < cands.length; c++){ if(cands[c].word === bare) isCand = true; }
 
-    if(isCand && !isTarget){
+    /* A match of more than one word is one thing, not several: "half an
+       hour" and "Page 42" get a single highlight, not a box per word. */
+    if(isTarget){
+      var end = i, words = 1;
+      while(targetAt(end + 2)){ end += 2; words++; }
+      var run = document.createElement("span");
+      run.className = "w on";
+      run.textContent = parts.slice(i, end + 1).join("");
+      line.appendChild(run);
+      if(words > spanWords) spanWords = words;
+      i = end;
+      continue;
+    }
+
+    if(isCand){
       var b = document.createElement("button");
       b.type = "button";
       b.className = "w";
@@ -565,7 +609,7 @@ function renderFocusBar(text, hitResult){
       line.appendChild(b);
     }else{
       var span = document.createElement("span");
-      span.className = "w" + (isTarget ? " on" : "");
+      span.className = "w";
       span.textContent = parts[i];
       line.appendChild(span);
     }
@@ -575,7 +619,8 @@ function renderFocusBar(text, hitResult){
   var hint = document.createElement("p");
   hint.className = "focushint";
   hint.textContent = targetWords.length
-    ? "Answering about the highlighted word. The others are underlined \u2014 tap one to switch."
+    ? ("Answering about the highlighted " + (spanWords > 1 ? "phrase" : "word") +
+       ". The others are underlined \u2014 tap one to switch.")
     : "More than one noun here. Tap the one you are deciding about.";
   focusEl.appendChild(hint);
 }
