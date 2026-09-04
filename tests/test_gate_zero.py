@@ -11,8 +11,8 @@ import re
 import unittest
 from pathlib import Path
 
-from logic import (ArticleLogic, _VERB_HINTS, choose_a_or_an, focus_candidates,
-                   is_known_noun)
+from logic import (ArticleLogic, _VERB_HINTS, _infer_focus_noun, _tokenize_words,
+                   choose_a_or_an, focus_candidates, is_known_noun)
 from rules import DECISION_TREE, ENTRY_NODE
 
 DATA = json.loads((Path(__file__).resolve().parents[1] / "rules_data.json").read_text(encoding="utf-8"))
@@ -755,6 +755,40 @@ class FocusTests(unittest.TestCase):
     def test_an_ordinary_verb_is_still_not_a_candidate(self):
         words = [c["word"] for c in focus_candidates("I bought a piano last week.")]
         self.assertNotIn("bought", words)
+
+    def test_the_head_of_the_noun_phrase_is_the_focus_not_its_first_word(self):
+        """The word after a determiner is often a modifier, not the noun.
+
+        `the tallest mountain` was answered about `tallest`, and `a very long
+        book` about `very`, which is not even a candidate.
+        """
+        for text, expected in [
+            ("the tallest mountain", "mountain"),
+            ("a beautiful day", "day"),
+            ("a very long book", "book"),
+            ("the second prize", "prize"),
+            ("the best student in the class", "student"),
+            ("I saw a beautiful old house", "house"),
+            # a determiner run that stops at a preposition keeps its own head
+            ("the man in the corner", "man"),
+            ("the capital of Spain", "capital"),
+            # and the copula rule still decides the ones with no determiner
+            ("Dogs are loyal", "dogs"),
+            ("She is a teacher", "teacher"),
+        ]:
+            self.assertEqual(_infer_focus_noun(_tokenize_words(text)), expected, text)
+
+    def test_a_word_before_the_next_determiner_is_a_verb(self):
+        """Position again: `The car hit the car` is about the car, not the hit.
+
+        `hit` is on no verb list, and putting it on one would be the word-list
+        answer to a question about where the word sits.
+        """
+        self.assertEqual(_infer_focus_noun(_tokenize_words("The car hit the car")), "car")
+        words = [c["word"] for c in focus_candidates("The car hit the car")]
+        self.assertEqual(words, ["car"])
+        # the same word opening a sentence is not a verb: nothing precedes it
+        self.assertIn("half", [c["word"] for c in focus_candidates("half the time")])
 
     def test_pinned_results_are_marked(self):
         analysis = self.logic.analyze_input("I have a doubt about the homework.",

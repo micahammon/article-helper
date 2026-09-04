@@ -649,14 +649,45 @@ var NOT_A_FOCUS = ["a","an","the","this","that","these","those","my","your",
 
 /* mirrors _infer_focus_noun in logic.py: the noun after the first article,
    otherwise the last content word */
-function inferFocus(text){
-  var toks = tokenize(text), dets = ["a","an","the"], i;
-  for(i = 0; i < toks.length - 1; i++){
-    if(dets.indexOf(toks[i]) !== -1 && dets.indexOf(toks[i + 1]) === -1){
-      return toks[i + 1];
-    }
+/* What closes a noun phrase: the sentence has moved on to a preposition, a
+   conjunction, another clause, or a verb. */
+var NP_END = ["and","or","but","if","so","because","at","in","on","to","for",
+  "from","with","by","of","about","as","into","over","under","there","here",
+  "then","than","when","where","how","why","that","which","who","whose",
+  "i","you","he","she","it","we","they","me","him","us","them"];
+var DETS = ["a","an","the"];
+
+/* The head of the noun phrase opening at `start`: its last candidate word.
+   `the tallest mountain` is about the mountain, not the tallest, and the
+   modifiers in between are often not candidates at all - `a very long book`
+   was answering about `very`. */
+function npHead(toks, start, isCandidate){
+  var j = start, run = [], r;
+  while(j < toks.length && NP_END.indexOf(toks[j]) === -1 &&
+        DETS.indexOf(toks[j]) === -1 && VERB_HINTS.indexOf(toks[j]) === -1){
+    run.push(toks[j]);
+    j++;
   }
-  var cands = focusCandidates(text);
+  /* A word sitting between this phrase and the determiner opening the next
+     one is the verb that joins them, whatever else it can be: `The car hit
+     the car` is about the car, not about the hit. */
+  if(run.length > 1 && j < toks.length && DETS.indexOf(toks[j]) !== -1) run.pop();
+  for(r = run.length - 1; r >= 0; r--){
+    if(isCandidate[run[r]]) return run[r];
+  }
+  return "";
+}
+
+function inferFocus(text){
+  var toks = tokenize(text), i;
+  var cands = focusCandidates(text), isCandidate = {}, head;
+  for(i = 0; i < cands.length; i++) isCandidate[cands[i].word] = 1;
+
+  for(i = 0; i < toks.length - 1; i++){
+    if(DETS.indexOf(toks[i]) === -1) continue;
+    head = npHead(toks, i + 1, isCandidate);
+    if(head) return head;
+  }
   if(!cands.length) return "";
 
   /* `Dogs are loyal` ends in an adjective, so the last content word is the
@@ -707,6 +738,10 @@ function focusCandidates(text){
     if(NOT_A_FOCUS.indexOf(t) !== -1) continue;
     if(i > 0 && SUBJECT_PRONOUNS.indexOf(toks[i - 1]) !== -1) continue;
     if(VERB_HINTS.indexOf(t) !== -1 && !isKnownNoun(t)) continue;
+    /* Same positional test, from the other side: a word between one noun
+       phrase and the determiner opening the next is that phrase's verb. */
+    if(i > 0 && i + 1 < toks.length && DETS.indexOf(toks[i + 1]) !== -1 &&
+       Object.prototype.hasOwnProperty.call(seen, toks[i - 1])) continue;
     if(t.length < 2) continue;
     if(Object.prototype.hasOwnProperty.call(seen, t)) continue;
     seen[t] = 1;

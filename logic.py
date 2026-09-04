@@ -88,17 +88,40 @@ def _find_lookup_phrase(tokens):
 BE_FORMS = {"is", "are", "was", "were", "am", "be", "been", "being"}
 
 
+def _noun_phrase_head(tokens, start, candidates):
+    """The head of the noun phrase opening at `start`: its last candidate word.
+
+    `the tallest mountain` is about the mountain, not the tallest, and the
+    modifiers in between are often not candidates at all -- `a very long book`
+    was answering about `very`.
+    """
+    end = start
+    while (end < len(tokens) and tokens[end] not in _NP_END
+           and tokens[end] not in _DETERMINERS and tokens[end] not in _VERB_HINTS):
+        end += 1
+    run = tokens[start:end]
+    # A word sitting between this phrase and the determiner opening the next
+    # one is the verb that joins them, whatever else it can be: `The car hit
+    # the car` is about the car, not about the hit.
+    if len(run) > 1 and end < len(tokens) and tokens[end] in _DETERMINERS:
+        run = run[:-1]
+    for word in reversed(run):
+        if word in candidates:
+            return word
+    return ""
+
+
 def _infer_focus_noun(tokens):
     """Infer a focus noun from free-form text when no lookup phrase matches."""
     if not tokens:
         return ""
 
-    determiners = {"a", "an", "the"}
+    candidates = {entry["word"] for entry in focus_candidates(" ".join(tokens))}
     for index, token in enumerate(tokens[:-1]):
-        if token in determiners:
-            candidate = tokens[index + 1]
-            if candidate not in determiners:
-                return candidate
+        if token in _DETERMINERS:
+            head = _noun_phrase_head(tokens, index + 1, candidates)
+            if head:
+                return head
 
     stop_words = {
         "i", "you", "he", "she", "it", "we", "they", "me", "him", "her", "us", "them",
@@ -112,7 +135,7 @@ def _infer_focus_noun(tokens):
     filtered = [
         (index, token)
         for index, token in enumerate(tokens)
-        if token not in determiners and token not in stop_words
+        if token not in _DETERMINERS and token not in stop_words
     ]
     if not filtered:
         return ""
@@ -161,6 +184,18 @@ _VERB_HINTS = {
 
 #: a pronoun that can head a clause; the word straight after one is its verb
 _SUBJECT_PRONOUNS = {"i", "you", "he", "she", "it", "we", "they"}
+
+_DETERMINERS = {"a", "an", "the"}
+
+# What closes a noun phrase: the sentence has moved on to a preposition, a
+# conjunction, another clause, or a verb.
+_NP_END = {
+    "and", "or", "but", "if", "so", "because", "at", "in", "on", "to", "for",
+    "from", "with", "by", "of", "about", "as", "into", "over", "under",
+    "there", "here", "then", "than", "when", "where", "how", "why",
+    "that", "which", "who", "whose",
+    "i", "you", "he", "she", "it", "we", "they", "me", "him", "us", "them",
+}
 
 #: words that end the search for a determiner sitting in front of a noun
 _LOOKBACK_BOUNDARY = {
@@ -242,6 +277,12 @@ def focus_candidates(text):
         # work`, `did you book a table` and `the book I lent you` can only be
         # settled by where the word sits.
         if index and tokens[index - 1] in _SUBJECT_PRONOUNS:
+            continue
+        # Same positional test, from the other side: a word between one noun
+        # phrase and the determiner opening the next is that phrase's verb.
+        if (index and index + 1 < len(tokens)
+                and tokens[index + 1] in _DETERMINERS
+                and tokens[index - 1] in seen):
             continue
         # otherwise a verb is only skipped when the data has no noun rule for it
         if token in _VERB_HINTS and not is_known_noun(token):
