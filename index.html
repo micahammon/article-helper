@@ -659,7 +659,9 @@ var NOT_A_FOCUS = ["a","an","the","this","that","these","those","my","your",
   "really","always","never","not","there","here","then","than","when","where",
   "how","why","what","some","any","no","all","every","each","much","many",
   "more","most","few","little","lots","one","two","three","next","last",
-  "first","second","other","same","own"];
+  "first","second","other","same","own",
+  /* time adverbs: `I went to the bank yesterday` is about the bank */
+  "yesterday","today","tomorrow","tonight","soon","later","ago","again"];
 
 /* mirrors _infer_focus_noun in logic.py: the noun after the first article,
    otherwise the last content word */
@@ -668,17 +670,32 @@ var NOT_A_FOCUS = ["a","an","the","this","that","these","those","my","your",
 var NP_END = ["and","or","but","if","so","because","at","in","on","to","for",
   "from","with","by","of","about","as","into","over","under","there","here",
   "then","than","when","where","how","why","that","which","who","whose",
-  "i","you","he","she","it","we","they","me","him","us","them"];
+  "i","you","he","she","it","we","they","me","him","us","them",
+  /* the rest of the common prepositions: `a cinema near my house` is about
+     the cinema, and the phrase ends where the preposition begins */
+  "near","before","after","during","without","within","between","among",
+  "against","through","across","behind","beside","around","above","below",
+  "until","since","via","upon","off","out","up","down"];
 var DETS = ["a","an","the"];
+/* Another determiner opens another noun phrase, so it closes this one:
+   `the radio every day` is about the radio, not the day. */
+var NEW_PHRASE = ["every","each","some","any","all","no","this","that","these",
+  "those","my","your","his","her","its","our","their"];
 
 /* The head of the noun phrase opening at `start`: its last candidate word.
    `the tallest mountain` is about the mountain, not the tallest, and the
    modifiers in between are often not candidates at all - `a very long book`
    was answering about `very`. */
+/* `beautifully` and `badly` are not what a sentence is about. Only a
+   preference, so a real noun that ends in -ly - family, supply, reply - is
+   still picked when it is the only thing there. */
+function looksAdverbial(word){ return /ly$/.test(word); }
+
 function npHead(toks, start, isCandidate){
   var j = start, run = [], r;
   while(j < toks.length && NP_END.indexOf(toks[j]) === -1 &&
-        DETS.indexOf(toks[j]) === -1 && VERB_HINTS.indexOf(toks[j]) === -1){
+        DETS.indexOf(toks[j]) === -1 && NEW_PHRASE.indexOf(toks[j]) === -1 &&
+        VERB_HINTS.indexOf(toks[j]) === -1){
     run.push(toks[j]);
     j++;
   }
@@ -686,6 +703,9 @@ function npHead(toks, start, isCandidate){
      one is the verb that joins them, whatever else it can be: `The car hit
      the car` is about the car, not about the hit. */
   if(run.length > 1 && j < toks.length && DETS.indexOf(toks[j]) !== -1) run.pop();
+  for(r = run.length - 1; r >= 0; r--){
+    if(isCandidate[run[r]] && !looksAdverbial(run[r])) return run[r];
+  }
   for(r = run.length - 1; r >= 0; r--){
     if(isCandidate[run[r]]) return run[r];
   }
@@ -715,6 +735,9 @@ function inferFocus(text){
       if(cands[c].index < i) return cands[c].word;
     }
     break;
+  }
+  for(i = cands.length - 1; i >= 0; i--){
+    if(!looksAdverbial(cands[i].word)) return cands[i].word;
   }
   return cands[cands.length - 1].word;
 }
@@ -1075,7 +1098,8 @@ var VERB_HINTS = ["is","are","was","were","am","be","been","being","have","has",
   "build","builds","built","mean","means","meant","become","becomes","became",
   "begin","begins","began","choose","chooses","chose","forget","forgets",
   "forgot","understand","understands","understood","borrow","borrows",
-  "borrowed","wear","wears","wore","break","breaks","broke"];
+  "borrowed","wear","wears","wore","break","breaks","broke",
+  "arrive","arrives","arrived","sing","sings","sang","sung"];
 
 /* Gate 0 for a noun the learner picked, inside the sentence they typed.
    The sentence still supplies context - the determiner in front of the word,

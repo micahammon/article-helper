@@ -802,6 +802,33 @@ class FocusTests(unittest.TestCase):
         ]:
             self.assertEqual(_infer_focus_noun(_tokenize_words(text)), expected, text)
 
+    def test_an_adverb_or_a_later_phrase_is_not_the_subject(self):
+        """What the sentence is about is the noun, not what trails after it.
+
+        `She plays the piano beautifully` was answered about `beautifully`,
+        `I went to the bank yesterday` about `yesterday`, and `I listen to the
+        radio every day` about `day` -- the phrase ran on past the determiner
+        that opened the next one.
+        """
+        for text, expected in [
+            ("She plays the piano beautifully", "piano"),
+            ("She sings the song badly", "song"),
+            ("We ate the cake quickly", "cake"),
+            ("I went to the bank yesterday", "bank"),
+            ("I saw the film yesterday", "film"),
+            ("the train arrives tomorrow", "train"),
+            ("I listen to the radio every day", "radio"),
+            ("the police arrived", "police"),
+            ("a cinema near my house", "cinema"),
+        ]:
+            self.assertEqual(_infer_focus_noun(_tokenize_words(text)), expected, text)
+
+    def test_a_noun_that_ends_in_ly_is_still_a_noun(self):
+        """The adverb rule is a preference, not an exclusion."""
+        for text, expected in [("a family", "family"), ("the supply", "supply"),
+                               ("a reply", "reply")]:
+            self.assertEqual(_infer_focus_noun(_tokenize_words(text)), expected, text)
+
     def test_a_word_before_the_next_determiner_is_a_verb(self):
         """Position again: `The car hit the car` is about the car, not the hit.
 

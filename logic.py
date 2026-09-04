@@ -90,6 +90,15 @@ def _find_lookup_phrase(tokens):
 BE_FORMS = {"is", "are", "was", "were", "am", "be", "been", "being"}
 
 
+def _looks_adverbial(word):
+    """`beautifully` and `badly` are not what a sentence is about.
+
+    A preference, not an exclusion, so a real noun ending in -ly -- family,
+    supply, reply -- is still picked when it is the only thing there.
+    """
+    return word.endswith("ly")
+
+
 def _noun_phrase_head(tokens, start, candidates):
     """The head of the noun phrase opening at `start`: its last candidate word.
 
@@ -99,7 +108,8 @@ def _noun_phrase_head(tokens, start, candidates):
     """
     end = start
     while (end < len(tokens) and tokens[end] not in _NP_END
-           and tokens[end] not in _DETERMINERS and tokens[end] not in _VERB_HINTS):
+           and tokens[end] not in _DETERMINERS and tokens[end] not in _NEW_PHRASE
+           and tokens[end] not in _VERB_HINTS):
         end += 1
     run = tokens[start:end]
     # A word sitting between this phrase and the determiner opening the next
@@ -107,6 +117,9 @@ def _noun_phrase_head(tokens, start, candidates):
     # the car` is about the car, not about the hit.
     if len(run) > 1 and end < len(tokens) and tokens[end] in _DETERMINERS:
         run = run[:-1]
+    for word in reversed(run):
+        if word in candidates and not _looks_adverbial(word):
+            return word
     for word in reversed(run):
         if word in candidates:
             return word
@@ -182,12 +195,20 @@ _VERB_HINTS = {
     "begins", "began", "choose", "chooses", "chose", "forget", "forgets",
     "forgot", "understand", "understands", "understood", "borrow", "borrows",
     "borrowed", "wear", "wears", "wore", "break", "breaks", "broke",
+    "arrive", "arrives", "arrived", "sing", "sings", "sang", "sung",
 }
 
 #: a pronoun that can head a clause; the word straight after one is its verb
 _SUBJECT_PRONOUNS = {"i", "you", "he", "she", "it", "we", "they"}
 
 _DETERMINERS = {"a", "an", "the"}
+
+# Another determiner opens another noun phrase, so it closes this one:
+# `the radio every day` is about the radio, not the day.
+_NEW_PHRASE = {
+    "every", "each", "some", "any", "all", "no", "this", "that", "these",
+    "those", "my", "your", "his", "her", "its", "our", "their",
+}
 
 # What closes a noun phrase: the sentence has moved on to a preposition, a
 # conjunction, another clause, or a verb.
@@ -197,6 +218,11 @@ _NP_END = {
     "there", "here", "then", "than", "when", "where", "how", "why",
     "that", "which", "who", "whose",
     "i", "you", "he", "she", "it", "we", "they", "me", "him", "us", "them",
+    # the rest of the common prepositions: `a cinema near my house` is about
+    # the cinema, and the phrase ends where the preposition begins
+    "near", "before", "after", "during", "without", "within", "between",
+    "among", "against", "through", "across", "behind", "beside", "around",
+    "above", "below", "until", "since", "via", "upon", "off", "out", "up", "down",
 }
 
 #: words that end the search for a determiner sitting in front of a noun
@@ -238,6 +264,8 @@ _NOT_A_FOCUS = {
     "some", "any", "no", "all", "every", "each", "much", "many", "more",
     "most", "few", "little", "lots", "one", "two", "three",
     "next", "last", "first", "second", "other", "same", "own",
+    # time adverbs: `I went to the bank yesterday` is about the bank
+    "yesterday", "today", "tomorrow", "tonight", "soon", "later", "ago", "again",
 }
 
 
