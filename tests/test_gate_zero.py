@@ -922,23 +922,25 @@ class LearnerFacingLanguageTests(unittest.TestCase):
             self.assertNotEqual(override, names[ref],
                                 f"{node_id} override repeats the name its ref already gives")
 
-    def test_conditional_examples_name_the_word_they_illustrate(self):
-        """A two-readings card shows these examples under the word asked about.
+    def test_examples_name_the_word_they_illustrate(self):
+        """Both places a lookup entry shows examples under the word asked about:
+        the two-readings card (`conditions`) and the "but" panel (`note`).
 
-        They were written once per group and copy-pasted across it, so asking
-        about `home` illustrated the point with a bed and a job, and `guitar`
-        showed only pianos. An example set that never mentions its own word is
-        the tell.
+        Both were written once per group and copy-pasted across it, so asking
+        about `home` illustrated the point with a bed and a job, `guitar` showed
+        only pianos, and every shop from `pub` to `chemist's` was a bank. An
+        example set that never mentions its own word is the tell.
         """
         for name, data in self._data_files():
             for key, entry in data.get("lookup_table", {}).items():
-                examples = (entry.get("conditions") or {}).get("examples")
-                if not examples:
-                    continue
                 word = key.split()[0]
-                self.assertTrue(
-                    any(word in example.lower() for example in examples),
-                    f"{name} {key!r} illustrates itself with {examples}")
+                for field in ("conditions", "note"):
+                    examples = (entry.get(field) or {}).get("examples")
+                    if not examples:
+                        continue
+                    self.assertTrue(
+                        any(word in example.lower() for example in examples),
+                        f"{name} {key!r} {field} illustrates itself with {examples}")
 
     def test_option_labels_and_categories_carry_no_tree_codes(self):
         code = re.compile(r"^\d[a-z]? \u00b7 ")

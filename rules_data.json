@@ -226,7 +226,7 @@
         "text": "Meaning one particular building or performance instead, it is an ordinary noun again and the ordinary rules apply.",
         "examples": [
           "There's a cinema near my house.",
-          "I saw an opera last night."
+          "The cinema on Main Street has closed."
         ],
         "rule_ref": "6.1.4"
       }
@@ -238,8 +238,8 @@
       "note": {
         "text": "Meaning one particular building or performance instead, it is an ordinary noun again and the ordinary rules apply.",
         "examples": [
-          "There's a cinema near my house.",
-          "I saw an opera last night."
+          "I saw an opera last night.",
+          "The opera we saw lasted four hours."
         ],
         "rule_ref": "6.1.4"
       }
@@ -251,8 +251,8 @@
       "note": {
         "text": "Meaning one particular building or performance instead, it is an ordinary noun again and the ordinary rules apply.",
         "examples": [
-          "There's a cinema near my house.",
-          "I saw an opera last night."
+          "There's a theatre on the corner.",
+          "The theatre was sold out."
         ],
         "rule_ref": "6.1.4"
       }
@@ -264,8 +264,8 @@
       "note": {
         "text": "Meaning one particular building or performance instead, it is an ordinary noun again and the ordinary rules apply.",
         "examples": [
-          "There's a cinema near my house.",
-          "I saw an opera last night."
+          "There's a theater on the corner.",
+          "The theater was sold out."
         ],
         "rule_ref": "6.1.4"
       }
@@ -277,8 +277,8 @@
       "note": {
         "text": "Meaning one particular building or performance instead, it is an ordinary noun again and the ordinary rules apply.",
         "examples": [
-          "There's a cinema near my house.",
-          "I saw an opera last night."
+          "We went to a ballet in Vienna.",
+          "The ballet was three hours long."
         ],
         "rule_ref": "6.1.4"
       }
@@ -646,8 +646,8 @@
       "note": {
         "text": "An unusual use - a variety, or a particular game - can take an article.",
         "examples": [
-          "The football played in America is different.",
-          "We watched a tennis match."
+          "We watched a golf tournament.",
+          "The golf they play in Scotland is different."
         ],
         "rule_ref": "6.1.4"
       }
@@ -659,8 +659,8 @@
       "note": {
         "text": "An unusual use - a variety, or a particular game - can take an article.",
         "examples": [
-          "The football played in America is different.",
-          "We watched a tennis match."
+          "We watched a tennis match.",
+          "The tennis at Wimbledon is played on grass."
         ],
         "rule_ref": "6.1.4"
       }
@@ -672,8 +672,8 @@
       "note": {
         "text": "An unusual use - a variety, or a particular game - can take an article.",
         "examples": [
-          "The football played in America is different.",
-          "We watched a tennis match."
+          "We watched a football match.",
+          "The football played in America is different."
         ],
         "rule_ref": "6.1.4"
       }
@@ -903,7 +903,7 @@
         "text": "Meaning one particular building instead, it is an ordinary noun again and the ordinary rules apply.",
         "examples": [
           "There's a gym near my house.",
-          "The library on our street is closed."
+          "The gym on our street has closed."
         ],
         "rule_ref": "2.1.2"
       }
@@ -915,8 +915,8 @@
       "note": {
         "text": "Meaning one particular building instead, it is an ordinary noun again and the ordinary rules apply.",
         "examples": [
-          "There's a gym near my house.",
-          "The library on our street is closed."
+          "There's a park near my house.",
+          "The park by the river is bigger."
         ],
         "rule_ref": "2.1.2"
       }
@@ -928,8 +928,8 @@
       "note": {
         "text": "Meaning one particular building instead, it is an ordinary noun again and the ordinary rules apply.",
         "examples": [
-          "There's a gym near my house.",
-          "The library on our street is closed."
+          "They opened a zoo outside the city.",
+          "The zoo near us has elephants."
         ],
         "rule_ref": "2.1.2"
       }
@@ -941,7 +941,7 @@
       "note": {
         "text": "Meaning one particular building instead, it is an ordinary noun again and the ordinary rules apply.",
         "examples": [
-          "There's a gym near my house.",
+          "There's a library on campus.",
           "The library on our street is closed."
         ],
         "rule_ref": "2.1.2"
@@ -954,8 +954,8 @@
       "note": {
         "text": "Meaning one particular building instead, it is an ordinary noun again and the ordinary rules apply.",
         "examples": [
-          "There's a gym near my house.",
-          "The library on our street is closed."
+          "We watched two movies last night.",
+          "The movies they show are all new."
         ],
         "rule_ref": "2.1.2"
       }
@@ -968,7 +968,7 @@
         "text": "Meaning one particular business instead, it is an ordinary noun again and the ordinary rules apply.",
         "examples": [
           "A bank has opened on the corner.",
-          "I waited outside a shop on the high street."
+          "The bank on our street closed."
         ],
         "rule_ref": "2.1.2"
       }
@@ -980,8 +980,8 @@
       "note": {
         "text": "Meaning one particular business instead, it is an ordinary noun again and the ordinary rules apply.",
         "examples": [
-          "A bank has opened on the corner.",
-          "I waited outside a shop on the high street."
+          "There's a pub at the end of the road.",
+          "The pub we went to was full."
         ],
         "rule_ref": "2.1.2"
       }
@@ -993,8 +993,8 @@
       "note": {
         "text": "Meaning one particular business instead, it is an ordinary noun again and the ordinary rules apply.",
         "examples": [
-          "A bank has opened on the corner.",
-          "I waited outside a shop on the high street."
+          "They opened a bar downtown.",
+          "The bar on the corner is closed."
         ],
         "rule_ref": "2.1.2"
       }
@@ -1006,8 +1006,8 @@
       "note": {
         "text": "Meaning one particular business instead, it is an ordinary noun again and the ordinary rules apply.",
         "examples": [
-          "A bank has opened on the corner.",
-          "I waited outside a shop on the high street."
+          "There's a post office in my town.",
+          "The post office on the square is closed."
         ],
         "rule_ref": "2.1.2"
       }
@@ -1019,8 +1019,8 @@
       "note": {
         "text": "Meaning one particular business instead, it is an ordinary noun again and the ordinary rules apply.",
         "examples": [
-          "A bank has opened on the corner.",
-          "I waited outside a shop on the high street."
+          "There's a doctor's on our street.",
+          "The doctor's near the station has moved."
         ],
         "rule_ref": "2.1.2"
       }
@@ -1032,8 +1032,8 @@
       "note": {
         "text": "Meaning one particular business instead, it is an ordinary noun again and the ordinary rules apply.",
         "examples": [
-          "A bank has opened on the corner.",
-          "I waited outside a shop on the high street."
+          "I saw a doctor about it.",
+          "The doctor who treated me was kind."
         ],
         "rule_ref": "2.1.2"
       }
@@ -1045,8 +1045,8 @@
       "note": {
         "text": "Meaning one particular business instead, it is an ordinary noun again and the ordinary rules apply.",
         "examples": [
-          "A bank has opened on the corner.",
-          "I waited outside a shop on the high street."
+          "There's a dentist's above the bakery.",
+          "The dentist's on the square has moved."
         ],
         "rule_ref": "2.1.2"
       }
@@ -1058,8 +1058,8 @@
       "note": {
         "text": "Meaning one particular business instead, it is an ordinary noun again and the ordinary rules apply.",
         "examples": [
-          "A bank has opened on the corner.",
-          "I waited outside a shop on the high street."
+          "She is a dentist.",
+          "The dentist who treated me was gentle."
         ],
         "rule_ref": "2.1.2"
       }
@@ -1071,8 +1071,8 @@
       "note": {
         "text": "Meaning one particular business instead, it is an ordinary noun again and the ordinary rules apply.",
         "examples": [
-          "A bank has opened on the corner.",
-          "I waited outside a shop on the high street."
+          "A hairdresser's opened next door.",
+          "The hairdresser's on the corner is closed."
         ],
         "rule_ref": "2.1.2"
       }
@@ -1084,8 +1084,8 @@
       "note": {
         "text": "Meaning one particular business instead, it is an ordinary noun again and the ordinary rules apply.",
         "examples": [
-          "A bank has opened on the corner.",
-          "I waited outside a shop on the high street."
+          "There's a baker's on the square.",
+          "The baker's near us opens early."
         ],
         "rule_ref": "2.1.2"
       }
@@ -1097,8 +1097,8 @@
       "note": {
         "text": "Meaning one particular business instead, it is an ordinary noun again and the ordinary rules apply.",
         "examples": [
-          "A bank has opened on the corner.",
-          "I waited outside a shop on the high street."
+          "They built a mall outside town.",
+          "The mall near us is closing."
         ],
         "rule_ref": "2.1.2"
       }
@@ -1110,8 +1110,8 @@
       "note": {
         "text": "Meaning one particular business instead, it is an ordinary noun again and the ordinary rules apply.",
         "examples": [
-          "A bank has opened on the corner.",
-          "I waited outside a shop on the high street."
+          "A store has opened on the corner.",
+          "The store on our street closed."
         ],
         "rule_ref": "2.1.2"
       }
@@ -1123,8 +1123,8 @@
       "note": {
         "text": "Meaning one particular business instead, it is an ordinary noun again and the ordinary rules apply.",
         "examples": [
-          "A bank has opened on the corner.",
-          "I waited outside a shop on the high street."
+          "There's a drugstore across the street.",
+          "The drugstore on the corner is open late."
         ],
         "rule_ref": "2.1.2"
       }
@@ -1136,8 +1136,8 @@
       "note": {
         "text": "Meaning one particular business instead, it is an ordinary noun again and the ordinary rules apply.",
         "examples": [
-          "A bank has opened on the corner.",
-          "I waited outside a shop on the high street."
+          "There's a chemist's across the street.",
+          "The chemist's on the corner is open late."
         ],
         "rule_ref": "2.1.2"
       }
@@ -1149,8 +1149,8 @@
       "note": {
         "text": "Meaning one particular business instead, it is an ordinary noun again and the ordinary rules apply.",
         "examples": [
-          "A bank has opened on the corner.",
-          "I waited outside a shop on the high street."
+          "They opened new shops downtown.",
+          "The shops on our street close early."
         ],
         "rule_ref": "2.1.2"
       }
