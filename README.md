@@ -246,13 +246,15 @@ belong on the card: `in hospital` / `in the hospital`, `the cinema` / `the
 movies`, `the chemist's` / `the drugstore`.
 
 `classic.html` and `rules_data.classic.json` had their prose swept the same
-way — they are frozen, but `/classic.html` is still served, so a learner can
-still read them. **Do not add keys to `rules_data.classic.json`.** It is not
-only classic.html's data: `test_all_49_original_lookup_entries_survive` reads it
-as the frozen baseline proving the live table never drops an inherited entry or
-changes its article. A new key there breaks that count. So `theater` joins
-`theatre` in `rules_data.json` but not in the classic file, and classic.html
-answers only the British spelling.
+way. The classic pair is not developed further, but `/classic.html` is still
+served, so a learner can still read it — which means an error there is an error
+in front of a student, and gets fixed. **Do not add lookup entries to
+`rules_data.classic.json`.** It is not only classic.html's data:
+`test_all_49_original_lookup_entries_survive` reads its 49-entry lookup table as
+the baseline proving the live table never drops an inherited entry, changes its
+article, or drifts on a reference. A new key there breaks that count. So
+`theater` joins `theatre` in `rules_data.json` but not in the classic file, and
+classic.html answers only the British spelling.
 
 **Citations are validated, not trusted.** `source_sections` holds the book's
 real contents, and the build refuses to write a `rule_ref` that is not in it.
@@ -261,8 +263,16 @@ with `7.5`, which is the *Illnesses* section, and pointed the proper-noun rule
 at `9.2.1`, which is the *'No article'* subsection — the opposite of what it
 was claiming. Both passed the tests of the day, because those only checked that
 a reference was **present**. Five inherited lookup entries had the same `9.2.1`
-misfiling; the fixes are recorded in `lookup_ref_corrections` so a deliberate
-correction stays distinguishable from drift.
+misfiling — *the USA*, *the United Kingdom*, *the Netherlands*, *the
+Philippines*, *The Hague*, all of which take *the* and so belong to `9.2.2`.
+They are corrected in both files, and `lookup_ref_corrections` records what
+changed and why. That record is what keeps the two tables comparable: the test
+asserts their references now agree and that the `was` value never returns.
+
+The misfiling survived as long as it did because nothing rendered it in a form
+anyone could check. Naming the rules is what exposed it — `9.2.1` reads as
+nothing, but *Place names without an article* under a **the** answer is
+obviously wrong.
 
 The map view and the path trail are both generated from this file, so neither
 can drift from the logic it documents. `tests/test_gate_zero.py` enforces the

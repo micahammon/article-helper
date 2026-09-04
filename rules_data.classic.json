@@ -178,27 +178,27 @@
         "usa": {
             "article": "the",
             "explanation": "Plural proper nouns like 'the United States of America' take 'the'.",
-            "rule_ref": "9.2.1"
+            "rule_ref": "9.2.2"
         },
         "united kingdom": {
             "article": "the",
             "explanation": "Proper nouns signifying a collection of states (kingdom, republic) take 'the'.",
-            "rule_ref": "9.2.1"
+            "rule_ref": "9.2.2"
         },
         "netherlands": {
             "article": "the",
             "explanation": "Plural proper nouns like 'the Netherlands' take 'the'.",
-            "rule_ref": "9.2.1"
+            "rule_ref": "9.2.2"
         },
         "philippines": {
             "article": "the",
             "explanation": "Plural proper nouns like 'the Philippines' take 'the'.",
-            "rule_ref": "9.2.1"
+            "rule_ref": "9.2.2"
         },
         "the hague": {
             "article": "the",
             "explanation": "'The Hague' is an exception where 'The' is part of the city's official name.",
-            "rule_ref": "9.2.1"
+            "rule_ref": "9.2.2"
         },
         "nile river": {
             "article": "the",
@@ -411,7 +411,7 @@
         "7.4.2": "The word home",
         "7.4.3": "Work, used as a noun",
         "7.5": "Illnesses",
-        "9.2.1": "Place names",
+        "9.2.1": "Place names without an article",
         "9.2.2": "Place names that take the",
         "Section 2": "Known and unknown"
     }

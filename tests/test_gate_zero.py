@@ -103,12 +103,12 @@ class GateZeroTests(unittest.TestCase):
             self.assertIn(key, DATA["lookup_table"], f"lost lookup entry {key!r}")
             kept = DATA["lookup_table"][key]
             self.assertEqual(kept["article"], entry["article"], f"{key!r} changed article")
+            self.assertEqual(kept["rule_ref"], entry["rule_ref"], f"{key!r} ref drifted")
             if key in corrections:
-                # A deliberate, recorded fix - not drift.
-                self.assertEqual(corrections[key]["was"], entry["rule_ref"])
+                # The misfiling is fixed in both files now; lookup_ref_corrections
+                # is the record of why, and the ref it replaced must not come back.
                 self.assertEqual(corrections[key]["now"], kept["rule_ref"])
-            else:
-                self.assertEqual(kept["rule_ref"], entry["rule_ref"], f"{key!r} ref drifted")
+                self.assertNotEqual(corrections[key]["was"], kept["rule_ref"])
 
     def test_corrected_lookup_refs_are_all_the_same_misfiling(self):
         """Only the 9.2.1 -> 9.2.2 fix is allowed to change an inherited ref."""
