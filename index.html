@@ -1276,7 +1276,7 @@ function renderResult(n){
     h += "</ul>";
   }
   var word = resultWord();
-  if(word && n.out !== "fixed"){
+  if(word){
     h += '<p class="built">' + esc(buildPhrase(n.out, word)) + '</p>';
   }
   h += refPill(n.rule_ref, n.rule_name);
@@ -1310,7 +1310,28 @@ function renderGate0(r){
   var f = FORM[r.form];
   var card = document.createElement("div");
   card.className = "result " + f.cls;
-  var h = headword(r.match) +
+  /* The phrase this card is about, ready to read. A construction matches a
+     pattern rather than a word - "what a", "one of the", "half an" - so the
+     fragment it matched would make a poor name for the card; the reader's own
+     phrase is the subject. */
+  var built;
+  if(r.fixed || r.blocked || r.either || r.construction){
+    /* nothing to build: the phrase is already complete as typed, so echo it
+       verbatim rather than through displayWord, which strips the apostrophe
+       out of "Sarah's car" */
+    built = String(phrase.value).trim() || r.match;
+  }else{
+    /* prefer what the user actually typed, so capitalisation survives */
+    var typed = displayWord(phrase.value);
+    built = buildPhrase(r.form, (normalize(typed) === r.match) ? typed : r.match);
+  }
+
+  /* The headword names what was matched. When that is already what the built
+     phrase says, one of them is noise - "Page 42" over "Page 42". */
+  var name = r.construction ? "" : asTyped(r.match);
+  if(name && normalize(name) === normalize(built)) name = "";
+
+  var h = headword(name) +
           '<p class="form">' + f.word + '</p>' +
           '<p class="cat">' + r.cat + '</p>' +
           '<p class="why">' + r.why + '</p>';
@@ -1338,17 +1359,7 @@ function renderGate0(r){
     }
     h += '</div>';
   }
-  if(r.fixed || r.blocked || r.either || r.construction){
-    /* nothing to build: the phrase is already complete as typed, so echo it
-       verbatim rather than through displayWord, which strips the apostrophe
-       out of "Sarah's car" */
-    h += '<p class="built">' + esc(String(phrase.value).trim() || r.match) + '</p>';
-  }else{
-    /* prefer what the user actually typed, so capitalisation survives */
-    var typed = displayWord(phrase.value);
-    var word = (normalize(typed) === r.match) ? typed : r.match;
-    h += '<p class="built">' + esc(buildPhrase(r.form, word)) + '</p>';
-  }
+  h += '<p class="built">' + esc(built) + '</p>';
   h += refPill(r.ref, r.rule_name);
   card.innerHTML = h;
   stage.appendChild(card);
