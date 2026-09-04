@@ -575,7 +575,7 @@ function renderFocusBar(text, hitResult){
   var hint = document.createElement("p");
   hint.className = "focushint";
   hint.textContent = targetWords.length
-    ? "Answering about the highlighted word. The others are underlined - tap one to switch."
+    ? "Answering about the highlighted word. The others are underlined \u2014 tap one to switch."
     : "More than one noun here. Tap the one you are deciding about.";
   focusEl.appendChild(hint);
 }
@@ -755,7 +755,7 @@ function gate0(text){
   if(isTheTakingName(text, norm)){
     var pn = D.proper_noun_the;
     return {form:formOf(pn.article), why:pn.explanation, ref:pn.rule_ref,
-            cat:"Name in the the-taking class", match:norm};
+            cat:"A name that takes the", match:norm};
   }
 
   /* last: a construction inside a longer sentence. An incidental match loses
@@ -791,7 +791,7 @@ function checkConstructions(text, tokens, wholeOnly){
        adjunct inside it, so it belongs in the first pass even when partial */
     if(wholeOnly !== (covers || !!rule.frame)) continue;
     return {form:formOf(rule.article), why:rule.explanation, ref:rule.rule_ref,
-            cat:"Construction",
+            cat:"Sentence pattern",
             /* what the rule actually matched: the page highlights this, and a
                pinned focus is checked against it */
             match:(m[0] || "").replace(/^\s+|\s+$/g, "") || phrase,
@@ -920,7 +920,8 @@ function lookupResult(key, tokens){
       if(D.determiners.groups[g].indexOf(governing) !== -1){
         return {form:"blocked", blocked:true, why:D.determiners.explanation,
                 ref:(g === "some_any" ? D.determiners.some_any_rule_ref : D.determiners.rule_ref),
-                cat:"The slot is already taken", match:key};
+                rule_name:(g === "some_any" ? null : D.determiners.rule_name),
+                cat:"Another word already fills the slot", match:key};
       }
     }
     if(forms[governing] && forms[governing] !== e.article){
@@ -1013,7 +1014,7 @@ function gate0Pinned(text, focus){
   if(isTheTakingName(text, word)){
     var pn = D.proper_noun_the;
     return {form:formOf(pn.article), why:pn.explanation, ref:pn.rule_ref,
-            cat:"Name in the the-taking class", match:word};
+            cat:"A name that takes the", match:word};
   }
   return null;
 }
@@ -1038,7 +1039,8 @@ function checkDeterminer(text, tokens){
     if(words.indexOf(first) !== -1){
       return {form:"blocked", why:det.explanation, blocked:true,
               ref:(group === "some_any" ? det.some_any_rule_ref : det.rule_ref),
-              cat:"The slot is already taken",
+              rule_name:(group === "some_any" ? null : det.rule_name),
+              cat:"Another word already fills the slot",
               match:tokens.slice(1).join(" ") || first};
     }
   }
@@ -1051,7 +1053,8 @@ function checkDeterminer(text, tokens){
   if(CONTRACTIONS.indexOf(stem) === -1 &&
      /^\s*\S+['\u2019]s\s+\S+/.test(String(text || ""))){
     return {form:"blocked", why:det.explanation, blocked:true, ref:det.rule_ref,
-            cat:"The slot is already taken",
+            rule_name:det.rule_name,
+            cat:"Another word already fills the slot",
             match:tokens.slice(1).join(" ") || tokens[0]};
   }
   return null;
@@ -1141,7 +1144,7 @@ function render(){
   if(!hist.length){
     var badge = document.createElement("div");
     badge.className = "gate0 g-miss";
-    badge.textContent = "No set phrase or known name \u2014 working through the questions";
+    badge.textContent = "No fixed expression or known name \u2014 working through the questions";
     stage.appendChild(badge);
   }
   if(n.out) renderResult(n); else renderQuestion(n);
@@ -1346,7 +1349,7 @@ function renderGate0(r){
     var word = (normalize(typed) === r.match) ? typed : r.match;
     h += '<p class="built">' + esc(buildPhrase(r.form, word)) + '</p>';
   }
-  h += refPill(r.ref);
+  h += refPill(r.ref, r.rule_name);
   card.innerHTML = h;
   stage.appendChild(card);
 }
@@ -1376,7 +1379,7 @@ function renderContext(r){
          '</span></div></div>';
   }
   h += '</div>';
-  h += refPill(r.ref);
+  h += refPill(r.ref, r.rule_name);
   card.innerHTML = h;
   stage.appendChild(card);
 
@@ -1504,8 +1507,8 @@ function buildMap(){
   g0.className = "mgate";
   var gh = "<h3>" + fr.title + "</h3><p class=\"mq\">" + fr.note + "</p>";
   fr.groups.forEach(function(grp){
-    gh += '<div class="refgroup"><h4>' + grp.label +
-          ' <span class="pill p-' + (grp.form === "an" ? "an" : grp.form) + '">' +
+    gh += '<div class="refgroup"><h4>' +
+          '<span class="pill p-' + (grp.form === "an" ? "an" : grp.form) + '">' +
           FORM[grp.form].word + '</span></h4><ul class="reflist">';
     grp.items.forEach(function(it){ gh += "<li>" + esc(it) + "</li>"; });
     gh += "</ul></div>";

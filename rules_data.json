@@ -2,7 +2,7 @@
   "meta": {
     "entry_node": "q2",
     "source": "Seonaid Beckwith, 'A' and 'The' Explained — see docs/",
-    "note": "Set phrases and known names are matched automatically in this order: determiners, fixed_expressions, noun_number, lookup_table, nationality_the, proper_noun_the. The decision_tree is only entered when none of them match.",
+    "note": "Fixed expressions and known names are matched automatically in this order: determiners, fixed_expressions, noun_number, lookup_table, nationality_the, proper_noun_the. The decision_tree is only entered when none of them match.",
     "gate_zero_order": [
       "constructions",
       "determiners",
@@ -246,7 +246,7 @@
     },
     "theatre": {
       "article": "the",
-      "explanation": "As a general concept of entertainment, we say 'go to the theater'.",
+      "explanation": "As a general concept of entertainment, we say 'go to the theatre'. American English spells it <em>theater</em>.",
       "rule_ref": "4.1",
       "note": {
         "text": "Meaning one particular building or performance instead, it is an ordinary noun again and the ordinary rules apply.",
@@ -644,7 +644,7 @@
       "explanation": "Names of sports and games generally take no article.",
       "rule_ref": "6.1.3",
       "note": {
-        "text": "An unusual use - a variety, or a particular game - can take an article.",
+        "text": "An unusual use — a variety, or a particular game — can take an article.",
         "examples": [
           "We watched a golf tournament.",
           "The golf they play in Scotland is different."
@@ -657,7 +657,7 @@
       "explanation": "Names of sports and games generally take no article.",
       "rule_ref": "6.1.3",
       "note": {
-        "text": "An unusual use - a variety, or a particular game - can take an article.",
+        "text": "An unusual use — a variety, or a particular game — can take an article.",
         "examples": [
           "We watched a tennis match.",
           "The tennis at Wimbledon is played on grass."
@@ -670,7 +670,7 @@
       "explanation": "Names of sports and games generally take no article.",
       "rule_ref": "6.1.3",
       "note": {
-        "text": "An unusual use - a variety, or a particular game - can take an article.",
+        "text": "An unusual use — a variety, or a particular game — can take an article.",
         "examples": [
           "We watched a football match.",
           "The football played in America is different."
@@ -1837,8 +1837,8 @@
     }
   },
   "fixed_reference": {
-    "title": "Set phrases and known names",
-    "note": "Checked automatically before any question is asked. Set phrases override every rule below, so they get caught first. Each one carries the rule it comes from.",
+    "title": "Fixed expressions and known names",
+    "note": "Checked automatically before any question is asked. Fixed expressions override every rule below, so they get caught first. Each one carries the rule it comes from.",
     "groups": [
       {
         "form": "zero",
@@ -1877,13 +1877,13 @@
           "for breakfast",
           "for lunch",
           "for dinner",
-          "on monday",
-          "on tuesday",
-          "on wednesday",
-          "on thursday",
-          "on friday",
-          "on saturday",
-          "on sunday",
+          "on Monday",
+          "on Tuesday",
+          "on Wednesday",
+          "on Thursday",
+          "on Friday",
+          "on Saturday",
+          "on Sunday",
           "at night",
           "at noon",
           "at midnight",
@@ -2015,7 +2015,8 @@
       ]
     },
     "some_any_rule_ref": "Appendix 3",
-    "possessive_s_note": "A possessive <em>'s</em> fills the same slot: <em>Sarah's car</em>."
+    "possessive_s_note": "A possessive <em>'s</em> fills the same slot: <em>Sarah's car</em>.",
+    "rule_name": "Only one determiner before a noun"
   },
   "constructions": [
     {
@@ -2231,7 +2232,7 @@
       "regex": "\\b(few|little|lots of)\\b",
       "article": "no article",
       "rule_ref": "7.7",
-      "explanation": "Bare <em>few</em> and <em>little</em> take no article and mean 'almost none' - noticeably less than <em>a few</em> and <em>a little</em>, which mean 'a small amount, but enough'.",
+      "explanation": "Bare <em>few</em> and <em>little</em> take no article and mean 'almost none' — noticeably less than <em>a few</em> and <em>a little</em>, which mean 'a small amount, but enough'.",
       "examples": [
         "Sorry, I have little money. I really can't afford to go out.",
         "There have been few problems with the new system, thankfully!"
@@ -2289,7 +2290,7 @@
       "regex": "\\b(touch|touched|touches|shoot|shot|shoots|take|took|takes|pull|pulled|pulls|hit|hits|kick|kicked|kicks|pat|patted|pats|grab|grabbed|grabs|hold|held|holds|kiss|kissed|kisses|punch|punched|bite|bit)\\b.*\\b(on|in|by) the (head|arm|arms|leg|legs|face|shoulder|shoulders|hand|hands|back|nose|ear|ears|knee|knees|chest|neck|foot|feet|wrist|elbow|cheek|forehead|hair|stomach)\\b",
       "article": "the",
       "rule_ref": "4.7",
-      "explanation": "After certain verbs - <em>touch, shoot, take, pull, hit, kick, pat, grab, hold, kiss</em> - a part of the body takes <em>the</em> after a preposition. It is almost a fixed phrase.",
+      "explanation": "After certain verbs — <em>touch, shoot, take, pull, hit, kick, pat, grab, hold, kiss</em> — a part of the body takes <em>the</em> after a preposition. It is almost a fixed phrase.",
       "examples": [
         "She touched him on the arm.",
         "The criminal shot the policeman in the leg."
@@ -2448,7 +2449,7 @@
     }
   },
   "time_words": {
-    "unusual": "A time word used in an unusual way - a particular one you both know - takes <em>the</em>: <em>Do you remember the Monday we met?</em>, <em>The June when we got married</em>. And <em>a</em> with a day means 'any': <em>Could we meet on a Monday?</em>",
+    "unusual": "A time word used in an unusual way — a particular one you both know — takes <em>the</em>: <em>Do you remember the Monday we met?</em>, <em>The June when we got married</em>. And <em>a</em> with a day means 'any': <em>Could we meet on a Monday?</em>",
     "groups": {
       "months": {
         "article": "no article",
@@ -2833,9 +2834,9 @@
       ]
     },
     "q2a": {
-      "short": "in the the-taking class?",
+      "short": "a name that takes the?",
       "gate": "Which kind of name",
-      "q": "Is it in the <em>the</em>-taking class of names?",
+      "q": "Is it a name that takes <em>the</em>?",
       "note": "Plural names, <em>of</em>-constructions, water and landforms, regions, buildings and publications.",
       "opts": [
         {
