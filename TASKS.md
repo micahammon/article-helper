@@ -34,6 +34,11 @@
       meant. Listed senses answer straight away; the ordinary ones open the
       questions pinned to the word, and the back button returns to the list.
       Browser only, assembled from rules_data.json as it already stands.
+- [x] Lead each reading card with the example and keep the rule underneath in
+      the small grey. The examples come out of the tree's own options, indexed
+      by the node they lead to, and out of the <em> phrases the lookup
+      explanations already name -- `go to the cinema`, `listen to the radio`.
+      An example that only repeats the card's phrase is dropped.
 - [x] Split Q4's 4f into two rules: 4f is Part 2.2 (the situation we're both
       in), 4g is Part 4.1/4.2 (the everyday place as an idea), role nouns move
       to 4h. The one option cited 2.2, showed 4.1/4.2 examples and explained
@@ -58,6 +63,10 @@
 - [x] Outline an implementation plan with minimal-risk increments
 
 ## notes
+- Eight lookup notes cite 6.1.4, whose learner-facing name is "A meal, sport or
+  language used in an unusual way" -- right for its section, wrong over `a
+  cinema`. The readings mode shows no rule name on a note, as the walk does
+  not either; the citations themselves may want a look.
 - Implemented phrase-first MVP without changing project architecture: both UIs still share `rules_data.json` semantics and decision-tree fallback.
 - New Python API: `ArticleLogic.analyze_input(text)` returns `mode`, `focus_noun`, and optional lookup `result`.
 - Validation run: `python -m py_compile logic.py app.py rules.py` and `python -m unittest discover -s tests -v` (5 tests passed).

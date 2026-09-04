@@ -256,7 +256,15 @@ body{
 .reading .top{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
 .reading .built{font-family:var(--serif);font-size:24px;margin:0}
 .reading .cat{font-size:13px;font-weight:600;margin:8px 0 0}
-.reading .why{font-size:14px;margin:6px 0 0;max-width:44em}
+/* The example is what the learner reads the card by: they recognise the use
+   they meant faster than they recognise a description of it. So it leads, in
+   the serif, and the rule that licenses it follows underneath in the small
+   grey the trail uses. */
+.reading .lead-ex{
+  font-family:var(--serif);font-size:17px;line-height:1.6;
+  margin:10px 0 0;color:var(--ink);
+}
+.reading .why{font-size:13px;margin:6px 0 0;max-width:44em;color:var(--muted)}
 .reading .why em{font-family:var(--serif);font-size:15px}
 .reading .when{font-size:13px;color:var(--muted);margin:6px 0 0}
 .reading .ex{font-family:var(--serif);font-style:italic;color:var(--muted);
@@ -1865,6 +1873,60 @@ document.getElementById("clearseen").addEventListener("click", function(){
 
 var READ_CAP = 6;
 
+/* Where each node is arrived at, the option that goes there carries the
+   example that made it recognisable. Indexing them by destination means the
+   examples follow the tree if a question is ever re-cut, rather than being
+   copied here to go stale. */
+var EX = null;
+function exFor(nodeId){
+  var k, n, i, o;
+  if(!EX){
+    EX = {};
+    for(k in T){
+      if(!Object.prototype.hasOwnProperty.call(T, k)) continue;
+      n = T[k];
+      for(i = 0; i < (n.opts || []).length; i++){
+        o = n.opts[i];
+        if(o.ex && o.go && !EX[o.go]) EX[o.go] = o.ex;
+      }
+    }
+  }
+  return EX[nodeId] || null;
+}
+
+/* Two examples are a card; four are a wall. */
+function firstItems(ex, n){
+  if(!ex) return null;
+  return ex.split(" \u00b7 ").slice(0, n).join(" \u00b7 ");
+}
+
+/* What a listed entry shows off. Most explanations name the use they are
+   about - <em>go to the cinema</em>, <em>listen to the radio</em> - and that
+   phrase is the example the entry never got a field for. */
+function emExamples(html, word){
+  var re = /<em>(.*?)<\/em>/gi, m, out = [], t;
+  while((m = re.exec(String(html || ""))) && out.length < 2){
+    t = m[1].replace(/<[^>]*>/g, "");
+    if(t.toLowerCase().indexOf(word) !== -1 && normalize(t) !== word) out.push(t);
+  }
+  return out;
+}
+
+/* Worked phrases that use this word. The lookup table and the fixed
+   expressions carry no examples of their own, but the traces that feed the
+   chips are real uses, and 45 of the 70 listed words appear in one. */
+function traceExamples(word, title){
+  var out = [], i, p;
+  for(i = 0; i < D.traces.length && out.length < 2; i++){
+    p = D.traces[i].p;
+    if(tokenize(p).indexOf(word) === -1) continue;
+    /* a trace that only repeats the card's own phrase teaches nothing */
+    if(normalize(p) === normalize(title)) continue;
+    out.push(p);
+  }
+  return out;
+}
+
 /* the words that switch a conditional entry on, said as a cue */
 function cueFor(cond){
   var list = cond.requires_any || cond.requires_prev || null;
@@ -1895,7 +1957,7 @@ function readingsFor(word, disp){
     add({kind:"listed", pick:"answer", form:formOf(e.article),
          cat:(cond && cond.sense) ? cap(cond.sense) : "Listed noun",
          why:e.explanation, ref:e.rule_ref, when:cond ? cueFor(cond) : null,
-         examples:[]});
+         examples:emExamples(e.explanation, word)});
     if(cond){
       add({kind:"listed", pick:"walk", form:"context", title:"anything else",
            cat:"Any other use", why:cond.contrast || "The ordinary rules apply.",
@@ -1904,7 +1966,10 @@ function readingsFor(word, disp){
     }
     if(e.note){
       add({kind:"listed", pick:"walk", form:"context", title:"a different sense",
-           cat:"A different sense", why:e.note.text, ref:e.note.rule_ref || null,
+           /* no rule name on a note, as the walk shows none: eight of the
+              notes cite 6.1.4, whose name is about meals, sports and
+              languages and reads as a mislabel over `a cinema` */
+           cat:"A different sense", why:e.note.text, ref:null,
            when:null, examples:e.note.examples || []});
     }
   }
@@ -1921,7 +1986,7 @@ function readingsFor(word, disp){
     var fx = D.fixed_expressions[f];
     add({kind:"listed", pick:"answer", form:formOf(fx.article), title:f,
          cat:"Fixed expression", why:fx.explanation, ref:fx.rule_ref,
-         when:null, examples:[], match:f});
+         when:null, examples:emExamples(fx.explanation, word), match:f});
   });
 
   /* 3. the productive groups: languages, meals, sports, months, days, ... */
@@ -1933,7 +1998,7 @@ function readingsFor(word, disp){
       if(!g.words || g.words.indexOf(word) === -1) continue;
       add({kind:"listed", pick:"answer", form:formOf(g.article),
            cat:cap(name.replace(/s$/, "")), why:g.explanation, ref:g.rule_ref,
-           when:null, examples:[]});
+           when:null, examples:emExamples(g.explanation, word)});
     }
   }
   fromGroups(D.categories);
@@ -1960,15 +2025,27 @@ function readingsFor(word, disp){
 
   var a = T.out5a, z = T.outGenZeroPl;
   add({kind:"ordinary", pick:"walk", form:"an", cat:a.cat, why:a.why,
-       ref:a.rule_ref, when:null, examples:[]});
+       ref:a.rule_ref, when:null, ex:firstItems(exFor("out5a"), 2)});
   add({kind:"ordinary", pick:"walk", form:"the", cat:T.q4.gate,
        /* the question itself, not its note - the note is advice about working
           down the list on the question page, which is not what this card is */
-       why:T.q4.q, ref:null, when:null, examples:[]});
+       why:T.q4.q, ref:null, when:null, ex:exFor("q4")});
   add({kind:"ordinary", pick:"walk", form:"zero", cat:z.cat, why:z.why,
-       ref:z.rule_ref, when:null, examples:[]});
+       ref:z.rule_ref, when:null,
+       ex:[firstItems(exFor("outGenZeroPl"), 1), firstItems(exFor("outGenZeroNc"), 1)]
+            .filter(Boolean).join(" \u00b7 ") || null});
 
   return out;
+}
+
+/* An example that only says the phrase already at the top of the card - `at
+   night` under `at night` - is not an example. */
+function exceptTitle(text, title){
+  if(!text) return null;
+  var keep = String(text).split(" \u00b7 ").filter(function(x){
+    return normalize(x) !== normalize(title);
+  });
+  return keep.length ? keep.join(" \u00b7 ") : null;
 }
 
 function renderReadings(word, disp){
@@ -1994,14 +2071,20 @@ function renderReadings(word, disp){
     var b = document.createElement("button");
     b.type = "button";
     b.className = "reading " + f.cls;
+    /* An example of its own comes first; failing that, a worked phrase that
+       uses the word. A card with neither closes up. */
+    var ex = exceptTitle(r.ex, r.title) ||
+             exceptTitle((r.examples || []).map(esc).join(" \u00b7 "), r.title) ||
+             (r.kind === "listed"
+                ? exceptTitle(traceExamples(word, r.title).map(esc).join(" \u00b7 "), r.title)
+                : null);
+
     var h = '<div class="top"><p class="built">' + esc(r.title) + '</p>' +
-            '<span class="pill ' + f.cls.replace("r-", "p-") + '">' + f.word + '</span></div>' +
-            '<p class="cat">' + esc(r.cat) + '</p>';
+            '<span class="pill ' + f.cls.replace("r-", "p-") + '">' + f.word + '</span></div>';
+    if(ex) h += '<p class="lead-ex">' + ex + '</p>';
+    h += '<p class="cat">' + esc(r.cat) + '</p>';
     if(r.when) h += '<p class="when">' + r.when + '</p>';
     h += '<p class="why">' + r.why + '</p>';
-    if(r.examples && r.examples.length){
-      h += '<span class="ex">' + r.examples.map(esc).join(" \u00b7 ") + '</span>';
-    }
     h += refPill(r.ref, null);
     b.innerHTML = h;
     b.addEventListener("click", function(){ chooseReading(word, disp, r); });
