@@ -220,7 +220,7 @@
   "lookup_table": {
     "cinema": {
       "article": "the",
-      "explanation": "As a general concept of entertainment, we say 'go to the cinema'.",
+      "explanation": "As a general concept of entertainment, we say <em>go to the cinema</em>.",
       "rule_ref": "4.1",
       "note": {
         "text": "Meaning one particular building or performance instead, it is an ordinary noun again and the ordinary rules apply.",
@@ -233,7 +233,7 @@
     },
     "opera": {
       "article": "the",
-      "explanation": "As a general concept of entertainment, we say 'go to the opera'.",
+      "explanation": "As a general concept of entertainment, we say <em>go to the opera</em>.",
       "rule_ref": "4.1",
       "note": {
         "text": "Meaning one particular building or performance instead, it is an ordinary noun again and the ordinary rules apply.",
@@ -246,7 +246,7 @@
     },
     "theatre": {
       "article": "the",
-      "explanation": "As a general concept of entertainment, we say 'go to the theatre'. American English spells it <em>theater</em>.",
+      "explanation": "As a general concept of entertainment, we say <em>go to the theatre</em>. American English spells it <em>theater</em>.",
       "rule_ref": "4.1",
       "note": {
         "text": "Meaning one particular building or performance instead, it is an ordinary noun again and the ordinary rules apply.",
@@ -259,7 +259,7 @@
     },
     "theater": {
       "article": "the",
-      "explanation": "As a general concept of entertainment, we say 'go to the theater'.",
+      "explanation": "As a general concept of entertainment, we say <em>go to the theater</em>.",
       "rule_ref": "4.1",
       "note": {
         "text": "Meaning one particular building or performance instead, it is an ordinary noun again and the ordinary rules apply.",
@@ -272,7 +272,7 @@
     },
     "ballet": {
       "article": "the",
-      "explanation": "As a general concept of entertainment, we say 'go to the ballet'.",
+      "explanation": "As a general concept of entertainment, we say <em>go to the ballet</em>.",
       "rule_ref": "4.1",
       "note": {
         "text": "Meaning one particular building or performance instead, it is an ordinary noun again and the ordinary rules apply.",
@@ -285,12 +285,12 @@
     },
     "internet": {
       "article": "the",
-      "explanation": "The name of a global system, 'the internet', always takes 'the'.",
+      "explanation": "The name of a global system, <em>the internet</em>, always takes <em>the</em>.",
       "rule_ref": "4.14"
     },
     "radio": {
       "article": "the",
-      "explanation": "As a medium of communication, we say 'listen to the radio'. Note: with 'by radio', use no article.",
+      "explanation": "As a medium of communication, we say <em>listen to the radio</em>. Note: with <em>by radio</em>, use no article.",
       "rule_ref": "4.5",
       "conditions": {
         "requires_any": [
@@ -315,7 +315,7 @@
     },
     "post": {
       "article": "the",
-      "explanation": "Referring to the mail system, we say 'in the post'. Note: with 'by post' (UK) / 'by mail' (US), use no article.",
+      "explanation": "Referring to the mail system, we say <em>in the post</em>. Note: with <em>by post</em> (UK) / <em>by mail</em> (US), use no article.",
       "rule_ref": "4.5",
       "conditions": {
         "requires_any": [
@@ -340,7 +340,7 @@
     },
     "phone": {
       "article": "the",
-      "explanation": "When referring to the device as a means of communication, we say 'on the phone'. Note: with 'by phone', use no article.",
+      "explanation": "When referring to the device as a means of communication, we say <em>on the phone</em>. Note: with <em>by phone</em>, use no article.",
       "rule_ref": "4.5",
       "conditions": {
         "requires_any": [
@@ -365,7 +365,7 @@
     },
     "piano": {
       "article": "the",
-      "explanation": "Musical instruments, especially with 'play', take 'the'. E.g., 'play the piano'.",
+      "explanation": "Musical instruments, especially with <em>play</em>, take <em>the</em>. E.g., <em>play the piano</em>.",
       "rule_ref": "4.3",
       "conditions": {
         "requires_any": [
@@ -385,7 +385,7 @@
     },
     "guitar": {
       "article": "the",
-      "explanation": "Musical instruments, especially with 'play', take 'the'. E.g., 'play the guitar'.",
+      "explanation": "Musical instruments, especially with <em>play</em>, take <em>the</em>. E.g., <em>play the guitar</em>.",
       "rule_ref": "4.3",
       "conditions": {
         "requires_any": [
@@ -405,7 +405,7 @@
     },
     "violin": {
       "article": "the",
-      "explanation": "Musical instruments, especially with 'play', take 'the'. E.g., 'play the violin'.",
+      "explanation": "Musical instruments, especially with <em>play</em>, take <em>the</em>. E.g., <em>play the violin</em>.",
       "rule_ref": "4.3",
       "conditions": {
         "requires_any": [
@@ -425,22 +425,22 @@
     },
     "sun": {
       "article": "the",
-      "explanation": "Unique celestial bodies in our solar system take 'the'.",
+      "explanation": "Unique celestial bodies in our solar system take <em>the</em>.",
       "rule_ref": "2.3"
     },
     "moon": {
       "article": "the",
-      "explanation": "Unique celestial bodies in our solar system take 'the'.",
+      "explanation": "Unique celestial bodies in our solar system take <em>the</em>.",
       "rule_ref": "2.3"
     },
     "world": {
       "article": "the",
-      "explanation": "As a unique concept, we say 'in the world'.",
+      "explanation": "As a unique concept, we say <em>in the world</em>.",
       "rule_ref": "2.3"
     },
     "environment": {
       "article": "the",
-      "explanation": "As a unique, shared concept, we say 'protect the environment'.",
+      "explanation": "As a unique, shared concept, we say <em>protect the environment</em>.",
       "rule_ref": "4.14"
     },
     "police": {
@@ -450,12 +450,12 @@
     },
     "countryside": {
       "article": "the",
-      "explanation": "As a general geographical concept, we say 'in the countryside'.",
+      "explanation": "As a general geographical concept, we say <em>in the countryside</em>.",
       "rule_ref": "4.10"
     },
     "nature": {
       "article": "no article",
-      "explanation": "The abstract concept of 'nature' does not take an article.",
+      "explanation": "The abstract concept of <em>nature</em> does not take an article.",
       "rule_ref": "4.15",
       "conditions": {
         "blocked_by_next": [
@@ -472,7 +472,7 @@
     },
     "society": {
       "article": "no article",
-      "explanation": "The abstract concept of 'society' does not take an article.",
+      "explanation": "The abstract concept of <em>society</em> does not take an article.",
       "rule_ref": "4.15",
       "conditions": {
         "blocked_by_next": [
@@ -489,7 +489,7 @@
     },
     "space": {
       "article": "no article",
-      "explanation": "When meaning 'outer space', this abstract concept does not take an article.",
+      "explanation": "When meaning <em>outer space</em>, this abstract concept does not take an article.",
       "rule_ref": "4.15",
       "conditions": {
         "blocked_by_next": [
@@ -506,7 +506,7 @@
     },
     "history": {
       "article": "no article",
-      "explanation": "The abstract concept of 'history' does not take an article.",
+      "explanation": "The abstract concept of <em>history</em> does not take an article.",
       "rule_ref": "4.15",
       "conditions": {
         "blocked_by_next": [
@@ -523,7 +523,7 @@
     },
     "art": {
       "article": "no article",
-      "explanation": "The abstract concept of 'art' does not take an article.",
+      "explanation": "The abstract concept of <em>art</em> does not take an article.",
       "rule_ref": "4.15",
       "conditions": {
         "blocked_by_next": [
@@ -540,7 +540,7 @@
     },
     "music": {
       "article": "no article",
-      "explanation": "The abstract concept of 'music' does not take an article.",
+      "explanation": "The abstract concept of <em>music</em> does not take an article.",
       "rule_ref": "4.15",
       "conditions": {
         "blocked_by_next": [
@@ -680,7 +680,7 @@
     },
     "bed": {
       "article": "no article",
-      "explanation": "When referring to the state of being in bed to sleep/rest, use 'no article' (e.g., 'go to bed'). If you mean the physical object, use normal rules (a/the).",
+      "explanation": "When referring to the state of being in bed to sleep/rest, use <em>no article</em> (e.g., <em>go to bed</em>). If you mean the physical object, use normal rules (a/the).",
       "rule_ref": "7.4.1",
       "conditions": {
         "requires_any": [
@@ -707,7 +707,7 @@
     },
     "home": {
       "article": "no article",
-      "explanation": "When used with verbs of motion like 'go', 'come', 'arrive', we say 'go home' with no article. If you mean a specific building/house, use normal rules (a/the).",
+      "explanation": "When used with verbs of motion like <em>go</em>, <em>come</em>, <em>arrive</em>, we say <em>go home</em> with no article. If you mean a specific building/house, use normal rules (a/the).",
       "rule_ref": "7.4.2",
       "conditions": {
         "requires_any": [
@@ -734,7 +734,7 @@
     },
     "work": {
       "article": "no article",
-      "explanation": "When referring to the place of employment, we say 'at work' or 'go to work' with no article. If you mean a specific job/task, use normal rules (a/the).",
+      "explanation": "When referring to the place of employment, we say <em>at work</em> or <em>go to work</em> with no article. If you mean a specific job/task, use normal rules (a/the).",
       "rule_ref": "7.4.3",
       "conditions": {
         "requires_any": [
@@ -761,57 +761,57 @@
     },
     "flu": {
       "article": "the",
-      "explanation": "For some common illnesses, it's conventional to use 'the' (e.g., 'I have the flu'). 'No article' is also sometimes possible.",
+      "explanation": "For some common illnesses, it's conventional to use <em>the</em> (e.g., <em>I have the flu</em>). <em>No article</em> is also sometimes possible.",
       "rule_ref": "7.5"
     },
     "measles": {
       "article": "the",
-      "explanation": "For some common illnesses, it's conventional to use 'the' (e.g., 'I have the measles'). 'No article' is also sometimes possible.",
+      "explanation": "For some common illnesses, it's conventional to use <em>the</em> (e.g., <em>I have the measles</em>). <em>No article</em> is also sometimes possible.",
       "rule_ref": "7.5"
     },
     "cancer": {
       "article": "no article",
-      "explanation": "Most serious or uncountable illnesses like 'cancer' or 'heart disease' take no article.",
+      "explanation": "Most serious or uncountable illnesses like <em>cancer</em> or <em>heart disease</em> take no article.",
       "rule_ref": "7.5"
     },
     "usa": {
       "article": "the",
-      "explanation": "Plural proper nouns like 'the United States of America' take 'the'.",
+      "explanation": "Plural proper nouns like <em>the United States of America</em> take <em>the</em>.",
       "rule_ref": "9.2.2"
     },
     "united kingdom": {
       "article": "the",
-      "explanation": "Proper nouns signifying a collection of states (kingdom, republic) take 'the'.",
+      "explanation": "Proper nouns signifying a collection of states (kingdom, republic) take <em>the</em>.",
       "rule_ref": "9.2.2"
     },
     "netherlands": {
       "article": "the",
-      "explanation": "Plural proper nouns like 'the Netherlands' take 'the'.",
+      "explanation": "Plural proper nouns like <em>the Netherlands</em> take <em>the</em>.",
       "rule_ref": "9.2.2"
     },
     "philippines": {
       "article": "the",
-      "explanation": "Plural proper nouns like 'the Philippines' take 'the'.",
+      "explanation": "Plural proper nouns like <em>the Philippines</em> take <em>the</em>.",
       "rule_ref": "9.2.2"
     },
     "the hague": {
       "article": "the",
-      "explanation": "'The Hague' is an exception where 'The' is part of the city's official name.",
+      "explanation": "<em>The Hague</em> is an exception where <em>The</em> is part of the city's official name.",
       "rule_ref": "9.2.2"
     },
     "nile river": {
       "article": "the",
-      "explanation": "Names of rivers, oceans, and seas always take 'the'.",
+      "explanation": "Names of rivers, oceans, and seas always take <em>the</em>.",
       "rule_ref": "9.2.2"
     },
     "sahara desert": {
       "article": "the",
-      "explanation": "Names of deserts always take 'the'.",
+      "explanation": "Names of deserts always take <em>the</em>.",
       "rule_ref": "9.2.2"
     },
     "alps": {
       "article": "the",
-      "explanation": "Names of mountain ranges (plural) always take 'the'.",
+      "explanation": "Names of mountain ranges (plural) always take <em>the</em>.",
       "rule_ref": "9.2.2"
     },
     "mount fuji": {
@@ -826,7 +826,7 @@
     },
     "poor": {
       "article": "the",
-      "explanation": "To refer to a group of people as a whole, use 'the' + adjective (e.g., 'the poor', 'the rich').",
+      "explanation": "To refer to a group of people as a whole, use <em>the</em> + adjective (e.g., <em>the poor</em>, <em>the rich</em>).",
       "rule_ref": "3.5",
       "conditions": {
         "requires_prev": [
@@ -844,7 +844,7 @@
     },
     "rich": {
       "article": "the",
-      "explanation": "To refer to a group of people as a whole, use 'the' + adjective (e.g., 'the poor', 'the rich').",
+      "explanation": "To refer to a group of people as a whole, use <em>the</em> + adjective (e.g., <em>the poor</em>, <em>the rich</em>).",
       "rule_ref": "3.5",
       "conditions": {
         "requires_prev": [
@@ -862,7 +862,7 @@
     },
     "unemployed": {
       "article": "the",
-      "explanation": "To refer to a group of people as a whole, use 'the' + adjective (e.g., 'the unemployed').",
+      "explanation": "To refer to a group of people as a whole, use <em>the</em> + adjective (e.g., <em>the unemployed</em>).",
       "rule_ref": "3.5",
       "conditions": {
         "requires_prev": [
@@ -879,7 +879,7 @@
     },
     "elderly": {
       "article": "the",
-      "explanation": "To refer to a group of people as a whole, use 'the' + adjective (e.g., 'the elderly').",
+      "explanation": "To refer to a group of people as a whole, use <em>the</em> + adjective (e.g., <em>the elderly</em>).",
       "rule_ref": "3.5",
       "conditions": {
         "requires_prev": [
@@ -897,7 +897,7 @@
     },
     "gym": {
       "article": "the",
-      "explanation": "A place we all know rather than a particular building: 'go to the gym'.",
+      "explanation": "A place we all know rather than a particular building: <em>go to the gym</em>.",
       "rule_ref": "4.1",
       "note": {
         "text": "Meaning one particular building instead, it is an ordinary noun again and the ordinary rules apply.",
@@ -910,7 +910,7 @@
     },
     "park": {
       "article": "the",
-      "explanation": "A place we all know rather than a particular one: 'go to the park'.",
+      "explanation": "A place we all know rather than a particular one: <em>go to the park</em>.",
       "rule_ref": "4.1",
       "note": {
         "text": "Meaning one particular building instead, it is an ordinary noun again and the ordinary rules apply.",
@@ -923,7 +923,7 @@
     },
     "zoo": {
       "article": "the",
-      "explanation": "A place we all know rather than a particular one: 'go to the zoo'.",
+      "explanation": "A place we all know rather than a particular one: <em>go to the zoo</em>.",
       "rule_ref": "4.1",
       "note": {
         "text": "Meaning one particular building instead, it is an ordinary noun again and the ordinary rules apply.",
@@ -936,7 +936,7 @@
     },
     "library": {
       "article": "the",
-      "explanation": "A place we all know rather than a particular building: 'go to the library'.",
+      "explanation": "A place we all know rather than a particular building: <em>go to the library</em>.",
       "rule_ref": "4.1",
       "note": {
         "text": "Meaning one particular building instead, it is an ordinary noun again and the ordinary rules apply.",
@@ -949,7 +949,7 @@
     },
     "movies": {
       "article": "the",
-      "explanation": "American English for 'the cinema': 'go to the movies'. The outing, not a building.",
+      "explanation": "American English for <em>the cinema</em>: <em>go to the movies</em>. The outing, not a building.",
       "rule_ref": "4.1",
       "note": {
         "text": "Meaning one particular building instead, it is an ordinary noun again and the ordinary rules apply.",
@@ -962,7 +962,7 @@
     },
     "bank": {
       "article": "the",
-      "explanation": "The errand rather than a particular branch: 'put it in the bank'.",
+      "explanation": "The errand rather than a particular branch: <em>put it in the bank</em>.",
       "rule_ref": "4.2",
       "note": {
         "text": "Meaning one particular business instead, it is an ordinary noun again and the ordinary rules apply.",
@@ -975,7 +975,7 @@
     },
     "pub": {
       "article": "the",
-      "explanation": "The outing rather than a particular pub: 'go to the pub'. American English says 'the bar'.",
+      "explanation": "The outing rather than a particular pub: <em>go to the pub</em>. American English says <em>the bar</em>.",
       "rule_ref": "4.2",
       "note": {
         "text": "Meaning one particular business instead, it is an ordinary noun again and the ordinary rules apply.",
@@ -988,7 +988,7 @@
     },
     "bar": {
       "article": "the",
-      "explanation": "American English counterpart of 'the pub': 'go to the bar'. Not 'a bar of chocolate', and not 'the bar' meaning the legal profession.",
+      "explanation": "American English counterpart of <em>the pub</em>: <em>go to the bar</em>. Not <em>a bar of chocolate</em>, and not <em>the bar</em> meaning the legal profession.",
       "rule_ref": "4.2",
       "note": {
         "text": "Meaning one particular business instead, it is an ordinary noun again and the ordinary rules apply.",
@@ -1001,7 +1001,7 @@
     },
     "post office": {
       "article": "the",
-      "explanation": "The errand rather than a particular branch: 'go to the post office'.",
+      "explanation": "The errand rather than a particular branch: <em>go to the post office</em>.",
       "rule_ref": "4.2",
       "note": {
         "text": "Meaning one particular business instead, it is an ordinary noun again and the ordinary rules apply.",
@@ -1014,7 +1014,7 @@
     },
     "doctor's": {
       "article": "the",
-      "explanation": "The visit rather than a particular surgery: 'go to the doctor's'. American English drops the 's': 'go to the doctor'.",
+      "explanation": "The visit rather than a particular surgery: <em>go to the doctor's</em>. American English drops the <em>s</em>: <em>go to the doctor</em>.",
       "rule_ref": "4.2",
       "note": {
         "text": "Meaning one particular business instead, it is an ordinary noun again and the ordinary rules apply.",
@@ -1027,7 +1027,7 @@
     },
     "doctor": {
       "article": "the",
-      "explanation": "American English for 'the doctor's': 'go to the doctor'. The visit, not a particular person.",
+      "explanation": "American English for <em>the doctor's</em>: <em>go to the doctor</em>. The visit, not a particular person.",
       "rule_ref": "4.2",
       "note": {
         "text": "Meaning one particular business instead, it is an ordinary noun again and the ordinary rules apply.",
@@ -1040,7 +1040,7 @@
     },
     "dentist's": {
       "article": "the",
-      "explanation": "The visit rather than a particular practice: 'go to the dentist's'. American English drops the 's'.",
+      "explanation": "The visit rather than a particular practice: <em>go to the dentist's</em>. American English drops the <em>s</em>.",
       "rule_ref": "4.2",
       "note": {
         "text": "Meaning one particular business instead, it is an ordinary noun again and the ordinary rules apply.",
@@ -1053,7 +1053,7 @@
     },
     "dentist": {
       "article": "the",
-      "explanation": "American English for 'the dentist's': 'go to the dentist'.",
+      "explanation": "American English for <em>the dentist's</em>: <em>go to the dentist</em>.",
       "rule_ref": "4.2",
       "note": {
         "text": "Meaning one particular business instead, it is an ordinary noun again and the ordinary rules apply.",
@@ -1066,7 +1066,7 @@
     },
     "hairdresser's": {
       "article": "the",
-      "explanation": "The appointment rather than a particular salon: 'go to the hairdresser's'.",
+      "explanation": "The appointment rather than a particular salon: <em>go to the hairdresser's</em>.",
       "rule_ref": "4.2",
       "note": {
         "text": "Meaning one particular business instead, it is an ordinary noun again and the ordinary rules apply.",
@@ -1079,7 +1079,7 @@
     },
     "baker's": {
       "article": "the",
-      "explanation": "The errand rather than a particular shop: 'buy bread at the baker's'.",
+      "explanation": "The errand rather than a particular shop: <em>buy bread at the baker's</em>.",
       "rule_ref": "4.2",
       "note": {
         "text": "Meaning one particular business instead, it is an ordinary noun again and the ordinary rules apply.",
@@ -1092,7 +1092,7 @@
     },
     "mall": {
       "article": "the",
-      "explanation": "American English, alongside British 'the shops': 'go to the mall'. The outing, not a particular mall.",
+      "explanation": "American English, alongside British <em>the shops</em>: <em>go to the mall</em>. The outing, not a particular mall.",
       "rule_ref": "4.2",
       "note": {
         "text": "Meaning one particular business instead, it is an ordinary noun again and the ordinary rules apply.",
@@ -1105,7 +1105,7 @@
     },
     "store": {
       "article": "the",
-      "explanation": "American English, alongside British 'the shops': 'go to the store'. The errand, not a particular store.",
+      "explanation": "American English, alongside British <em>the shops</em>: <em>go to the store</em>. The errand, not a particular store.",
       "rule_ref": "4.2",
       "note": {
         "text": "Meaning one particular business instead, it is an ordinary noun again and the ordinary rules apply.",
@@ -1118,7 +1118,7 @@
     },
     "drugstore": {
       "article": "the",
-      "explanation": "American English counterpart of British 'the chemist's': 'go to the drugstore'.",
+      "explanation": "American English counterpart of British <em>the chemist's</em>: <em>go to the drugstore</em>.",
       "rule_ref": "4.2",
       "note": {
         "text": "Meaning one particular business instead, it is an ordinary noun again and the ordinary rules apply.",
@@ -1131,7 +1131,7 @@
     },
     "chemist's": {
       "article": "the",
-      "explanation": "The errand rather than a particular shop: 'go to the chemist's'. American English says 'the drugstore' or 'the pharmacy'.",
+      "explanation": "The errand rather than a particular shop: <em>go to the chemist's</em>. American English says <em>the drugstore</em> or <em>the pharmacy</em>.",
       "rule_ref": "4.2",
       "note": {
         "text": "Meaning one particular business instead, it is an ordinary noun again and the ordinary rules apply.",
@@ -1144,7 +1144,7 @@
     },
     "shops": {
       "article": "the",
-      "explanation": "The errand rather than particular shops: 'go to the shops'. American English says 'the mall' or 'the store'.",
+      "explanation": "The errand rather than particular shops: <em>go to the shops</em>. American English says <em>the mall</em> or <em>the store</em>.",
       "rule_ref": "4.2",
       "note": {
         "text": "Meaning one particular business instead, it is an ordinary noun again and the ordinary rules apply.",
@@ -1767,19 +1767,19 @@
       "article": "a / an",
       "group": "a_an",
       "rule_ref": "7.7",
-      "explanation": "A quantifying expression built on <em>a</em>: <em>a few</em> and <em>a little</em> mean 'some', while bare <em>few</em> and <em>little</em> mean 'not many/much'."
+      "explanation": "A quantifying expression built on <em>a</em>: <em>a few</em> and <em>a little</em> mean <em>some</em>, while bare <em>few</em> and <em>little</em> mean <em>not many/much</em>."
     },
     "a few": {
       "article": "a / an",
       "group": "a_an",
       "rule_ref": "7.7",
-      "explanation": "A quantifying expression built on <em>a</em>: <em>a few</em> and <em>a little</em> mean 'some', while bare <em>few</em> and <em>little</em> mean 'not many/much'."
+      "explanation": "A quantifying expression built on <em>a</em>: <em>a few</em> and <em>a little</em> mean <em>some</em>, while bare <em>few</em> and <em>little</em> mean <em>not many/much</em>."
     },
     "a little": {
       "article": "a / an",
       "group": "a_an",
       "rule_ref": "7.7",
-      "explanation": "A quantifying expression built on <em>a</em>: <em>a few</em> and <em>a little</em> mean 'some', while bare <em>few</em> and <em>little</em> mean 'not many/much'."
+      "explanation": "A quantifying expression built on <em>a</em>: <em>a few</em> and <em>a little</em> mean <em>some</em>, while bare <em>few</em> and <em>little</em> mean <em>not many/much</em>."
     },
     "in a hurry": {
       "article": "a / an",
@@ -2024,12 +2024,12 @@
       "regex": "\\b(there is|there's|there was|is there|was there)\\b",
       "article": "a / an",
       "rule_ref": "2.7",
-      "explanation": "<em>There is / there are</em> in the 'something exists' sense introduces something the listener does not yet know about, so a singular noun takes <em>a/an</em>.",
+      "explanation": "<em>There is / there are</em> in the <em>something exists</em> sense introduces something the listener does not yet know about, so a singular noun takes <em>a/an</em>.",
       "examples": [
         "There's a post office in my town.",
         "Is there a bank nearby?"
       ],
-      "contrast": "An uncountable noun after <em>there is</em> takes no article instead: <em>There is always traffic on this road.</em> And <em>there</em> can mean 'in a certain place', where no special rule applies: <em>There are the books that I lost!</em>",
+      "contrast": "An uncountable noun after <em>there is</em> takes no article instead: <em>There is always traffic on this road.</em> And <em>there</em> can mean <em>in a certain place</em>, where no special rule applies: <em>There are the books that I lost!</em>",
       "frame": true
     },
     {
@@ -2037,13 +2037,13 @@
       "regex": "\\b(there are|there were|are there|were there)\\b",
       "article": "no article",
       "rule_ref": "2.7",
-      "explanation": "<em>There are</em> in the 'something exists' sense takes a plural noun, and it is normal to use a number or no article rather than an article.",
+      "explanation": "<em>There are</em> in the <em>something exists</em> sense takes a plural noun, and it is normal to use a number or no article rather than an article.",
       "examples": [
         "There are two train stations in Glasgow.",
         "There are butterflies in my garden.",
         "There is always traffic on this road."
       ],
-      "contrast": "<em>There</em> meaning 'in a certain place' is different: <em>There are the books that I lost!</em>",
+      "contrast": "<em>There</em> meaning <em>in a certain place</em> is different: <em>There are the books that I lost!</em>",
       "frame": true
     },
     {
@@ -2093,7 +2093,7 @@
       "regex": "\\bin the (next|last)\\b.*\\b(week|weekend|month|year|night|morning|afternoon|evening|summer|winter|spring|autumn|fall|term|semester|decade|century|monday|tuesday|wednesday|thursday|friday|saturday|sunday|january|february|march|april|may|june|july|august|september|october|november|december)\\b",
       "article": "the",
       "rule_ref": "7.11",
-      "explanation": "<em>In the next / last</em> + a time word takes <em>the</em>, and means a stretch running from now: <em>in the next year</em> is 'between now and a year from now', which is different from <em>next year</em>.",
+      "explanation": "<em>In the next / last</em> + a time word takes <em>the</em>, and means a stretch running from now: <em>in the next year</em> is <em>between now and a year from now</em>, which is different from <em>next year</em>.",
       "examples": [
         "I'll finish my thesis in the next year.",
         "I lost my credit card sometime in the last week."
@@ -2149,7 +2149,7 @@
       "regex": "\\b(a|an) (first|second|third|fourth|fifth|sixth|seventh|eighth|ninth|tenth|eleventh|twelfth) [a-z]+\\b",
       "article": "a / an",
       "rule_ref": "7.12",
-      "explanation": "<em>A/an</em> with an ordinal means 'one more', not 'the Nth one in a row'. Less common than <em>the</em>.",
+      "explanation": "<em>A/an</em> with an ordinal means <em>one more</em>, not <em>the Nth one in a row</em>. Less common than <em>the</em>.",
       "examples": [
         "Would you like a second cup of coffee?",
         "We missed two buses, but thankfully a third bus came along."
@@ -2177,7 +2177,7 @@
         "She bought the first dress she found.",
         "I'd like the third cake on the shelf."
       ],
-      "contrast": "<em>A/an</em> is possible when it does not identify which one, meaning 'one more': <em>Would you like a second cup of coffee?</em>"
+      "contrast": "<em>A/an</em> is possible when it does not identify which one, meaning <em>one more</em>: <em>Would you like a second cup of coffee?</em>"
     },
     {
       "name": "comparative_pair",
@@ -2196,7 +2196,7 @@
       "regex": "\\bthe most\\b",
       "article": "the",
       "rule_ref": "7.8",
-      "explanation": "<em>The most</em> is part of a superlative with a long adjective, and implies a comparison. With a noun it means 'the largest number of'.",
+      "explanation": "<em>The most</em> is part of a superlative with a long adjective, and implies a comparison. With a noun it means <em>the largest number of</em>.",
       "examples": [
         "Lucy is the most intelligent student in the class.",
         "James has the most books of the people in the class."
@@ -2220,7 +2220,7 @@
       "regex": "^most [a-z]+",
       "article": "no article",
       "rule_ref": "7.8",
-      "explanation": "<em>Most</em> before a noun means 'almost all' or 'very many', and takes no article.",
+      "explanation": "<em>Most</em> before a noun means <em>almost all</em> or <em>very many</em>, and takes no article.",
       "examples": [
         "Most people like chocolate.",
         "Most children drink milk."
@@ -2232,7 +2232,7 @@
       "regex": "\\b(few|little|lots of)\\b",
       "article": "no article",
       "rule_ref": "7.7",
-      "explanation": "Bare <em>few</em> and <em>little</em> take no article and mean 'almost none' — noticeably less than <em>a few</em> and <em>a little</em>, which mean 'a small amount, but enough'.",
+      "explanation": "Bare <em>few</em> and <em>little</em> take no article and mean <em>almost none</em> — noticeably less than <em>a few</em> and <em>a little</em>, which mean <em>a small amount, but enough</em>.",
       "examples": [
         "Sorry, I have little money. I really can't afford to go out.",
         "There have been few problems with the new system, thankfully!"
@@ -2449,7 +2449,7 @@
     }
   },
   "time_words": {
-    "unusual": "A time word used in an unusual way — a particular one you both know — takes <em>the</em>: <em>Do you remember the Monday we met?</em>, <em>The June when we got married</em>. And <em>a</em> with a day means 'any': <em>Could we meet on a Monday?</em>",
+    "unusual": "A time word used in an unusual way — a particular one you both know — takes <em>the</em>: <em>Do you remember the Monday we met?</em>, <em>The June when we got married</em>. And <em>a</em> with a day means <em>any</em>: <em>Could we meet on a Monday?</em>",
     "groups": {
       "months": {
         "article": "no article",
@@ -2473,7 +2473,7 @@
       "days": {
         "article": "no article",
         "rule_ref": "6.2.2",
-        "explanation": "Days of the week take no article: <em>I'm meeting Julia on Monday</em>, <em>She started work last Wednesday</em>. A plural day means 'every': <em>I work on Mondays and Tuesdays</em>.",
+        "explanation": "Days of the week take no article: <em>I'm meeting Julia on Monday</em>, <em>She started work last Wednesday</em>. A plural day means <em>every</em>: <em>I work on Mondays and Tuesdays</em>.",
         "words": [
           "monday",
           "tuesday",

@@ -23,7 +23,9 @@ from rules import (
     TIME_WORDS,
 )
 
-WORD_PATTERN = re.compile(r"[A-Za-z0-9]+(?:'[A-Za-z]+)?")
+# The accented range keeps cafe, resume and naive in one piece when they are
+# written properly; without it the tokenizer cut them at the accent.
+WORD_PATTERN = re.compile(r"[A-Za-z0-9\u00c0-\u024f]+(?:'[A-Za-z\u00c0-\u024f]+)?")
 
 _NOUN_NUMBER_RE = re.compile(PATTERNS["noun_number"]["regex"], re.IGNORECASE)
 

@@ -467,13 +467,14 @@ function displayWord(s){
    is one token and can be told apart from a possessive */
 function tokenize(s){
   var m = String(s == null ? "" : s).toLowerCase()
-            .match(/[a-z0-9]+(?:['\u2019][a-z]+)?/g);
+            .match(/[a-z0-9\u00c0-\u024f]+(?:['\u2019][a-z\u00c0-\u024f]+)?/g);
   return m || [];
 }
 
 /* word tokens with their original capitalisation kept */
 function casedTokens(s){
-  var m = String(s == null ? "" : s).match(/[A-Za-z0-9]+(?:'[A-Za-z]+)?/g);
+  var m = String(s == null ? "" : s)
+    .match(/[A-Za-z0-9\u00c0-\u024f]+(?:'[A-Za-z\u00c0-\u024f]+)?/g);
   return m || [];
 }
 function isCap(t){ return !!t && t[0] >= "A" && t[0] <= "Z"; }
@@ -481,7 +482,8 @@ function isCap(t){ return !!t && t[0] >= "A" && t[0] <= "Z"; }
 /* a or an by sound, not spelling: the lists live in the JSON */
 function chooseAOrAn(word){
   if(!word) return "a";
-  var bare = String(word).replace(/^[^A-Za-z0-9]+|[^A-Za-z0-9]+$/g, "");
+  var bare = String(word)
+    .replace(/^[^A-Za-z0-9\u00c0-\u024f]+|[^A-Za-z0-9\u00c0-\u024f]+$/g, "");
   if(!bare) return "a";
   var low = bare.toLowerCase(), P = D.phonetics, i;
 
@@ -638,7 +640,8 @@ function renderFocusBar(text, hitResult){
 
 /* strip punctuation from one word, keeping the clitic */
 function normalizeWord(w){
-  return String(w).toLowerCase().replace(/^[^a-z0-9]+|[^a-z0-9'\u2019]+$/g, "");
+  return String(w).toLowerCase()
+    .replace(/^[^a-z0-9\u00c0-\u024f]+|[^a-z0-9\u00c0-\u024f'\u2019]+$/g, "");
 }
 
 /* ---- which word is the learner asking about? (mirrors logic.py) ---- */
@@ -1349,6 +1352,9 @@ function resultWord(){
 
 function buildPhrase(form, word){
   if(!word) return "";
+  /* one lookup key carries its own article - `the hague` - and adding another
+     built `the the hague` */
+  if(/^(?:the|an?)\s/i.test(word)) return word;
   if(form === "the") return "the " + word;
   if(form === "an")  return chooseAOrAn(word) + " " + word;
   return word;
@@ -1415,7 +1421,9 @@ function renderGate0(r){
   }else{
     /* prefer what the user actually typed, so capitalisation survives */
     var typed = displayWord(phrase.value);
-    built = buildPhrase(r.form, (normalize(typed) === r.match) ? typed : r.match);
+    var bare = String(r.match).replace(/^(?:the|an?)\s+/i, "");
+    var same = normalize(typed) === r.match || normalize(typed) === bare;
+    built = buildPhrase(r.form, same ? typed : r.match);
   }
 
   /* The headword names what was matched. When that is already what the built
