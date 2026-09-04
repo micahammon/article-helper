@@ -847,7 +847,7 @@ function gate0(text){
   /* 3. the lookup table, direct then longest phrase - subject to conditions */
   key = Object.prototype.hasOwnProperty.call(D.lookup_table, norm) ? norm
       : longestPhrase(tokens, D.lookup_table);
-  if(key){
+  if(key && !isAdjunctOf(key, norm)){
     return lookupResult(key, tokens);
   }
 
@@ -930,6 +930,24 @@ function checkConstructions(text, tokens, wholeOnly){
             examples:rule.examples || [], contrast:rule.contrast || null};
   }
   return null;
+}
+
+/* A listed word can also be the first half of a noun-noun pair - `bank
+   holiday`, `piano teacher`, `art gallery`. There the second noun decides and
+   the entry has nothing to say about the phrase: answering from it produced a
+   card about banks for a question about holidays. Standing aside lets the
+   noun-adjunct rule take it, which is the rule that covers this shape.
+
+   An adjective entry models the shape itself, with requires_prev for the
+   `the` in `the poor`, so it keeps the answer. */
+function isAdjunctOf(key, norm){
+  /* the normalized form, so a leading article is already off: `a bank
+     holiday` is the pair `bank holiday` */
+  var pair = tokenize(norm);
+  if(pair.length !== 2 || key !== pair[0]) return false;
+  var entry = D.lookup_table[key];
+  if(entry && entry.conditions && entry.conditions.requires_prev) return false;
+  return true;
 }
 
 /* the longest listed phrase present in the tokens */

@@ -283,6 +283,39 @@ class ConditionalLookupTests(unittest.TestCase):
         self.assertAnswers("tennis", "no article")
         self.assertAnswers("music", "no article")
 
+    def test_a_listed_word_modifying_a_noun_hands_over_to_the_pair_rule(self):
+        """`a bank holiday` is decided by the holiday, not by the bank.
+
+        The lookup answered from the first noun, so the card discussed banks
+        for a question about holidays. A listed word in front of another noun
+        now stands aside for the noun-adjunct rule, which is the rule that
+        covers the shape.
+        """
+        for text, head in [("a bank holiday", "holiday"),
+                           ("the piano teacher", "teacher"),
+                           ("a golf club", "club"),
+                           ("the art gallery", "gallery"),
+                           ("a history book", "book"),
+                           ("a bed sheet", "sheet"),
+                           ("the work permit", "permit"),
+                           ("a home page", "page"),
+                           ("a music lesson", "lesson")]:
+            analysis = self.logic.analyze_input(text)
+            self.assertEqual(analysis["mode"], "question", text)
+            self.assertEqual(analysis["focus_noun"], head, text)
+
+    def test_the_pair_rule_does_not_take_what_the_conditions_model(self):
+        """A listed word that is the head, or an entry that knows this shape."""
+        # the head of its own phrase, with a longer sentence around it
+        self.assertDefers("I bought a piano", "determiner_conflict")
+        # an adjective entry says what a bare `poor people` means itself
+        self.assertDefers("poor people", "missing_required_word")
+        # a following word the entry names
+        self.assertDefers("music of Bach", "blocked_by_following_word")
+        # a two-word listed name is not a pair of nouns to be split
+        self.assertAnswers("the post office", "the")
+        self.assertAnswers("mount fuji", "no article")
+
     def test_unconditional_entries_are_untouched(self):
         for text, article in [("the USA", "the"), ("the sun", "the"),
                               ("the Netherlands", "the"), ("the police", "the"),
