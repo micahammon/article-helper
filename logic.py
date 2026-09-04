@@ -99,27 +99,6 @@ def _looks_adverbial(word):
     return word.endswith("ly")
 
 
-def _is_adjunct_of(key, normalized):
-    """Is this listed word the first half of a noun-noun pair?
-
-    Reads the normalized form, so a leading article is already off: `a bank
-    holiday` is the pair `bank holiday`.
-
-    `bank holiday`, `piano teacher` and `art gallery` are decided by their
-    second noun, and the entry for the first has nothing to say about the
-    phrase -- answering from it produced a card about banks for a question
-    about holidays. Standing aside lets the noun-adjunct rule take it.
-
-    An adjective entry models the shape itself, with requires_prev for the
-    `the` in `the poor`, so it keeps the answer.
-    """
-    pair = _tokenize_words(normalized)
-    if len(pair) != 2 or key != pair[0]:
-        return False
-    conditions = (LOOKUP_TABLE.get(key) or {}).get("conditions") or {}
-    return "requires_prev" not in conditions
-
-
 def _noun_phrase_head(tokens, start, candidates):
     """The head of the noun phrase opening at `start`: its last candidate word.
 
@@ -769,11 +748,11 @@ class ArticleLogic:
         # 3. The lookup table: exact normalized form, then longest phrase.
         #    Both go through the same conditions, so a noun that is only fixed
         #    inside a particular construction cannot answer outside it.
-        if normalized in LOOKUP_TABLE and not _is_adjunct_of(normalized, normalized):
+        if normalized in LOOKUP_TABLE:
             span = _span_of(tokens, normalized)
             return self._lookup_result(normalized, tokens, span)
         phrase_match = _find_lookup_phrase(tokens)
-        if phrase_match and not _is_adjunct_of(phrase_match[0], normalized):
+        if phrase_match:
             matched, start, end = phrase_match
             return self._lookup_result(matched, tokens, (start, end))
 
