@@ -5,3 +5,4 @@ AGENTS.md
 /.claude/skills/
 /skills-lock.json
 /.agents/
+*.local.md
