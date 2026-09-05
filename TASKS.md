@@ -27,6 +27,18 @@
       it, now that it has eight cues instead of seven.
 
 ## done
+- [x] Add a fourth view, "Play": a drill that asks before it answers. Early
+      levels blank the article out of a phrase and ask which one goes in;
+      middle levels show the phrase whole and ask which rule decides it; the
+      last two ask both halves, with the wrong answers drawn from the asked
+      rule's own section so they are near misses rather than obvious. Nothing
+      is authored: every phrase is mined from the fixed expressions, the
+      lookup table, the construction and note examples, the category words,
+      the traces and the tree's own option examples, then handed back to gate
+      0 -- an item survives only if the engine agrees with the entry it came
+      from, so a rules edit cannot leave the drill teaching what the tool
+      denies. rules_data.json is untouched. Score, streak and the rules that
+      went wrong are kept in localStorage beside the chip marks.
 - [x] Add a third view, "Look a word up": type a word and see every reading the
       rules hold for it -- the listed sense with the words that switch it on,
       the contrast sense, any fixed expressions it appears in, its category or

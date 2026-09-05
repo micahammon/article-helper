@@ -386,6 +386,74 @@ body{
 .btn:disabled{opacity:.4;cursor:default}
 .btn.ghost:disabled:hover{background:transparent;color:var(--muted)}
 @media (max-width:560px){ .reflist{columns:1} }
+/* ---------------- play ---------------- */
+
+/* Right and wrong get colours of their own. The four article colours say which
+   article it is, not whether the learner was right, and the Gloss restyle is
+   about to collapse them into one blue - borrowing --zero for "correct" would
+   leave the drill with no way to say so. */
+:root{
+  --good:#2F6B4F; --good-wash:#E4EEE8;
+  --bad:#8A3324;  --bad-wash:#F5E4E0;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --good:#7FC3A0; --good-wash:#16302A;
+    --bad:#E09A88;  --bad-wash:#38201B;
+  }
+}
+.gbar{
+  display:flex;justify-content:space-between;align-items:baseline;gap:12px;
+  margin:0 0 18px;padding-bottom:10px;border-bottom:1px solid var(--hairline);
+  font-size:13px;color:var(--muted);
+}
+.glevel{margin:0;font-weight:600;color:var(--ink)}
+.gscore{margin:0}
+.glevelnote{
+  margin:0 0 14px;padding-bottom:12px;border-bottom:1px solid var(--hairline);
+  font-size:14px;color:var(--muted);max-width:44em;
+}
+.gphrase{
+  font-family:var(--serif);font-size:26px;line-height:1.45;
+  margin:0 0 4px;color:var(--ink);
+}
+.gphrase .blank{
+  border-bottom:2px solid var(--rule);padding:0 .1em;
+  letter-spacing:.06em;color:var(--muted);
+}
+.gopts{display:grid;gap:8px;margin-top:18px;max-width:44em}
+.gopt{
+  display:flex;gap:12px;align-items:baseline;text-align:left;width:100%;
+  font:inherit;cursor:pointer;background:var(--card);color:var(--ink);
+  border:1px solid var(--rule);border-radius:3px;padding:12px 14px;
+}
+.gopt .num{font-size:12px;color:var(--muted);min-width:1em;flex:0 0 auto}
+.gopt:hover:not(:disabled){border-color:var(--ink)}
+.gopt:disabled{cursor:default}
+.gopt.right{background:var(--good-wash);border-color:var(--good);color:var(--good)}
+.gopt.right .num,.gopt.wrong .num{color:inherit}
+.gopt.wrong{background:var(--bad-wash);border-color:var(--bad);color:var(--bad)}
+.gfeed{margin-top:14px}
+.gverdict{
+  font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+  margin:0 0 10px;
+}
+.gverdict.good{color:var(--good)}
+.gverdict.bad{color:var(--bad)}
+.gfeed .built{font-family:var(--serif);font-size:24px;margin:0 0 14px;color:var(--ink)}
+.gfeed .built .fill{color:var(--muted)}
+.gfeed .cat{font-size:14px;font-weight:600;margin:0 0 10px}
+.gfeed .why{font-size:15px;max-width:44em;margin:0 0 14px}
+.gfeed .why em{font-family:var(--serif);font-size:16px}
+.gacts{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+.gsum{display:flex;gap:32px;flex-wrap:wrap;margin:14px 0 18px}
+.gsum b{display:block;font-family:var(--serif);font-size:30px;font-weight:400;color:var(--ink)}
+.gsum div{font-size:13px;color:var(--muted)}
+.gmissh{font-size:13px;font-weight:600;letter-spacing:.04em;margin:18px 0 10px;color:var(--muted)}
+@media (max-width:560px){
+  .gbar{flex-direction:column;align-items:flex-start;gap:2px}
+  .gphrase{font-size:22px}
+}
 </style>
 </head>
 <body>
@@ -397,6 +465,7 @@ body{
       <button id="m-walk" aria-pressed="true">Walk the tree</button>
       <button id="m-map" aria-pressed="false">See the whole map</button>
       <button id="m-senses" aria-pressed="false">Look a word up</button>
+      <button id="m-play" aria-pressed="false">Play</button>
     </div>
   </div>
 
@@ -449,6 +518,22 @@ body{
       </div>
     </div>
     <div id="sstage" aria-live="polite"></div>
+  </div>
+
+  <!-- ============ PLAY ============ -->
+  <div id="play" class="hidden">
+    <div class="gbar">
+      <p class="glevel" id="glevel">Level 1</p>
+      <p class="gscore" id="gscore" aria-live="off"><span id="gpts">0</span> points
+         &middot; streak <span id="gstreak">0</span></p>
+    </div>
+
+    <div id="gstage" role="region" aria-live="polite" aria-label="Question"></div>
+
+    <div class="actions">
+      <button class="btn ghost" id="gskip" type="button">Skip this one</button>
+      <button class="btn ghost" id="greset" type="button">Start a new run</button>
+    </div>
   </div>
 
   <p class="foot">Fixed expressions and known names are matched automatically. Everything else answers the first question that matches and stops as soon as it reaches a form.</p>
@@ -2179,13 +2264,637 @@ sword.addEventListener("keydown", function(e){
   if(e.key === "Enter"){ e.preventDefault(); runReadings(); }
 });
 
+/* ---------------- play ---------------- */
+
+/* The other three modes hand the learner the answer. This one asks for it
+   first, and the only reward for guessing is the same explanation the tree
+   gives - so nothing here authors a question. Every phrase is lifted out of
+   the rules the tool already carries and then handed back to gate0(); an item
+   only survives if the engine agrees with the entry it came from. A rules edit
+   can therefore never leave the game teaching something the tool denies. */
+
+var GAME_KEY = "article-helper:game";
+var GAME_FORMS = ["the", "an", "zero"];
+var ART_TOKENS = {a:"an", an:"an", the:"the"};
+
+/* words that can stand in front of the blank when the phrase has no article of
+   its own: `in ___ prison`, `for ___ dinner`, `by ___ bus` */
+var CLOZE_LEAD = ["in","on","at","to","by","for","of","with","from","into",
+  "after","before","during","over","under","go","goes","went","play","plays",
+  "played","listen","listens","watch","watches","speak","speaks","have","has",
+  "had","learn","learns","teach","teaches","study","studies","take","takes"];
+
+var GAME_POOL = null;
+
+function gameStrip(s){
+  return String(s == null ? "" : s).replace(/<[^>]*>/g, "").replace(/^\s+|\s+$/g, "");
+}
+
+/* Every phrase the data already contains, with whatever answer its own entry
+   declares. A null ref means the source cannot vouch for the answer and gate0
+   alone decides - which is right for the note and contrast examples, since
+   those illustrate the *other* sense of the word they hang under. */
+function gameCandidates(){
+  var out = [], k, e, i, nid;
+
+  function add(p, ref, article, src, also){
+    p = gameStrip(p);
+    if(!p) return;
+    out.push({phrase:p, ref:ref || null, form:article ? formOf(article) : null,
+              src:src, also:also || []});
+  }
+
+  for(k in D.fixed_expressions){
+    if(!Object.prototype.hasOwnProperty.call(D.fixed_expressions, k)) continue;
+    e = D.fixed_expressions[k];
+    add(k, e.rule_ref, e.article, "fixed");
+  }
+
+  for(k in D.lookup_table){
+    if(!Object.prototype.hasOwnProperty.call(D.lookup_table, k)) continue;
+    e = D.lookup_table[k];
+    var also = [];
+    if(e.note && e.note.rule_ref) also.push(e.note.rule_ref);
+    if(e.conditions && e.conditions.contrast_rule_ref) also.push(e.conditions.contrast_rule_ref);
+    add(k, e.rule_ref, e.article, "lookup", also);
+    gameAddAll(add, gameNoteExamples(e), null, null, "lookup-ex", [e.rule_ref]);
+  }
+
+  for(i = 0; i < D.constructions.length; i++){
+    e = D.constructions[i];
+    gameAddAll(add, e.examples, e.rule_ref, e.article, "construction");
+  }
+
+  for(k in D.categories){
+    if(!Object.prototype.hasOwnProperty.call(D.categories, k)) continue;
+    e = D.categories[k];
+    /* a language is a name and keeps its capital; a meal or a sport does not */
+    gameAddAll(add, (e.words || []).map(k === "languages" ? cap : String),
+               e.rule_ref, e.article, "category");
+  }
+
+  D.traces.forEach(function(t){ add(t.p, null, null, "trace"); });
+
+  for(nid in T){
+    if(!Object.prototype.hasOwnProperty.call(T, nid)) continue;
+    (T[nid].opts || []).forEach(function(o){
+      if(!o.ex) return;
+      String(o.ex).split(/\s*·\s*/).forEach(function(x){
+        add(x, null, null, "treeex");
+      });
+    });
+  }
+
+  return out;
+}
+
+function gameAddAll(add, list, ref, article, src, also){
+  (list || []).forEach(function(x){ add(x, ref, article, src, also); });
+}
+
+function gameNoteExamples(e){
+  return ((e.note && e.note.examples) || [])
+    .concat((e.conditions && e.conditions.examples) || []);
+}
+
+/* The verification step. gate0 has to answer, and answer something a learner
+   can be asked to pick: `it depends`, a filled article slot, and the either/
+   countable/one forms are all true answers and all unaskable. */
+function gameVerify(c){
+  var r = gate0(c.phrase);
+  if(!r) return null;
+  if(r.context || r.blocked) return null;
+  if(GAME_FORMS.indexOf(r.form) === -1) return null;
+  if(!r.ref || !D.rule_names[r.ref]) return null;
+  if(c.ref && r.ref !== c.ref) return null;
+  if(c.form && r.form !== c.form) return null;
+
+  /* refs the data itself calls another reading of this phrase. They are barred
+     as wrong answers: a distractor that is also right is not a question. */
+  var also = {};
+  (c.also || []).forEach(function(x){ if(x) also[x] = 1; });
+  if(r.note && r.note.rule_ref) also[r.note.rule_ref] = 1;
+  [displayWord(c.phrase), r.match].forEach(function(t){
+    if(!t || t === c.phrase) return;
+    var alt = gate0(t);
+    if(alt && alt.ref) also[alt.ref] = 1;
+  });
+  delete also[r.ref];
+
+  return {phrase:c.phrase, form:r.form, ref:r.ref, name:D.rule_names[r.ref],
+          why:r.why || "", cat:r.cat || "", src:c.src, also:also,
+          cloze:gameCloze(c.phrase, r.match || "", r.form),
+          len:tokenize(c.phrase).length};
+}
+
+function gameJoin(toks, at, drop){
+  return toks.slice(0, at).concat(["___"], toks.slice(at + (drop ? 1 : 0))).join(" ");
+}
+
+/* Where the blank goes, or null if it cannot go anywhere honestly. */
+function gameCloze(phrase, match, form){
+  var toks = casedTokens(phrase);
+  var low = tokenize(phrase);
+  if(!toks.length || toks.length !== low.length) return null;
+
+  var slots = [], i;
+  for(i = 0; i < low.length; i++){
+    if(Object.prototype.hasOwnProperty.call(ART_TOKENS, low[i])) slots.push(i);
+  }
+
+  /* two articles in one sentence: only the one the rule matched is in play */
+  if(slots.length > 1 && match){
+    var span = spanOf(low, tokenize(match).join(" "));
+    if(span[1] !== null){
+      slots = slots.filter(function(ix){ return ix >= span[0] && ix < span[1]; });
+    }
+  }
+
+  if(slots.length === 1){
+    /* `half an hour` is a no-article expression that happens to carry an `an`.
+       Blanking that `an` would ask a question whose answer is a lie. */
+    if(ART_TOKENS[low[slots[0]]] !== form) return null;
+    return gameJoin(toks, slots[0], true);
+  }
+  if(slots.length) return null;
+
+  if(form !== "zero") return null;
+  if(toks.length === 1) return "___ " + toks[0];
+
+  /* the blank belongs in front of the noun, so every leading function word has
+     to be walked past first: `go to school` is `go to ___ school`, not
+     `go ___ to school` */
+  var at = 0;
+  while(at < low.length && CLOZE_LEAD.indexOf(low[at]) !== -1) at++;
+  if(at === 0 || at >= low.length) return null;
+  return gameJoin(toks, at, false);
+}
+
+/* A floor, not a partition: a level draws everything at its tier and below, so
+   the easy items come back round under a harder question. */
+function gameTier(it){
+  if(it.cloze && it.len <= 3 &&
+     (it.src === "fixed" || it.src === "lookup" || it.src === "category")) return 1;
+  if(it.len <= 5 && it.src !== "construction") return 2;
+  return 3;
+}
+
+function buildGamePool(){
+  if(GAME_POOL) return GAME_POOL;
+  var items = [], keys = {}, byRef = {}, byForm = {}, byPrefix = {};
+
+  gameCandidates().forEach(function(c){
+    var k = normalize(c.phrase);
+    if(!k || Object.prototype.hasOwnProperty.call(keys, k)) return;
+    keys[k] = 1;
+    var it = gameVerify(c);
+    if(!it) return;
+    it.tier = gameTier(it);
+    items.push(it);
+  });
+
+  items.forEach(function(it){
+    (byRef[it.ref] = byRef[it.ref] || []).push(it);
+    (byForm[it.form] = byForm[it.form] || []).push(it);
+  });
+  Object.keys(byRef).forEach(function(ref){
+    var p = String(ref).split(".")[0];
+    (byPrefix[p] = byPrefix[p] || []).push(ref);
+  });
+
+  GAME_POOL = {items:items, byRef:byRef, byForm:byForm, byPrefix:byPrefix,
+               refs:Object.keys(byRef)};
+  return GAME_POOL;
+}
+
+/* ---------------- questions ---------------- */
+
+function plainForm(form){
+  if(form === "zero") return "no article";
+  return FORM[form] ? FORM[form].word : form;
+}
+
+function articleOptions(item){
+  return shuffled([{key:"the"}, {key:"an"}, {key:"zero"}]).map(function(o){
+    o.label = plainForm(o.key);
+    o.right = (o.key === item.form);
+    return o;
+  });
+}
+
+/* A wrong answer has to be wrong. Two bars: a name identical to the right
+   answer's (rule names are not unique - two of Q4's cues cite the same rule),
+   and any ref the data offered as another reading of this very phrase. */
+function alsoCorrect(item, ref){
+  return ref === item.ref ||
+         D.rule_names[ref] === item.name ||
+         !!item.also[ref];
+}
+
+/* Near misses first, then any rule that answers the same article, then the
+   whole pool - so three options can always be found. */
+function ruleOptions(item, near){
+  var pool = GAME_POOL, pick = [], tried = {}, names = {};
+  names[item.name] = 1;
+
+  var sameSection = pool.byPrefix[String(item.ref).split(".")[0]] || [];
+  var sameForm = (pool.byForm[item.form] || []).map(function(x){ return x.ref; });
+  var sources = near ? [sameSection, sameForm, pool.refs] : [pool.refs];
+
+  sources.forEach(function(src){
+    shuffled(src).forEach(function(ref){
+      if(pick.length >= 3) return;
+      if(Object.prototype.hasOwnProperty.call(tried, ref)) return;
+      tried[ref] = 1;
+      if(alsoCorrect(item, ref)) return;
+      var nm = D.rule_names[ref];
+      if(!nm || Object.prototype.hasOwnProperty.call(names, nm)) return;
+      names[nm] = 1;
+      pick.push(ref);
+    });
+  });
+
+  if(pick.length < 3) return null;
+  return shuffled(pick.concat([item.ref])).map(function(r){
+    return {key:r, label:D.rule_names[r], right:(r === item.ref)};
+  });
+}
+
+/* ---------------- the run ---------------- */
+
+var LEVELS = [
+  {ask:"article", tier:1, near:false, need:5,
+   blurb:"which article?",
+   intro:"Short phrases. Say which article fills the blank."},
+  {ask:"article", tier:1, near:false, need:6,
+   blurb:"which article?",
+   intro:"Same question, with more of the rules in play."},
+  {ask:"rule",    tier:2, near:false, need:5,
+   blurb:"which rule?",
+   intro:"The article is not the question any more. Say which rule decides it."},
+  {ask:"rule",    tier:2, near:true,  need:6,
+   blurb:"which rule? · closer calls",
+   intro:"The wrong answers are now rules from the same family."},
+  {ask:"both",    tier:3, near:true,  need:6,
+   blurb:"article, then rule",
+   intro:"Both halves, on longer phrases."},
+  {ask:"both",    tier:3, near:true,  need:8,
+   blurb:"article, then rule",
+   intro:"Last level. Everything the rules hold."}
+];
+
+var G = null;
+var GSTATS = null;
+var gstage = document.getElementById("gstage");
+
+function freshStats(){
+  return {best:0, bestStreak:0, runs:0, missed:[]};
+}
+
+/* Same defensive shape as loadSeen - a file:// page in private mode simply
+   keeps no record. Every field is checked on the way in as well: a rule that
+   has since been retired must not come back as a blank button. */
+function loadStats(){
+  try{
+    var raw = window.localStorage.getItem(GAME_KEY);
+    var s = raw ? JSON.parse(raw) : null;
+    if(!s || typeof s !== "object") return freshStats();
+    return {
+      best: +s.best || 0,
+      bestStreak: +s.bestStreak || 0,
+      runs: +s.runs || 0,
+      missed: (Array.isArray(s.missed) ? s.missed : []).filter(function(r){
+        return typeof r === "string" && !!D.rule_names[r];
+      }).slice(0, 40)
+    };
+  }catch(e){
+    return freshStats();
+  }
+}
+
+function saveStats(){
+  try{
+    window.localStorage.setItem(GAME_KEY, JSON.stringify(GSTATS));
+  }catch(e){ /* private mode, file:// quirks - the run is just not kept */ }
+}
+
+function freshRun(){
+  return {level:0, right:0, rounds:0, streak:0, best:0, score:0,
+          item:null, stage:null, opts:null, answered:false,
+          used:{}, formTurn:0, missed:[], levelNote:null, over:false};
+}
+
+function gameEligible(list, L, needCloze){
+  return list.filter(function(it){
+    if(it.tier > L.tier) return false;
+    if(needCloze && !it.cloze) return false;
+    return !Object.prototype.hasOwnProperty.call(G.used, it.phrase);
+  });
+}
+
+function gameDraw(list){
+  return list[Math.floor(Math.random() * list.length)];
+}
+
+function gamePick(L){
+  var pool = GAME_POOL, list, i, form;
+
+  if(L.ask === "article" || L.ask === "both"){
+    /* the pool is more than half no-article. Walking the three forms in turn
+       stops "no article" from being the guess that keeps on winning. */
+    for(i = 0; i < GAME_FORMS.length; i++){
+      form = GAME_FORMS[(G.formTurn + i) % GAME_FORMS.length];
+      list = gameEligible(pool.byForm[form] || [], L, true);
+      if(list.length){
+        G.formTurn = (G.formTurn + i + 1) % GAME_FORMS.length;
+        return gameDraw(list);
+      }
+    }
+  }
+
+  list = gameEligible(pool.items, L, false);
+  if(!list.length){
+    /* out of unseen items at this tier: let them come round again rather than
+       ending a run the learner is in the middle of */
+    G.used = {};
+    list = gameEligible(pool.items, L, false);
+  }
+  return list.length ? gameDraw(list) : null;
+}
+
+function nextRound(){
+  var L = LEVELS[G.level], it = null, tries;
+  for(tries = 0; tries < 12; tries++){
+    it = gamePick(L);
+    if(!it) break;
+    if(L.ask === "article" || ruleOptions(it, L.near)) break;
+    G.used[it.phrase] = 1;
+    it = null;
+  }
+  if(!it){
+    endGame("That is every phrase the rules hold.");
+    return;
+  }
+  G.used[it.phrase] = 1;
+  G.item = it;
+  G.stage = (L.ask === "rule") ? "rule" : "article";
+  G.answered = false;
+  renderRound();
+}
+
+/* ---------------- rendering ---------------- */
+
+function gameHead(){
+  var L = LEVELS[G.level];
+  document.getElementById("glevel").textContent =
+    "Level " + (G.level + 1) + " of " + LEVELS.length + " · " + L.blurb;
+  document.getElementById("gpts").textContent = String(G.score);
+  document.getElementById("gstreak").textContent = String(G.streak);
+}
+
+function clozeHTML(s){
+  return esc(s).replace(/___/g, '<span class="blank">___</span>');
+}
+
+function renderRound(){
+  var L = LEVELS[G.level], it = G.item, asking = G.stage;
+  var opts = (asking === "article") ? articleOptions(it) : ruleOptions(it, L.near);
+  if(!opts){ G.used[it.phrase] = 1; nextRound(); return; }
+  G.opts = opts;
+
+  var shown = (asking === "article" && it.cloze) ? it.cloze : it.phrase;
+  var h = '<div class="qcard">';
+  if(G.levelNote){
+    h += '<p class="glevelnote">' + esc(G.levelNote) + "</p>";
+    G.levelNote = null;
+  }
+  h += '<p class="gate">' +
+       (asking === "article" ? "Which article goes in the blank?"
+                             : "Which rule decides this?") + "</p>";
+  h += '<p class="gphrase">' + clozeHTML(shown) + "</p>";
+  if(asking === "rule" && L.ask === "both"){
+    h += '<p class="qnote">The article is <em>' + esc(plainForm(it.form)) +
+         "</em>. Now the reason.</p>";
+  }
+  h += '<div class="gopts">';
+  opts.forEach(function(o, i){
+    h += '<button class="gopt" type="button" data-i="' + i + '">' +
+         '<span class="num">' + (i + 1) + "</span><span>" + esc(o.label) +
+         "</span></button>";
+  });
+  h += "</div></div>";
+
+  gstage.innerHTML = h;
+  var btns = gstage.querySelectorAll(".gopt"), i;
+  for(i = 0; i < btns.length; i++){
+    btns[i].addEventListener("click", function(){
+      answerGame(+this.getAttribute("data-i"));
+    });
+  }
+  if(btns.length) btns[0].focus();
+  gameHead();
+}
+
+function answerGame(i){
+  if(!G || G.over || G.answered) return;
+  var o = G.opts && G.opts[i];
+  if(!o) return;
+  G.answered = true;
+
+  var btns = gstage.querySelectorAll(".gopt"), k;
+  for(k = 0; k < btns.length; k++){
+    btns[k].disabled = true;
+    if(G.opts[k] && G.opts[k].right) btns[k].className = "gopt right";
+  }
+  if(!o.right && btns[i]) btns[i].className = "gopt wrong";
+
+  G.rounds++;
+  if(o.right){
+    G.streak++;
+    if(G.streak > G.best) G.best = G.streak;
+    /* a streak is worth having, but not worth more than the answer itself */
+    G.score += 10 + Math.min(20, G.streak * 2);
+    G.right++;
+  }else{
+    G.streak = 0;
+    G.missed.push({ref:G.item.ref, name:G.item.name, phrase:G.item.phrase});
+  }
+  gameHead();
+  renderGameFeedback(o.right);
+}
+
+function gameFilled(it){
+  if(it.form === "zero" && it.cloze){
+    return esc(it.cloze).replace(/___/g, '<span class="fill">—</span>');
+  }
+  return esc(it.phrase);
+}
+
+function renderGameFeedback(right){
+  var L = LEVELS[G.level], it = G.item;
+  /* the article half of a both-round must not name the rule: that is the very
+     next question */
+  var partial = (L.ask === "both" && G.stage === "article");
+
+  var h = '<div class="qcard gfeed">';
+  h += '<p class="gverdict ' + (right ? "good" : "bad") + '">' +
+       (right ? "Right" : "Not this time") + "</p>";
+  if(G.stage === "article") h += '<p class="built">' + gameFilled(it) + "</p>";
+  if(!partial){
+    if(it.cat) h += '<p class="cat">' + esc(it.cat) + "</p>";
+    if(it.why) h += '<p class="why">' + it.why + "</p>";
+    h += "<p>" + refPill(it.ref, null) + "</p>";
+  }
+  h += '<div class="gacts">' +
+       '<button class="btn" id="gnext" type="button">Next</button>' +
+       '<button class="btn ghost" id="gwalk" type="button">Walk this one</button>' +
+       "</div></div>";
+
+  var box = document.createElement("div");
+  box.innerHTML = h;
+  gstage.appendChild(box.firstChild);
+
+  document.getElementById("gnext").addEventListener("click", gameAdvance);
+  document.getElementById("gwalk").addEventListener("click", function(){
+    walkThisOne(it.phrase);
+  });
+  document.getElementById("gnext").focus();
+}
+
+/* the walk card reads phrase.value for the phrase it names, and analyze()
+   touches the focus bar - so the panel has to be showing first */
+function walkThisOne(text){
+  mode("walk");
+  phrase.value = text;
+  analyze(text, null, null);
+  stage.scrollIntoView({block:"nearest", behavior:"smooth"});
+}
+
+function gameAdvance(){
+  var L = LEVELS[G.level];
+  if(L.ask === "both" && G.stage === "article"){
+    G.stage = "rule";
+    G.answered = false;
+    renderRound();
+    return;
+  }
+  if(G.right >= L.need){
+    if(G.level + 1 >= LEVELS.length){ endGame(null); return; }
+    G.level++;
+    G.right = 0;
+    G.levelNote = LEVELS[G.level].intro;
+    recordRun(false);
+  }
+  G.answered = false;
+  nextRound();
+}
+
+function recordRun(finished){
+  if(G.score > GSTATS.best) GSTATS.best = G.score;
+  if(G.best > GSTATS.bestStreak) GSTATS.bestStreak = G.best;
+  if(finished) GSTATS.runs++;
+  G.missed.forEach(function(m){
+    if(GSTATS.missed.indexOf(m.ref) === -1) GSTATS.missed.push(m.ref);
+  });
+  GSTATS.missed = GSTATS.missed.slice(0, 40);
+  saveStats();
+}
+
+function endGame(msg){
+  if(G.over) return;
+  G.over = true;
+  recordRun(true);
+
+  var h = '<div class="qcard">';
+  h += '<p class="gverdict good">Run over</p>';
+  if(msg) h += '<p class="qnote">' + esc(msg) + "</p>";
+  h += '<div class="gsum">' +
+       "<div><b>" + G.score + "</b>points</div>" +
+       "<div><b>" + G.best + "</b>longest streak</div>" +
+       "<div><b>" + G.rounds + "</b>answered</div></div>";
+  h += '<p class="qnote">Best so far: ' + GSTATS.best + " points, a streak of " +
+       GSTATS.bestStreak + ", over " + GSTATS.runs +
+       (GSTATS.runs === 1 ? " run." : " runs.") + "</p>";
+  if(G.missed.length){
+    h += '<h2 class="gmissh">Worth another look</h2><div class="chips gmiss">';
+    G.missed.forEach(function(m, i){
+      h += '<button class="chip" type="button" data-m="' + i + '">' +
+           esc(m.phrase) + " — " + esc(m.name) + "</button>";
+    });
+    h += "</div>";
+  }
+  h += '<div class="gacts">' +
+       '<button class="btn" id="gagain" type="button">Play again</button>' +
+       '<button class="btn ghost" id="gback" type="button">Back to the tree</button>' +
+       "</div></div>";
+  gstage.innerHTML = h;
+
+  var miss = gstage.querySelectorAll(".gmiss .chip"), i;
+  for(i = 0; i < miss.length; i++){
+    miss[i].addEventListener("click", function(){
+      walkThisOne(G.missed[+this.getAttribute("data-m")].phrase);
+    });
+  }
+  document.getElementById("gagain").addEventListener("click", startGame);
+  document.getElementById("gback").addEventListener("click", function(){ mode("walk"); });
+  document.getElementById("gagain").focus();
+  gameHead();
+}
+
+function gameFail(err){
+  gstage.innerHTML = '<div class="err"><b>The drill could not be built.</b><br><br>' +
+    "The other three views still work — they read the rules directly.<br><br>" +
+    '<span class="ex">' + esc(String(err && err.message ? err.message : err)) +
+    "</span></div>";
+}
+
+function startGame(){
+  try{
+    buildGamePool();
+    if(!GSTATS) GSTATS = loadStats();
+    G = freshRun();
+    G.levelNote = LEVELS[0].intro;
+    nextRound();
+  }catch(err){
+    G = null;
+    gameFail(err);
+  }
+}
+
+document.getElementById("gskip").addEventListener("click", function(){
+  if(!G || G.over) return;
+  G.answered = false;
+  G.streak = 0;
+  nextRound();
+});
+document.getElementById("greset").addEventListener("click", startGame);
+
+/* 1-4 answer, n moves on. Guarded on the panel showing and on the learner not
+   being in one of the other panels' text fields. */
+document.addEventListener("keydown", function(e){
+  if(!G || document.getElementById("play").classList.contains("hidden")) return;
+  if(e.metaKey || e.ctrlKey || e.altKey) return;
+  var tag = document.activeElement ? document.activeElement.tagName : "";
+  if(tag === "INPUT" || tag === "TEXTAREA") return;
+  if(e.key >= "1" && e.key <= "4"){
+    if(G.answered || G.over) return;
+    e.preventDefault();
+    answerGame(+e.key - 1);
+    return;
+  }
+  if(e.key === "n" || e.key === "N"){
+    if(document.getElementById("gnext")){ e.preventDefault(); gameAdvance(); }
+  }
+});
+
 /* ---------------- mode toggle ---------------- */
 
 /* Three panels now, so the toggle is a name rather than a boolean. */
 var PANELS = {
   walk:   ["walk", "m-walk"],
   map:    ["map", "m-map"],
-  senses: ["senses", "m-senses"]
+  senses: ["senses", "m-senses"],
+  play:   ["play", "m-play"]
 };
 function mode(name){
   var k;
@@ -2196,7 +2905,13 @@ function mode(name){
   }
 }
 Object.keys(PANELS).forEach(function(k){
-  document.getElementById(PANELS[k][1]).addEventListener("click", function(){ mode(k); });
+  document.getElementById(PANELS[k][1]).addEventListener("click", function(){
+    mode(k);
+    /* the pool is mined the first time it is asked for: 350-odd gate0 calls
+       that the other three views have no use for, and a fault in them must not
+       reach the boot block the whole page depends on */
+    if(k === "play" && !G) startGame();
+  });
 });
 
 /* ---------------- boot ---------------- */

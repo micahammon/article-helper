@@ -1075,5 +1075,122 @@ class LearnerFacingLanguageTests(unittest.TestCase):
                 self.assertIsNone(code.search(option["label"]), node_id)
 
 
+
+class GameItemPoolTests(unittest.TestCase):
+    """The drill mines its questions out of the rules and asks gate 0 to confirm
+    each one, so it authors nothing and cannot drift from the tool.
+
+    That leaves the pool at the mercy of the rules. These tests do not mirror
+    the miner - it lives in the page's JavaScript and a copy here would rot -
+    they assert the data-level conditions it needs in order to have anything to
+    ask about. `test_every_reachable_rule_has_a_learner_facing_name` above
+    already guards the other half: every ref the drill can serve has a name a
+    learner can read.
+    """
+
+    FORMS = {"the", "a / an", "no article"}
+
+    @classmethod
+    def setUpClass(cls):
+        cls.items = cls._pool()
+
+    @classmethod
+    def _candidates(cls):
+        """Phrase, and the answer its own entry declares (None = gate 0 alone
+        decides, which is right for the note and contrast examples: those show
+        the *other* sense of the word they hang under)."""
+        out = []
+        for key, entry in DATA["fixed_expressions"].items():
+            out.append((key, entry["rule_ref"], entry["article"]))
+        for key, entry in DATA["lookup_table"].items():
+            out.append((key, entry["rule_ref"], entry["article"]))
+            for holder in (entry.get("note"), entry.get("conditions")):
+                for example in (holder or {}).get("examples", []):
+                    out.append((example, None, None))
+        for rule in DATA["constructions"]:
+            for example in rule.get("examples", []):
+                out.append((example, rule["rule_ref"], rule["article"]))
+        for group in DATA["categories"].values():
+            for word in group.get("words", []):
+                out.append((word, group["rule_ref"], group["article"]))
+        for trace in DATA["traces"]:
+            out.append((trace["p"], None, None))
+        for node in RAW_TREE.values():
+            for option in node.get("opts", []):
+                for example in re.split(r"\s*\u00b7\s*", option.get("ex", "")):
+                    example = re.sub(r"<[^>]*>", "", example).strip()
+                    if example:
+                        out.append((example, None, None))
+        return out
+
+    @classmethod
+    def _pool(cls):
+        logic = ArticleLogic()
+        names = DATA["rule_names"]
+        items, seen = [], set()
+        for phrase, ref, article in cls._candidates():
+            key = phrase.strip().lower()
+            if not key or key in seen:
+                continue
+            seen.add(key)
+            analysis = logic.analyze_input(phrase)
+            if analysis["mode"] != "lookup":
+                continue
+            result = analysis["result"] or {}
+            form, got = result.get("article"), result.get("rule_ref")
+            if form not in cls.FORMS or not got or got not in names:
+                continue
+            if ref and got != ref:
+                continue
+            if article and form != article:
+                continue
+            items.append({"phrase": phrase, "form": form, "ref": got})
+        return items
+
+    def test_the_pool_is_large_enough_to_play(self):
+        self.assertGreaterEqual(len(self.items), 300,
+                                "too few phrases survive gate 0 to fill a run")
+
+    def test_every_form_has_enough_items(self):
+        """Without this, a rules edit could quietly leave the drill unable to
+        ask about `a / an` - the form the pool holds least of."""
+        for form in self.FORMS:
+            count = sum(1 for item in self.items if item["form"] == form)
+            self.assertGreaterEqual(count, 25, f"only {count} items answer {form!r}")
+
+    def test_enough_rules_to_choose_between(self):
+        refs = {}
+        for item in self.items:
+            refs[item["ref"]] = refs.get(item["ref"], 0) + 1
+        rich = [ref for ref, count in refs.items() if count >= 3]
+        self.assertGreaterEqual(len(rich), 20,
+                                "too few rules carry enough phrases to be asked about")
+
+    def test_near_miss_sections_have_siblings(self):
+        """The hard levels draw their wrong answers from the asked rule's own
+        section first. A section with one rule in the pool cannot supply any."""
+        sections = {}
+        for item in self.items:
+            sections.setdefault(item["ref"].split(".")[0], set()).add(item["ref"])
+        crowded = {key: refs for key, refs in sections.items()
+                   if sum(1 for item in self.items
+                          if item["ref"].split(".")[0] == key) >= 3}
+        siblings = [key for key, refs in crowded.items() if len(refs) >= 2]
+        self.assertGreaterEqual(len(siblings), 4,
+                                "no section can supply a near miss")
+
+    def test_names_in_the_pool_are_distinct(self):
+        """Two options reading the same words is not a question. The drill bars
+        a distractor whose name matches the answer's; this says how often that
+        bar has to fire."""
+        names = DATA["rule_names"]
+        by_name = {}
+        for item in self.items:
+            by_name.setdefault(names[item["ref"]], set()).add(item["ref"])
+        shared = {name: refs for name, refs in by_name.items() if len(refs) > 1}
+        self.assertLessEqual(len(shared), 3,
+                             f"rule names collide too widely: {sorted(shared)}")
+
+
 if __name__ == "__main__":
     unittest.main()
