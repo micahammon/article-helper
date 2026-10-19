@@ -11,6 +11,7 @@ Run with the rest of the suite:
 
     python -m unittest discover -s tests -v
 """
+import importlib.util
 import json
 import shutil
 import subprocess
@@ -20,6 +21,10 @@ from pathlib import Path
 from logic import ArticleLogic, _normalize_noun, _tokenize_words
 
 ROOT = Path(__file__).resolve().parents[1]
+_spec = importlib.util.spec_from_file_location(
+    "generate_examples", ROOT / "tools" / "generate_examples.py")
+gen = importlib.util.module_from_spec(_spec)
+_spec.loader.exec_module(gen)
 PARITY = ROOT / "tools" / "check_parity.js"
 CORPUS = json.loads((ROOT / "examples_data.json").read_text(encoding="utf-8"))
 EXAMPLES = CORPUS.get("examples", [])
@@ -54,6 +59,15 @@ class ExampleCorpusTests(unittest.TestCase):
                                  f"{e['text']!r}: engine no longer commits")
                 self.assertEqual(analysis["result"]["article"], e["verified_article"],
                                  f"{e['text']!r}: article drifted from the corpus")
+
+    def test_every_example_shows_its_article(self):
+        """The engine answers for the word, not the sentence, so the sentence
+        must actually put that article before the word."""
+        for e in EXAMPLES:
+            with self.subTest(text=e.get("text")):
+                self.assertTrue(
+                    gen.sentence_shows(e["verified_article"], e["text"], e["word"]),
+                    f"{e['text']!r} does not show {e['verified_article']!r}")
 
     def test_no_example_is_an_it_depends(self):
         """An ambiguous sentence teaches the wrong thing, so none may survive."""
@@ -95,6 +109,48 @@ class ExampleCorpusTests(unittest.TestCase):
         self.assertEqual(proc.returncode, 0,
                          "JS reads these examples differently from the corpus:\n"
                          + json.dumps(report.get("failures", []), indent=2))
+
+
+class SentenceArticleTests(unittest.TestCase):
+    """verify() keeps a sentence only if its surface matches the engine's answer.
+    These are the Haiku cinema drafts that once slipped through as "the"."""
+
+    def test_reads_the_article_before_the_word(self):
+        cases = {
+            "We often go to the cinema on rainy Sunday afternoons.": "the",
+            "The old black-and-white cinema closed.": "the",
+            "She works at a cinema downtown.": "a",
+            "Cinema has changed how people share stories.": None,
+            "Studying cinema taught him to notice light.": None,
+            "The cinema near my house is small.": "the",
+            "We went to my cinema.": None,
+        }
+        for text, expected in cases.items():
+            with self.subTest(text=text):
+                self.assertEqual(gen.article_in_sentence(text, "cinema"), expected)
+
+    def test_bare_noun_is_not_a_the_example(self):
+        self.assertFalse(gen.sentence_shows(
+            "the", "Cinema has changed how people share stories.", "cinema"))
+        self.assertFalse(gen.sentence_shows(
+            "the", "Studying cinema taught him to notice light.", "cinema"))
+        self.assertTrue(gen.sentence_shows(
+            "the", "Nothing beats the cinema with friends.", "cinema"))
+
+    def test_verify_drops_a_sentence_that_contradicts_the_engine(self):
+        logic = ArticleLogic()
+        self.assertIsNone(gen.verify(
+            logic, "Studying cinema taught him to notice light.", "cinema"))
+        kept = gen.verify(logic, "We often go to the cinema on Sundays.", "cinema")
+        self.assertIsNotNone(kept)
+        self.assertEqual(kept["verified_article"], "the")
+
+    def test_either_answer_allows_both_forms(self):
+        self.assertTrue(gen.sentence_shows("either the or no article", "in summer", "summer"))
+        self.assertTrue(gen.sentence_shows(
+            "either the or no article", "in the summer", "summer"))
+        self.assertFalse(gen.sentence_shows(
+            "either the or no article", "a summer to remember", "summer"))
 
 
 if __name__ == "__main__":

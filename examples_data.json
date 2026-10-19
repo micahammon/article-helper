@@ -375,15 +375,6 @@
       "date": "2026-09-07"
     },
     {
-      "text": "by phone",
-      "word": "phone",
-      "verified_article": "the",
-      "verified_rule_ref": "4.5",
-      "verified_source": "lookup",
-      "source": "harvested",
-      "date": "2026-09-07"
-    },
-    {
       "text": "on the phone",
       "word": "phone",
       "verified_article": "the",
@@ -411,15 +402,6 @@
       "date": "2026-09-07"
     },
     {
-      "text": "by post",
-      "word": "post",
-      "verified_article": "the",
-      "verified_rule_ref": "4.5",
-      "verified_source": "lookup",
-      "source": "harvested",
-      "date": "2026-09-07"
-    },
-    {
       "text": "in the post",
       "word": "post",
       "verified_article": "the",
@@ -433,15 +415,6 @@
       "word": "pub",
       "verified_article": "the",
       "verified_rule_ref": "4.2",
-      "verified_source": "lookup",
-      "source": "harvested",
-      "date": "2026-09-07"
-    },
-    {
-      "text": "by radio",
-      "word": "radio",
-      "verified_article": "the",
-      "verified_rule_ref": "4.5",
       "verified_source": "lookup",
       "source": "harvested",
       "date": "2026-09-07"
@@ -596,15 +569,6 @@
       "verified_article": "the",
       "verified_rule_ref": "4.1",
       "verified_source": "lookup",
-      "source": "harvested",
-      "date": "2026-09-07"
-    },
-    {
-      "text": "There's a post office in my town",
-      "word": "town",
-      "verified_article": "a / an",
-      "verified_rule_ref": "2.7",
-      "verified_source": "construction:there_is_singular",
       "source": "harvested",
       "date": "2026-09-07"
     },

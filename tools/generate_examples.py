@@ -81,6 +81,53 @@ def target_words(data):
     return {w for w in words if len(w) > 1}
 
 
+# Looking back from the noun, how far an article may sit: room for a couple of
+# adjectives, and a hyphenated one ("black-and-white") tokenizes as three.
+_ARTICLE_WINDOW = 5
+_DETERMINERS = {
+    "my", "your", "his", "her", "its", "our", "their", "this", "that", "these",
+    "those", "some", "any", "no", "every", "each", "another",
+}
+# What each engine answer allows to stand before the noun in the sentence.
+_SHOWS = {
+    "the": {"the"},
+    "a / an": {"a", "an"},
+    "no article": {None},
+    "no article needed": {None},
+    "either the or no article": {"the", None},
+}
+
+
+def article_in_sentence(text, word):
+    """The article the sentence itself puts before `word`: "the", "a", "an", or
+    None when there is none (a bare noun, or a determiner like "my" in its slot).
+
+    The engine's lookup answers for the word, not the sentence, so this is the
+    surface check that the sentence actually shows that answer. Tokens carry no
+    parts of speech; it walks back a short window and stops at the first article
+    or determiner.
+    """
+    word = _normalize_noun(word)
+    if word in ("the", "a", "an"):
+        # Harvested proper-noun entries ("the Alps") key on the article itself.
+        return word
+    tokens = _tokenize_words(text)
+    i = tokens.index(word)
+    for tok in reversed(tokens[max(0, i - _ARTICLE_WINDOW):i]):
+        if tok in ("the", "a", "an"):
+            return tok
+        if tok in _DETERMINERS:
+            return None
+    return None
+
+
+def sentence_shows(article, text, word):
+    """Does the sentence use the article the engine gave? An answer this table
+    does not know is let through: the engine has the final word on labels."""
+    allowed = _SHOWS.get(article)
+    return allowed is None or article_in_sentence(text, word) in allowed
+
+
 def verify(engine, text, word):
     """Does the engine give `word` a definite reading inside `text`?
 
@@ -97,6 +144,8 @@ def verify(engine, text, word):
     result = analysis.get("result") or {}
     article = result.get("article")
     if not article or article == "it depends":
+        return None
+    if not sentence_shows(article, text, word):
         return None
     return {
         "text": text.strip(),
