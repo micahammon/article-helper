@@ -22,6 +22,8 @@ Two sources of candidates:
 Usage:
     python tools/generate_examples.py harvest
     python tools/generate_examples.py draft --word radio --sense "listen to it" --n 6
+    python tools/generate_examples.py draft-all --dry-run
+    python tools/generate_examples.py draft-all --limit 5
     python tools/generate_examples.py promote
 """
 import argparse
@@ -140,7 +142,14 @@ def verify(engine, text, word):
         return None
     analysis = engine.analyze_input(text, focus=word)
     if analysis.get("mode") != "lookup":
-        return None
+        # A focused read never matches a fixed expression ("in the afternoon");
+        # the whole-sentence read does. Take it only if the expression it
+        # matched is one this word belongs to.
+        analysis = engine.analyze_input(text)
+        if (analysis.get("mode") != "lookup"
+                or analysis.get("source") != "fixed_expression"
+                or word not in (analysis.get("focus_noun") or "").split()):
+            return None
     result = analysis.get("result") or {}
     article = result.get("article")
     if not article or article == "it depends":
@@ -237,6 +246,8 @@ def _draft_from_llm(word, sense, n, model):
         "max_tokens": 1500,
         # writing sentences is not deep reasoning: keep thinking (and cost) low
         "reasoning": {"effort": "low"},
+        # ask OpenRouter to report what the call cost, so a batch can total it
+        "usage": {"include": True},
     }
     req = urllib.request.Request(
         OPENROUTER_URL,
@@ -257,15 +268,20 @@ def _draft_from_llm(word, sense, n, model):
                  % (e.code, e.read().decode("utf-8", "replace")))
 
     text = resp["choices"][0]["message"]["content"]
+    cost = float((resp.get("usage") or {}).get("cost") or 0)
     match = re.search(r"\[.*\]", text, re.DOTALL)
     if not match:
-        sys.exit("draft: model did not return a JSON array:\n" + text)
-    return [str(s) for s in json.loads(match.group(0))]
+        raise ValueError("model did not return a JSON array:\n" + text)
+    return [str(s) for s in json.loads(match.group(0))], cost
 
 
 def draft(word, sense, n, model):
+    """Draft one word into staging. Returns what the call cost in USD."""
     engine = ArticleLogic()
-    candidates = _draft_from_llm(word, sense, n, model)
+    try:
+        candidates, cost = _draft_from_llm(word, sense, n, model)
+    except ValueError as e:
+        sys.exit("draft: %s" % e)
 
     staging = _load(STAGING, {"examples": []})
     have = {(e["word"], _normalize_noun(e["text"])) for e in staging["examples"]}
@@ -285,8 +301,95 @@ def draft(word, sense, n, model):
         print("  kept [%s]: %s" % (fields["verified_article"], text))
 
     _save(STAGING, staging)
-    print("draft: %d/%d survived verification -> %s (review, then `promote`)"
-          % (kept, len(candidates), STAGING.name))
+    print("draft: %d/%d survived verification -> %s (review, then `promote`), $%.4f"
+          % (kept, len(candidates), STAGING.name, cost))
+    return cost
+
+
+# Plain text for a prompt: the data's explanations carry <em> and <br>.
+_TAGS = re.compile(r"<[^>]+>")
+
+
+def _plain(html):
+    return re.sub(r"\s+", " ", _TAGS.sub(" ", html or "")).strip()
+
+
+def build_plan(data):
+    """One entry per single-word target, with the sense the data gives it.
+
+    Each word is drafted for the reading the rules hold for it, so the plan
+    says which reading that is: the lookup entry's sense (or explanation), the
+    category or time group's explanation, or the fixed expression it ends.
+    Multi-word names ("united kingdom") are left out: verify() matches a single
+    token, so nothing drafted for them could be kept. So are the prepositions
+    and verbs inside fixed expressions; only the noun an expression ends on
+    is a target.
+    """
+    plan = {}
+
+    def add(word, article, sense, source):
+        word = word.lower()
+        if " " in word or len(word) < 2 or word in plan:
+            return
+        plan[word] = {"word": word, "article": article,
+                      "sense": _plain(sense), "source": source}
+
+    for word, entry in data["lookup_table"].items():
+        cond = entry.get("conditions") or {}
+        add(word, entry["article"], cond.get("sense") or entry.get("explanation"),
+            "lookup")
+    for name, cat in data["categories"].items():
+        for word in cat.get("words", []):
+            add(word, cat["article"], "%s: %s" % (name, cat.get("explanation", "")),
+                "category")
+    for name, group in data["time_words"]["groups"].items():
+        for word in group.get("words", []):
+            add(word, group["article"], "%s: %s" % (name, group.get("explanation", "")),
+                "time")
+    for key, expr in data["fixed_expressions"].items():
+        if re.search(r"\d", key):
+            continue
+        add(key.split(" ")[-1], expr["article"],
+            "as in the fixed expression \"%s\"" % key, "fixed")
+    nat = data["nationality_the"]
+    for word in nat.get("examples", []):
+        add(word, nat["article"], "the people as a group: %s" % nat.get("explanation", ""),
+            "nationality")
+    pn = data["proper_noun_the"]
+    for word in pn.get("named", []):
+        add(word, pn["article"], "the proper name: %s" % pn.get("explanation", ""),
+            "proper")
+    return [plan[w] for w in sorted(plan)]
+
+
+def draft_all(model, n, limit, dry_run):
+    """Draft every planned word that has no example yet, in the corpus or staging.
+
+    --dry-run lists what would be drafted and makes no call. A word whose
+    response cannot be parsed is reported and skipped; the run goes on.
+    """
+    data = _load(DATA, None)
+    covered = {e["word"] for e in _load(CORPUS, {"examples": []})["examples"]}
+    covered |= {e["word"] for e in _load(STAGING, {"examples": []})["examples"]}
+    todo = [p for p in build_plan(data) if p["word"] not in covered]
+    if limit:
+        todo = todo[:limit]
+    if dry_run:
+        for p in todo:
+            print("  %-16s [%s] %s" % (p["word"], p["article"], p["sense"][:70]))
+        print("draft-all --dry-run: %d words would be drafted, no calls made" % len(todo))
+        return
+    spent, failed = 0.0, []
+    for i, p in enumerate(todo, 1):
+        print("[%d/%d] %s" % (i, len(todo), p["word"]))
+        sense = "%s (in this reading the word takes: %s)" % (p["sense"], p["article"])
+        try:
+            spent += draft(p["word"], sense, n, model)
+        except SystemExit as e:
+            print("  skipped: %s" % e)
+            failed.append(p["word"])
+    print("draft-all: %d words, $%.4f spent, %d skipped%s"
+          % (len(todo), spent, len(failed), (": " + ", ".join(failed)) if failed else ""))
 
 
 def promote():
@@ -334,9 +437,17 @@ def main(argv=None):
     d.add_argument("--n", type=int, default=6)
     d.add_argument("--model", default="anthropic/claude-sonnet-5.5",
                    help="OpenRouter model slug, e.g. anthropic/claude-haiku-5.5")
+    a = sub.add_parser("draft-all",
+                       help="draft every planned word with no example yet (needs API key)")
+    a.add_argument("--n", type=int, default=8)
+    a.add_argument("--model", default="anthropic/claude-sonnet-5.5")
+    a.add_argument("--limit", type=int, default=0, help="draft only the first N words")
+    a.add_argument("--dry-run", action="store_true", help="list the words, make no calls")
     sub.add_parser("promote", help="move reviewed staged entries into the corpus")
 
     args = parser.parse_args(argv)
+    if args.cmd == "draft-all":
+        draft_all(args.model, args.n, args.limit, args.dry_run)
     if args.cmd == "harvest":
         harvest()
     elif args.cmd == "draft":

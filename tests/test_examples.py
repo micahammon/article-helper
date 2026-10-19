@@ -54,10 +54,9 @@ class ExampleCorpusTests(unittest.TestCase):
                 word = _normalize_noun(e["word"])
                 self.assertIn(word, _tokenize_words(e["text"]),
                               "the focus word must appear in the sentence")
-                analysis = self.logic.analyze_input(e["text"], focus=word)
-                self.assertEqual(analysis["mode"], "lookup",
-                                 f"{e['text']!r}: engine no longer commits")
-                self.assertEqual(analysis["result"]["article"], e["verified_article"],
+                fields = gen.verify(self.logic, e["text"], word)
+                self.assertIsNotNone(fields, f"{e['text']!r}: engine no longer commits")
+                self.assertEqual(fields["verified_article"], e["verified_article"],
                                  f"{e['text']!r}: article drifted from the corpus")
 
     def test_every_example_shows_its_article(self):
@@ -145,12 +144,47 @@ class SentenceArticleTests(unittest.TestCase):
         self.assertIsNotNone(kept)
         self.assertEqual(kept["verified_article"], "the")
 
+    def test_verify_reads_fixed_expressions_in_a_sentence(self):
+        logic = ArticleLogic()
+        kept = gen.verify(logic, "We met in the afternoon.", "afternoon")
+        self.assertEqual(kept["verified_article"], "the")
+        kept = gen.verify(logic, "She went to school by bus.", "school")
+        self.assertEqual(kept["verified_article"], "no article")
+        # the expression matched must contain the target word
+        self.assertIsNone(gen.verify(logic, "We met in the afternoon.", "met"))
+
     def test_either_answer_allows_both_forms(self):
         self.assertTrue(gen.sentence_shows("either the or no article", "in summer", "summer"))
         self.assertTrue(gen.sentence_shows(
             "either the or no article", "in the summer", "summer"))
         self.assertFalse(gen.sentence_shows(
             "either the or no article", "a summer to remember", "summer"))
+
+
+class DraftPlanTests(unittest.TestCase):
+    """The batch plan is built from rules_data.json alone; no network."""
+
+    @classmethod
+    def setUpClass(cls):
+        data = json.loads((ROOT / "rules_data.json").read_text(encoding="utf-8"))
+        cls.plan = {p["word"]: p for p in gen.build_plan(data)}
+
+    def test_only_single_word_targets(self):
+        for word in self.plan:
+            self.assertNotIn(" ", word)
+
+    def test_fixed_expressions_contribute_their_noun_not_their_preposition(self):
+        self.assertIn("school", self.plan)
+        for word in ("at", "by", "to", "after"):
+            self.assertNotIn(word, self.plan)
+
+    def test_lookup_sense_is_carried(self):
+        self.assertEqual(self.plan["phone"]["article"], "the")
+        self.assertEqual(self.plan["phone"]["sense"], "the medium")
+
+    def test_senses_are_plain_text(self):
+        for p in self.plan.values():
+            self.assertNotIn("<", p["sense"], p["word"])
 
 
 if __name__ == "__main__":
