@@ -47,6 +47,10 @@ Type a noun or phrase and the tool normalizes it (trims spaces, drops a leading
 2. **Fixed expressions** — `at night`, `by car`, `in the end`, `twice a week`.
    Set phrases override every rule below them, so they are caught first. Each
    one resolves to a **specific form**, never to "it's memorized, good luck."
+   An entry can list inflected `variants` in `rules_data.json`, so `took
+   place` and `making progress` match `take place` and `make progress`. A
+   fixed expression that opens the input is read whole before the slot check:
+   `all of a sudden` is not the quantifier `all`.
 3. **Noun + classifying number** — `Page 42`, `Platform 9`, `Question B`.
 4. **The lookup table** — nouns with fixed or idiosyncratic rules: proper nouns
    (`the USA`), abstractions (`music`), systems (`the internet`). Matched on the
@@ -160,6 +164,16 @@ rather than inert.
 Pinning a word narrows only the *matching*. The sentence still supplies
 context, so `I bought a piano last week` pinned to `piano` still sees the `a`
 in front of it — and `last week` no longer answers a question about the piano.
+Each gate has to be about the pinned word:
+
+- a determiner counts only when it heads that word's phrase, directly or past
+  adjectives (`a lovely dinner`); in `My grandmother always cooks dinner` the
+  `my` belongs to the grandmother, so `dinner` is not "no article needed";
+- a sentence pattern applies only when the word is in it, or in the noun phrase
+  a frame opens: `the most dramatic moments in history` speaks for `moments`,
+  not `history`;
+- a fixed expression around the word answers for it: `afternoon` in `We met in
+  the afternoon`, `few` in `a few`.
 
 3. **Otherwise, answer the questions** until you reach a form.
 4. **Read the result** — the recommended article, why it applies, the phrase

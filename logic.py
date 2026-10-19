@@ -15,6 +15,7 @@ from rules import (
     DETERMINERS,
     ENTRY_NODE,
     FIXED_EXPRESSIONS,
+    FIXED_PHRASES,
     LOOKUP_TABLE,
     NATIONALITY_THE,
     PATTERNS,
@@ -232,13 +233,38 @@ _LOOKBACK_BOUNDARY = {
 }
 _LOOKBACK_LIMIT = 4
 
+#: adverbs that sit between a subject and its verb, never inside a noun phrase
+_CLAUSE_ADVERBS = {
+    "always", "never", "often", "usually", "sometimes", "also", "still", "just",
+    "already", "even", "ever", "seldom", "rarely", "really", "not", "only",
+}
+#: plurals without an -s, which no adjective looks like
+_IRREGULAR_PLURALS = {"children", "people", "men", "women", "feet", "teeth", "mice"}
+
+
+def _ends_the_lookback(token):
+    """A word that cannot stand between a determiner and its noun.
+
+    The lookback is only meant to step over adjectives. A verb, an adverb or
+    another noun in the way means the determiner heads a different phrase: in
+    `My grandmother always cooks dinner` the `my` is the grandmother's, and
+    `dinner` has no determiner at all.
+    """
+    if (token in _LOOKBACK_BOUNDARY or token in _VERB_HINTS
+            or token in _CLAUSE_ADVERBS or token in _SUBJECT_PRONOUNS
+            or token in _IRREGULAR_PLURALS or is_known_noun(token)):
+        return True
+    # adjectives never take an -s: `cooks`, `students`, `moments`
+    return token.endswith("s") and not token.endswith(("ss", "us", "is"))
+
 
 def _determiner_before(tokens, start, determiner_words):
     """
     The determiner governing a noun, looking past any adjectives in between.
 
     Checking only the immediately preceding token misses `a lovely dinner`,
-    where an adjective hides the article that decides the reading.
+    where an adjective hides the article that decides the reading. Anything
+    that is not an adjective ends the search (see `_ends_the_lookback`).
     """
     index = start - 1
     steps = 0
@@ -246,11 +272,48 @@ def _determiner_before(tokens, start, determiner_words):
         token = tokens[index]
         if token in determiner_words:
             return token
-        if token in _LOOKBACK_BOUNDARY:
+        if _ends_the_lookback(token):
             return None
         index -= 1
         steps += 1
     return None
+
+
+def _fixed_covering(tokens, span):
+    """The longest fixed expression (or variant) in the tokens that contains
+    the words at ``span``."""
+    start, end = span
+    if end is None:
+        return None
+    for size in range(min(5, len(tokens)), end - start - 1, -1):
+        for first in range(max(0, end - size), min(start, len(tokens) - size) + 1):
+            candidate = " ".join(tokens[first:first + size])
+            if candidate in FIXED_PHRASES:
+                return candidate
+    return None
+
+
+#: quantity words that can open the noun phrase after a frame
+_FRAME_LEAD = {"many", "much", "few", "little", "lots", "of", "several", "two", "three"}
+
+
+def _follows_frame(tokens, frame_end, word):
+    word = word.split()[0] if word else word
+    """Is ``word`` in the noun phrase a frame opens? In `the most dramatic
+    moments in history` that phrase is `dramatic moments`; `history` is not
+    part of it."""
+    index = frame_end
+    while index < len(tokens) and (tokens[index] in _DETERMINERS
+                                   or tokens[index] in _NEW_PHRASE
+                                   or tokens[index] in _FRAME_LEAD):
+        index += 1
+    while (index < len(tokens) and tokens[index] not in _NP_END
+           and tokens[index] not in _DETERMINERS
+           and tokens[index] not in _VERB_HINTS):
+        if tokens[index] == word:
+            return True
+        index += 1
+    return False
 
 
 #: words that are never the noun a learner is asking about
@@ -721,15 +784,18 @@ class ArticleLogic:
         # 0.5 The article slot may already be taken. A possessive, demonstrative
         #     or quantifier leaves no room for an article, so this is not a
         #     zero-article answer - the question does not arise.
-        blocked = self.check_determiner(text)
+        #     A fixed expression that opens the input is read whole first:
+        #     `all of a sudden` is not the quantifier `all`.
+        match = _find_phrase(tokens, FIXED_PHRASES)
+        blocked = None if match and match[1] == 0 else self.check_determiner(text)
         if blocked:
             return blocked
 
-        # 1. Fixed expressions outrank every rule below them.
-        match = _find_phrase(tokens, FIXED_EXPRESSIONS)
-        key = match[0] if match else (normalized if normalized in FIXED_EXPRESSIONS else None)
+        # 1. Fixed expressions outrank every rule below them. Their inflected
+        #    variants count too: `took place`, `making progress`.
+        key = match[0] if match else (normalized if normalized in FIXED_PHRASES else None)
         if key:
-            entry = FIXED_EXPRESSIONS[key]
+            entry = FIXED_PHRASES[key]
             return {
                 "focus_noun": key,
                 "result": _result(entry["article"], entry["explanation"], entry["rule_ref"]),
@@ -827,23 +893,32 @@ class ArticleLogic:
         word = _normalize_noun(focus)
         span = _span_of(tokens, word)
 
+        # A fixed expression the word sits inside answers for it: `afternoon`
+        # in `We met in the afternoon`, `few` in `a few`.
+        fixed = _fixed_covering(tokens, span)
+        if fixed:
+            entry = FIXED_PHRASES[fixed]
+            return {"mode": "lookup", "focus_noun": fixed,
+                    "result": _result(entry["article"], entry["explanation"],
+                                      entry["rule_ref"]),
+                    "source": "fixed_expression", "note": None}
+
         # A construction only speaks for this noun if its match covers it.
         for whole_only in (True, False):
             hit = self.check_constructions(text, tokens, whole_only=whole_only)
-            # A frame speaks for the whole clause, so it still applies to a
-            # noun inside it: 2.7 is precisely a rule about the noun after
-            # `there is`. Other rules only apply if they matched that word.
-            if hit and word and (hit.get("frame")
-                                 or word in hit.get("matched", "").split()):
+            if not hit or not word:
+                continue
+            if word in hit.get("matched", "").split():
                 return dict(hit, mode="lookup", note=None)
+            # A frame also speaks for the noun phrase it opens: 2.7 is a rule
+            # about the noun after `there is`. A noun elsewhere in the
+            # sentence is not part of it.
+            if hit.get("frame"):
+                frame_span = _span_of(tokens, " ".join(_tokenize_words(hit["matched"])))
+                if frame_span[1] is not None and _follows_frame(tokens, frame_span[1], word):
+                    return dict(hit, mode="lookup", note=None)
 
         if span[1] is not None:
-            if word in FIXED_EXPRESSIONS:
-                entry = FIXED_EXPRESSIONS[word]
-                return {"mode": "lookup", "focus_noun": word,
-                        "result": _result(entry["article"], entry["explanation"],
-                                          entry["rule_ref"]),
-                        "source": "fixed_expression", "note": None}
             if word in LOOKUP_TABLE:
                 answer = self._lookup_result(word, tokens, span)
                 return dict(answer, mode="lookup", note=None)

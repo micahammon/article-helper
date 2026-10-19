@@ -87,11 +87,19 @@ function buildSandbox() {
   return sandbox;
 }
 
-function main() {
+/* The page's engine, loaded into a fresh sandbox. Exported so the Python
+   tests can put their own sentences to the JS engine. */
+function loadEngine() {
   const sandbox = buildSandbox();
   vm.createContext(sandbox);
+  vm.runInContext(engineCode(), sandbox, { filename: "index.html:engine" });
+  return sandbox;
+}
+
+function main() {
+  let sandbox;
   try {
-    vm.runInContext(engineCode(), sandbox, { filename: "index.html:engine" });
+    sandbox = loadEngine();
   } catch (err) {
     console.log(JSON.stringify({ ok: false, loaded: false, error: String(err) }));
     process.exit(2);
@@ -122,4 +130,5 @@ function main() {
   process.exit(failures.length === 0 ? 0 : 1);
 }
 
-main();
+if (require.main === module) main();
+module.exports = { loadEngine };

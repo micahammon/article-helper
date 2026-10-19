@@ -249,15 +249,6 @@
       "date": "2026-09-07"
     },
     {
-      "text": "There's a post office in my town",
-      "word": "in",
-      "verified_article": "a / an",
-      "verified_rule_ref": "2.7",
-      "verified_source": "construction:there_is_singular",
-      "source": "harvested",
-      "date": "2026-09-07"
-    },
-    {
       "text": "She speaks Japanese",
       "word": "japanese",
       "verified_article": "no article",

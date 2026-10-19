@@ -70,6 +70,14 @@ with _DATA_PATH.open(encoding="utf-8") as data_file:
 
 LOOKUP_TABLE = _rules_data["lookup_table"]
 FIXED_EXPRESSIONS = _rules_data["fixed_expressions"]
+# Every form a fixed expression is matched in: its key plus the inflected
+# `variants` listed with it (`took place`, `making progress`), each pointing
+# back at the entry it belongs to.
+FIXED_PHRASES = {}
+for _key, _entry in FIXED_EXPRESSIONS.items():
+    FIXED_PHRASES[_key] = _entry
+    for _variant in _entry.get("variants", []):
+        FIXED_PHRASES.setdefault(_variant, _entry)
 PROPER_NOUN_THE = _rules_data["proper_noun_the"]
 NATIONALITY_THE = _rules_data["nationality_the"]
 DETERMINERS = _rules_data["determiners"]
@@ -90,6 +98,7 @@ DECISION_TREE = _adapt_tree(_rules_data["decision_tree"])
 __all__ = [
     "LOOKUP_TABLE",
     "FIXED_EXPRESSIONS",
+    "FIXED_PHRASES",
     "PROPER_NOUN_THE",
     "NATIONALITY_THE",
     "DETERMINERS",

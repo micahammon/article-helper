@@ -1551,25 +1551,47 @@
       "article": "no article",
       "group": "zero",
       "rule_ref": "8.2",
-      "explanation": "An idiom. The article is part of the expression, not a live choice — there is no rule to recover here."
+      "explanation": "An idiom. The article is part of the expression, not a live choice — there is no rule to recover here.",
+      "variants": [
+        "takes place",
+        "took place",
+        "taking place",
+        "taken place"
+      ]
     },
     "catch fire": {
       "article": "no article",
       "group": "zero",
       "rule_ref": "8.2",
-      "explanation": "An idiom. The article is part of the expression, not a live choice — there is no rule to recover here."
+      "explanation": "An idiom. The article is part of the expression, not a live choice — there is no rule to recover here.",
+      "variants": [
+        "catches fire",
+        "caught fire",
+        "catching fire"
+      ]
     },
     "make progress": {
       "article": "no article",
       "group": "zero",
       "rule_ref": "8.2",
-      "explanation": "An idiom. The article is part of the expression, not a live choice — there is no rule to recover here."
+      "explanation": "An idiom. The article is part of the expression, not a live choice — there is no rule to recover here.",
+      "variants": [
+        "makes progress",
+        "made progress",
+        "making progress"
+      ]
     },
     "give way": {
       "article": "no article",
       "group": "zero",
       "rule_ref": "8.2",
-      "explanation": "An idiom. The article is part of the expression, not a live choice — there is no rule to recover here."
+      "explanation": "An idiom. The article is part of the expression, not a live choice — there is no rule to recover here.",
+      "variants": [
+        "gives way",
+        "gave way",
+        "giving way",
+        "given way"
+      ]
     },
     "hand in hand": {
       "article": "no article",
@@ -1737,7 +1759,13 @@
       "article": "a / an",
       "group": "a_an",
       "rule_ref": "7.10",
-      "explanation": "<em>A/an</em> used to mean <em>per</em> in a rate: <em>twice a week</em>, <em>$5 a kilo</em>."
+      "explanation": "<em>A/an</em> used to mean <em>per</em> in a rate: <em>twice a week</em>, <em>$5 a kilo</em>.",
+      "variants": [
+        "once a month",
+        "once a year",
+        "twice a year",
+        "twice a day"
+      ]
     },
     "three times a week": {
       "article": "a / an",
