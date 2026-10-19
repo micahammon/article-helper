@@ -153,6 +153,36 @@ class SentenceArticleTests(unittest.TestCase):
         # the expression matched must contain the target word
         self.assertIsNone(gen.verify(logic, "We met in the afternoon.", "met"))
 
+    def test_fixed_expression_wins_over_other_readings(self):
+        """Another construction in the sentence must not decide a word that sits
+        in a fixed expression."""
+        logic = ArticleLogic()
+        for text, word in [
+            ("We explored the whole island by bike over one sunny week.", "bike"),
+            ("The soup tasted bland at first, so she added more salt.", "first"),
+            ("Most of the guests left early, but a few stayed to help.", "few"),
+            ("All of a sudden, the lights went out.", "sudden"),
+        ]:
+            with self.subTest(text=text):
+                kept = gen.verify(logic, text, word)
+                self.assertIsNotNone(kept)
+                self.assertEqual(kept["verified_source"], "fixed_expression")
+        self.assertEqual(gen.verify(logic, "The soup tasted bland at first.", "first")
+                         ["verified_article"], "no article")
+
+    def test_an_answer_about_another_phrase_is_not_kept(self):
+        """The engine's answer must be about the target word itself."""
+        logic = ArticleLogic()
+        for text, word in [
+            ("My grandmother always cooks dinner for the whole family.", "dinner"),
+            ("Some of the most dramatic moments in history happened then.", "history"),
+        ]:
+            with self.subTest(text=text):
+                kept = gen.verify(logic, text, word)
+                if kept:
+                    self.assertNotEqual(kept["verified_article"], "no article needed")
+                    self.assertFalse(kept["verified_source"].startswith("construction"))
+
     def test_either_answer_allows_both_forms(self):
         self.assertTrue(gen.sentence_shows("either the or no article", "in summer", "summer"))
         self.assertTrue(gen.sentence_shows(
@@ -175,8 +205,14 @@ class DraftPlanTests(unittest.TestCase):
 
     def test_fixed_expressions_contribute_their_noun_not_their_preposition(self):
         self.assertIn("school", self.plan)
-        for word in ("at", "by", "to", "after"):
+        for word in ("at", "by", "to", "after", "of"):
             self.assertNotIn(word, self.plan)
+        # "in charge of" contributes its noun, not its last word
+        self.assertIn("charge", self.plan)
+
+    def test_fixed_expression_prompt_asks_for_the_exact_phrase(self):
+        self.assertIn('"make progress"', self.plan["progress"]["sense"])
+        self.assertIn("exact phrase", self.plan["progress"]["sense"])
 
     def test_lookup_sense_is_carried(self):
         self.assertEqual(self.plan["phone"]["article"], "the")

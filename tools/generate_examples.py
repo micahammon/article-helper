@@ -130,6 +130,68 @@ def sentence_shows(article, text, word):
     return allowed is None or article_in_sentence(text, word) in allowed
 
 
+_FIXED_KEYS = None
+
+
+def _fixed_keys():
+    """The data's fixed expressions, longest first ("all of a sudden" before
+    "a sudden"), skipping the numeric patterns."""
+    global _FIXED_KEYS
+    if _FIXED_KEYS is None:
+        keys = _load(DATA, {}).get("fixed_expressions", {})
+        _FIXED_KEYS = sorted((k for k in keys if not re.search(r"\d", k)),
+                             key=len, reverse=True)
+    return _FIXED_KEYS
+
+
+def _contains_phrase(tokens, phrase):
+    p = phrase.split()
+    return any(tokens[i:i + len(p)] == p for i in range(len(tokens) - len(p) + 1))
+
+
+def _fixed_expression_read(engine, text, tokens, word):
+    """If the sentence holds a fixed expression containing `word`, the engine's
+    answer for that expression, else None.
+
+    The whole-sentence read is tried first; if it settles on some other phrase
+    ("most of the..."), the expression is asked about on its own. Either way the
+    engine answers. The expression carries its own article, so no surface check
+    is needed.
+    """
+    hit = next((k for k in _fixed_keys()
+                if word in k.split() and _contains_phrase(tokens, k)), None)
+    if hit is None:
+        return None
+    analysis = engine.analyze_input(text)
+    if not (analysis.get("source") == "fixed_expression"
+            and word in (analysis.get("focus_noun") or "").split()):
+        analysis = engine.analyze_input(hit)
+    if analysis.get("mode") != "lookup" or analysis.get("source") != "fixed_expression":
+        return None
+    return analysis
+
+
+# How close a construction's cue must end before the word to govern it:
+# "what a beautiful day", "there's a post office".
+_CUE_REACH = 3
+
+
+def _answers_for(analysis, tokens, word):
+    """Is the engine's answer about `word`? Either the phrase it settled on
+    contains the word, or it is a construction whose cue sits just before the
+    word -- not "the most" four words back, nor "most of the" after it."""
+    cue = (analysis.get("focus_noun") or "").lower().split()
+    if word in cue:
+        return True
+    if not (analysis.get("source") or "").startswith("construction") or not cue:
+        return False
+    i = tokens.index(word)
+    for start in range(max(0, i - _CUE_REACH - len(cue)), i):
+        if tokens[start:start + len(cue)] == cue and i - (start + len(cue) - 1) <= _CUE_REACH:
+            return True
+    return False
+
+
 def verify(engine, text, word):
     """Does the engine give `word` a definite reading inside `text`?
 
@@ -138,23 +200,23 @@ def verify(engine, text, word):
     wrong thing, so it is dropped rather than guessed at.
     """
     word = _normalize_noun(word)
-    if word not in _tokenize_words(text):
+    tokens = _tokenize_words(text)
+    if word not in tokens:
         return None
-    analysis = engine.analyze_input(text, focus=word)
-    if analysis.get("mode") != "lookup":
-        # A focused read never matches a fixed expression ("in the afternoon");
-        # the whole-sentence read does. Take it only if the expression it
-        # matched is one this word belongs to.
-        analysis = engine.analyze_input(text)
+    analysis = _fixed_expression_read(engine, text, tokens, word)
+    if analysis is None:
+        # No fixed expression for this word here: the focused read, but only
+        # when its answer is about this word and the sentence shows it.
+        analysis = engine.analyze_input(text, focus=word)
         if (analysis.get("mode") != "lookup"
-                or analysis.get("source") != "fixed_expression"
-                or word not in (analysis.get("focus_noun") or "").split()):
+                or not _answers_for(analysis, tokens, word)):
+            return None
+        article = (analysis.get("result") or {}).get("article")
+        if not sentence_shows(article, text, word):
             return None
     result = analysis.get("result") or {}
     article = result.get("article")
     if not article or article == "it depends":
-        return None
-    if not sentence_shows(article, text, word):
         return None
     return {
         "text": text.strip(),
@@ -314,6 +376,11 @@ def _plain(html):
     return re.sub(r"\s+", " ", _TAGS.sub(" ", html or "")).strip()
 
 
+# Words an expression can end on that are not its noun ("in charge of").
+_FUNCTION_WORDS = {"a", "an", "the", "of", "to", "in", "on", "at", "by", "for",
+                   "with", "from"}
+
+
 def build_plan(data):
     """One entry per single-word target, with the sense the data gives it.
 
@@ -349,8 +416,13 @@ def build_plan(data):
     for key, expr in data["fixed_expressions"].items():
         if re.search(r"\d", key):
             continue
-        add(key.split(" ")[-1], expr["article"],
-            "as in the fixed expression \"%s\"" % key, "fixed")
+        nouns = [w for w in key.split(" ") if w not in _FUNCTION_WORDS]
+        if not nouns:
+            continue
+        add(nouns[-1], expr["article"],
+            "as in the fixed expression \"%s\". Use that exact phrase word for "
+            "word in every sentence: do not change its verb form or swap its "
+            "words" % key, "fixed")
     nat = data["nationality_the"]
     for word in nat.get("examples", []):
         add(word, nat["article"], "the people as a group: %s" % nat.get("explanation", ""),
@@ -362,7 +434,7 @@ def build_plan(data):
     return [plan[w] for w in sorted(plan)]
 
 
-def draft_all(model, n, limit, dry_run):
+def draft_all(model, n, limit, dry_run, words=None):
     """Draft every planned word that has no example yet, in the corpus or staging.
 
     --dry-run lists what would be drafted and makes no call. A word whose
@@ -371,7 +443,11 @@ def draft_all(model, n, limit, dry_run):
     data = _load(DATA, None)
     covered = {e["word"] for e in _load(CORPUS, {"examples": []})["examples"]}
     covered |= {e["word"] for e in _load(STAGING, {"examples": []})["examples"]}
-    todo = [p for p in build_plan(data) if p["word"] not in covered]
+    if words:
+        # an explicit list redrafts those words even if they have some examples
+        todo = [p for p in build_plan(data) if p["word"] in words]
+    else:
+        todo = [p for p in build_plan(data) if p["word"] not in covered]
     if limit:
         todo = todo[:limit]
     if dry_run:
@@ -443,11 +519,12 @@ def main(argv=None):
     a.add_argument("--model", default="anthropic/claude-sonnet-5.5")
     a.add_argument("--limit", type=int, default=0, help="draft only the first N words")
     a.add_argument("--dry-run", action="store_true", help="list the words, make no calls")
+    a.add_argument("--words", nargs="+", help="draft only these words (redrafts thin ones)")
     sub.add_parser("promote", help="move reviewed staged entries into the corpus")
 
     args = parser.parse_args(argv)
     if args.cmd == "draft-all":
-        draft_all(args.model, args.n, args.limit, args.dry_run)
+        draft_all(args.model, args.n, args.limit, args.dry_run, args.words)
     if args.cmd == "harvest":
         harvest()
     elif args.cmd == "draft":
