@@ -1,7 +1,7 @@
 docs/'A' and 'The' Explained--the_defining_doc.pdf
 AGENTS.md
-/__pycache__
-/tests/__pycache__
+__pycache__/
+.pytest_cache/
 /.claude/skills/
 /skills-lock.json
 /.agents/
