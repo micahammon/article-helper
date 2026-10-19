@@ -1,32 +1,86 @@
 # TASKS
 
-## current
-- [ ] Restyle index.html to the "Gloss" direction, with tweaks still to
-      settle. Gloss is the manuscript treatment from the design
-      mock-up, direction B: cold white paper, ink-blue text, one annotating
-      red for everything the learner did, and the trail moved out of its card
-      into a real right-hand margin as a gloss in a second hand. Fraunces for the
-      headword and verdict, Newsreader for the question and examples, Archivo
-      for the marginal hand. The four article colours collapse to a single
-      blue on the verdict, so decide first what the map view does without
-      per-form colour.
-- [ ] Gather user feedback on phrase-first UX and tune detection heuristics/wording
-- [ ] Tell a noun from a verb, so `bank holiday` can be told from `sun rises`.
-      Both are determiner + listed word + one more word, so the lookup answers
-      from the first noun and `a bank holiday` gets a card about banks. Handing
-      those to the noun-adjunct rule was tried twice and reverted twice
-      (bce8a71, and the gate before it): the pair test cannot see that `rises`
-      is a verb, so `the sun rises` came back as a noun-noun pair. Neither the
-      verb list nor position can settle it -- `rises` is not on the list and it
-      sits exactly where `holiday` sits. Needs real part-of-speech knowledge: a
-      small lexicon of noun and verb forms, or a tagger. Affects the same
-      shape in `the piano teacher`, `a golf club`, `the art gallery`, `a
-      history book`, `a bed sheet`, `the work permit`, `a home page`, `a music
-      lesson`.
+The concrete backlog. Direction and the reasoning behind these live in
+[`ROADMAP.md`](ROADMAP.md); this list is grouped by the roadmap's horizons —
+**Now** (polish the live standalone tool), **Next** (shape it into a platform
+module), **Later** (the platform itself).
+
+The AI items all follow one rule: the engine is the oracle — AI generates and
+perceives, never adjudicates, and everything it produces is verified before a
+learner sees it.
+
+## Now — polish the standalone tool (it's live, in front of students)
+
+- [ ] Restyle index.html to the "Gloss" direction, as a **design system** rather
+      than page-glued CSS (it seeds the platform's look — see
+      [`docs/design-direction.md`](docs/design-direction.md)). Gloss is the
+      manuscript treatment from the design mock-up, direction B: cold white
+      paper, ink-blue text, one annotating red for everything the learner did,
+      and the trail moved out of its card into a real right-hand margin as a
+      gloss in a second hand. Fraunces for the headword and verdict, Newsreader
+      for the question and examples, Archivo for the marginal hand. The four
+      article colours collapse to a single blue on the verdict, so decide first
+      what the map view does without per-form colour.
+- [ ] Make the four views cohere — consistent navigation and interaction across
+      Walk, Map, Look-a-word-up and Play. Today each grew on its own.
+- [ ] Retire the Tkinter desktop app. Remove the GUI (`app.py`) and reframe
+      `logic.py` / `rules.py` in the README as what they now are — the shared
+      headless engine the tests and `tools/` scripts read — not "the desktop
+      app." Update the README/project-layout tables that still present the GUI as
+      a first-class citizen.
+- [ ] Role A — run a real AI-draft batch. The pipeline, harvest, corpus, "More
+      examples" surface and parity guards are in (see `done`); what remains is to
+      draft fresh sentences with an LLM (`tools/generate_examples.py draft`),
+      review `examples_staging.json`, `promote`, and re-inline.
+- [ ] Gather user feedback on phrase-first UX and tune detection
+      heuristics/wording.
 - [ ] Q4's 4a-4h list is getting long. Watch whether learners still work down
       it, now that it has eight cues instead of seven.
 
+## Next — shape the module for the platform
+
+- [ ] Draw the **module boundary**: make the rules engine mountable independent
+      of the standalone chrome, so it can be dropped into the platform shell.
+      Do this alongside the Gloss restyle so presentation and engine are teased
+      apart once, not twice.
+- [ ] Build a genuine **Learn mode** — teach the principle first, then hand off
+      to Play — assembled from the explanatory material that already exists (the
+      "why" on cards, the map, the readings).
+- [ ] **Role B — tell a noun from a verb**, so `bank holiday` can be told from
+      `sun rises`. Both are determiner + listed word + one more word, so the
+      lookup answers from the first noun and `a bank holiday` gets a card about
+      banks. Handing those to the noun-adjunct rule was tried twice and reverted
+      twice (bce8a71, and the gate before it): the pair test cannot see that
+      `rises` is a verb, so `the sun rises` came back as a noun-noun pair.
+      Neither the verb list nor position can settle it -- `rises` is not on the
+      list and it sits exactly where `holiday` sits. Needs real part-of-speech
+      knowledge: a small lexicon of noun and verb forms, or a tagger. This is the
+      first candidate for the AI layer's **Role B** (runtime perception): AI
+      extracts the features, the canonical rules act on them, with a
+      deterministic offline fallback and "it depends" on disagreement. Decide API
+      cost + learner-text-to-API privacy before building. Affects the same shape
+      in `the piano teacher`, `a golf club`, `the art gallery`, `a history
+      book`, `a bed sheet`, `the work permit`, `a home page`, `a music lesson`.
+
+## Later — the platform itself
+
+- [ ] Additional grammar topics on the articles pattern, across A1–C2 (each a
+      topic = its own data + a set of modes).
+- [ ] Cross-topic learner progress (today's state is per-view `localStorage`).
+- [ ] Source and integrate video / listening ("Watch") — this needs clips found
+      or made, not just code.
+
 ## done
+- [x] Build the AI layer's **Role A** scaffold (generate-then-verify, at build
+      time): `tools/generate_examples.py` (harvest / draft / promote),
+      `examples_data.json` (74 harvested, engine-verified, provenance-tagged,
+      partitioned from canon), inlined into index.html by `tools/inline_rules.py`,
+      and a "More examples of …" surface in the readings view. Two guards:
+      `tests/test_examples.py` re-verifies every example against the Python
+      engine, and `tools/check_parity.js` (run from the suite) loads the real
+      browser engine and asserts it reads each example the same — so the two
+      engines can never silently disagree over a sentence a learner is shown. The
+      AI-draft step is written but still needs a real batch (see Now).
 - [x] Add a fourth view, "Play": a drill that asks before it answers. Early
       levels blank the article out of a phrase and ask which one goes in;
       middle levels show the phrase whole and ask which rule decides it; the
