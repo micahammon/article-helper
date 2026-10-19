@@ -1035,12 +1035,15 @@ class LearnerFacingLanguageTests(unittest.TestCase):
         rules, with nothing on screen to say so.
         """
         root = Path(__file__).resolve().parents[1]
-        opener = '<script id="rules-data" type="application/json">'
-        for data_name, page_name in (("rules_data.json", "index.html"),
-                                     ("rules_data.classic.json", "classic.html")):
+        # index.html also carries the verified example corpus in its own block.
+        for data_name, page_name, block_id in (
+                ("rules_data.json", "index.html", "rules-data"),
+                ("examples_data.json", "index.html", "examples-data"),
+                ("rules_data.classic.json", "classic.html", "rules-data")):
+            opener = f'<script id="{block_id}" type="application/json">'
             page = (root / page_name).read_text(encoding="utf-8")
             start = page.find(opener)
-            self.assertNotEqual(start, -1, f"{page_name} has no rules-data block")
+            self.assertNotEqual(start, -1, f"{page_name} has no {block_id} block")
             start += len(opener)
             inlined = json.loads(page[start:page.find("</script>", start)])
             source = json.loads((root / data_name).read_text(encoding="utf-8"))

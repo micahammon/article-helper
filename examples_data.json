@@ -1,0 +1,675 @@
+{
+  "meta": {
+    "note": "Example sentences verified against the engine. Not canonical rules -- regenerate with tools/generate_examples.py. AI-drafted entries are human-approved before they land here.",
+    "generated": "2026-09-07",
+    "count": 74
+  },
+  "examples": [
+    {
+      "text": "She speaks Arabic",
+      "word": "arabic",
+      "verified_article": "no article",
+      "verified_rule_ref": "6.1.1",
+      "verified_source": "category:languages",
+      "source": "harvested",
+      "date": "2026-09-07"
+    },
+    {
+      "text": "buy bread at the baker's",
+      "word": "baker's",
+      "verified_article": "the",
+      "verified_rule_ref": "4.2",
+      "verified_source": "lookup",
+      "source": "harvested",
+      "date": "2026-09-07"
+    },
+    {
+      "text": "go to the ballet",
+      "word": "ballet",
+      "verified_article": "the",
+      "verified_rule_ref": "4.1",
+      "verified_source": "lookup",
+      "source": "harvested",
+      "date": "2026-09-07"
+    },
+    {
+      "text": "put it in the bank",
+      "word": "bank",
+      "verified_article": "the",
+      "verified_rule_ref": "4.2",
+      "verified_source": "lookup",
+      "source": "harvested",
+      "date": "2026-09-07"
+    },
+    {
+      "text": "go to the bar",
+      "word": "bar",
+      "verified_article": "the",
+      "verified_rule_ref": "4.2",
+      "verified_source": "lookup",
+      "source": "harvested",
+      "date": "2026-09-07"
+    },
+    {
+      "text": "go to bed",
+      "word": "bed",
+      "verified_article": "no article",
+      "verified_rule_ref": "7.4.1",
+      "verified_source": "lookup",
+      "source": "harvested",
+      "date": "2026-09-07"
+    },
+    {
+      "text": "in bed",
+      "word": "bed",
+      "verified_article": "no article",
+      "verified_rule_ref": "7.4.1",
+      "verified_source": "lookup",
+      "source": "harvested",
+      "date": "2026-09-07"
+    },
+    {
+      "text": "the next bus",
+      "word": "bus",
+      "verified_article": "the",
+      "verified_rule_ref": "2.4.4",
+      "verified_source": "construction:next_last_adjective",
+      "source": "harvested",
+      "date": "2026-09-07"
+    },
+    {
+      "text": "go to the chemist's",
+      "word": "chemist's",
+      "verified_article": "the",
+      "verified_rule_ref": "4.2",
+      "verified_source": "lookup",
+      "source": "harvested",
+      "date": "2026-09-07"
+    },
+    {
+      "text": "at Christmas",
+      "word": "christmas",
+      "verified_article": "no article",
+      "verified_rule_ref": "6.2.3",
+      "verified_source": "time_words:holidays",
+      "source": "harvested",
+      "date": "2026-09-07"
+    },
+    {
+      "text": "go to the cinema",
+      "word": "cinema",
+      "verified_article": "the",
+      "verified_rule_ref": "4.1",
+      "verified_source": "lookup",
+      "source": "harvested",
+      "date": "2026-09-07"
+    },
+    {
+      "text": "in the countryside",
+      "word": "countryside",
+      "verified_article": "the",
+      "verified_rule_ref": "4.10",
+      "verified_source": "lookup",
+      "source": "harvested",
+      "date": "2026-09-07"
+    },
+    {
+      "text": "What a beautiful day",
+      "word": "day",
+      "verified_article": "a / an",
+      "verified_rule_ref": "5.3",
+      "verified_source": "construction:exclamation_what_a",
+      "source": "harvested",
+      "date": "2026-09-07"
+    },
+    {
+      "text": "in December",
+      "word": "december",
+      "verified_article": "no article",
+      "verified_rule_ref": "6.2.1",
+      "verified_source": "time_words:months",
+      "source": "harvested",
+      "date": "2026-09-07"
+    },
+    {
+      "text": "go to the dentist",
+      "word": "dentist",
+      "verified_article": "the",
+      "verified_rule_ref": "4.2",
+      "verified_source": "lookup",
+      "source": "harvested",
+      "date": "2026-09-07"
+    },
+    {
+      "text": "go to the dentist's",
+      "word": "dentist's",
+      "verified_article": "the",
+      "verified_rule_ref": "4.2",
+      "verified_source": "lookup",
+      "source": "harvested",
+      "date": "2026-09-07"
+    },
+    {
+      "text": "go to the doctor",
+      "word": "doctor",
+      "verified_article": "the",
+      "verified_rule_ref": "4.2",
+      "verified_source": "lookup",
+      "source": "harvested",
+      "date": "2026-09-07"
+    },
+    {
+      "text": "go to the doctor's",
+      "word": "doctor's",
+      "verified_article": "the",
+      "verified_rule_ref": "4.2",
+      "verified_source": "lookup",
+      "source": "harvested",
+      "date": "2026-09-07"
+    },
+    {
+      "text": "go to the drugstore",
+      "word": "drugstore",
+      "verified_article": "the",
+      "verified_rule_ref": "4.2",
+      "verified_source": "lookup",
+      "source": "harvested",
+      "date": "2026-09-07"
+    },
+    {
+      "text": "protect the environment",
+      "word": "environment",
+      "verified_article": "the",
+      "verified_rule_ref": "4.14",
+      "verified_source": "lookup",
+      "source": "harvested",
+      "date": "2026-09-07"
+    },
+    {
+      "text": "I have the flu",
+      "word": "flu",
+      "verified_article": "the",
+      "verified_rule_ref": "7.5",
+      "verified_source": "lookup",
+      "source": "harvested",
+      "date": "2026-09-07"
+    },
+    {
+      "text": "on Fridays",
+      "word": "fridays",
+      "verified_article": "no article",
+      "verified_rule_ref": "6.2.2",
+      "verified_source": "time_words:days",
+      "source": "harvested",
+      "date": "2026-09-07"
+    },
+    {
+      "text": "play the guitar",
+      "word": "guitar",
+      "verified_article": "the",
+      "verified_rule_ref": "4.3",
+      "verified_source": "lookup",
+      "source": "harvested",
+      "date": "2026-09-07"
+    },
+    {
+      "text": "go to the gym",
+      "word": "gym",
+      "verified_article": "the",
+      "verified_rule_ref": "4.1",
+      "verified_source": "lookup",
+      "source": "harvested",
+      "date": "2026-09-07"
+    },
+    {
+      "text": "The Hague",
+      "word": "hague",
+      "verified_article": "the",
+      "verified_rule_ref": "9.2.2",
+      "verified_source": "proper_noun",
+      "source": "harvested",
+      "date": "2026-09-07"
+    },
+    {
+      "text": "go to the hairdresser's",
+      "word": "hairdresser's",
+      "verified_article": "the",
+      "verified_rule_ref": "4.2",
+      "verified_source": "lookup",
+      "source": "harvested",
+      "date": "2026-09-07"
+    },
+    {
+      "text": "go home",
+      "word": "home",
+      "verified_article": "no article",
+      "verified_rule_ref": "7.4.2",
+      "verified_source": "lookup",
+      "source": "harvested",
+      "date": "2026-09-07"
+    },
+    {
+      "text": "There's a post office in my town",
+      "word": "in",
+      "verified_article": "a / an",
+      "verified_rule_ref": "2.7",
+      "verified_source": "construction:there_is_singular",
+      "source": "harvested",
+      "date": "2026-09-07"
+    },
+    {
+      "text": "She speaks Japanese",
+      "word": "japanese",
+      "verified_article": "no article",
+      "verified_rule_ref": "6.1.1",
+      "verified_source": "category:languages",
+      "source": "harvested",
+      "date": "2026-09-07"
+    },
+    {
+      "text": "in June",
+      "word": "june",
+      "verified_article": "no article",
+      "verified_rule_ref": "6.2.1",
+      "verified_source": "time_words:months",
+      "source": "harvested",
+      "date": "2026-09-07"
+    },
+    {
+      "text": "last Wednesday",
+      "word": "last",
+      "verified_article": "no article",
+      "verified_rule_ref": "7.11",
+      "verified_source": "construction:next_last_time_word",
+      "source": "harvested",
+      "date": "2026-09-07"
+    },
+    {
+      "text": "go to the library",
+      "word": "library",
+      "verified_article": "the",
+      "verified_rule_ref": "4.1",
+      "verified_source": "lookup",
+      "source": "harvested",
+      "date": "2026-09-07"
+    },
+    {
+      "text": "have lunch",
+      "word": "lunch",
+      "verified_article": "no article",
+      "verified_rule_ref": "6.1.2",
+      "verified_source": "lookup",
+      "source": "harvested",
+      "date": "2026-09-07"
+    },
+    {
+      "text": "go to the mall",
+      "word": "mall",
+      "verified_article": "the",
+      "verified_rule_ref": "4.2",
+      "verified_source": "lookup",
+      "source": "harvested",
+      "date": "2026-09-07"
+    },
+    {
+      "text": "I have the measles",
+      "word": "measles",
+      "verified_article": "the",
+      "verified_rule_ref": "7.5",
+      "verified_source": "lookup",
+      "source": "harvested",
+      "date": "2026-09-07"
+    },
+    {
+      "text": "on Monday",
+      "word": "monday",
+      "verified_article": "no article",
+      "verified_rule_ref": "6.2.2",
+      "verified_source": "time_words:days",
+      "source": "harvested",
+      "date": "2026-09-07"
+    },
+    {
+      "text": "go to the movies",
+      "word": "movies",
+      "verified_article": "the",
+      "verified_rule_ref": "4.1",
+      "verified_source": "lookup",
+      "source": "harvested",
+      "date": "2026-09-07"
+    },
+    {
+      "text": "the Nile River",
+      "word": "nile",
+      "verified_article": "the",
+      "verified_rule_ref": "9.2.2",
+      "verified_source": "proper_noun",
+      "source": "harvested",
+      "date": "2026-09-07"
+    },
+    {
+      "text": "November 16th",
+      "word": "november",
+      "verified_article": "no article",
+      "verified_rule_ref": "6.2.1",
+      "verified_source": "time_words:months",
+      "source": "harvested",
+      "date": "2026-09-07"
+    },
+    {
+      "text": "go to the opera",
+      "word": "opera",
+      "verified_article": "the",
+      "verified_rule_ref": "4.1",
+      "verified_source": "lookup",
+      "source": "harvested",
+      "date": "2026-09-07"
+    },
+    {
+      "text": "go to the park",
+      "word": "park",
+      "verified_article": "the",
+      "verified_rule_ref": "4.1",
+      "verified_source": "lookup",
+      "source": "harvested",
+      "date": "2026-09-07"
+    },
+    {
+      "text": "by phone",
+      "word": "phone",
+      "verified_article": "the",
+      "verified_rule_ref": "4.5",
+      "verified_source": "lookup",
+      "source": "harvested",
+      "date": "2026-09-07"
+    },
+    {
+      "text": "on the phone",
+      "word": "phone",
+      "verified_article": "the",
+      "verified_rule_ref": "4.5",
+      "verified_source": "lookup",
+      "source": "harvested",
+      "date": "2026-09-07"
+    },
+    {
+      "text": "play the piano",
+      "word": "piano",
+      "verified_article": "the",
+      "verified_rule_ref": "4.3",
+      "verified_source": "lookup",
+      "source": "harvested",
+      "date": "2026-09-07"
+    },
+    {
+      "text": "There's a post office in my town",
+      "word": "post",
+      "verified_article": "a / an",
+      "verified_rule_ref": "2.7",
+      "verified_source": "construction:there_is_singular",
+      "source": "harvested",
+      "date": "2026-09-07"
+    },
+    {
+      "text": "by post",
+      "word": "post",
+      "verified_article": "the",
+      "verified_rule_ref": "4.5",
+      "verified_source": "lookup",
+      "source": "harvested",
+      "date": "2026-09-07"
+    },
+    {
+      "text": "in the post",
+      "word": "post",
+      "verified_article": "the",
+      "verified_rule_ref": "4.5",
+      "verified_source": "lookup",
+      "source": "harvested",
+      "date": "2026-09-07"
+    },
+    {
+      "text": "go to the pub",
+      "word": "pub",
+      "verified_article": "the",
+      "verified_rule_ref": "4.2",
+      "verified_source": "lookup",
+      "source": "harvested",
+      "date": "2026-09-07"
+    },
+    {
+      "text": "by radio",
+      "word": "radio",
+      "verified_article": "the",
+      "verified_rule_ref": "4.5",
+      "verified_source": "lookup",
+      "source": "harvested",
+      "date": "2026-09-07"
+    },
+    {
+      "text": "listen to the radio",
+      "word": "radio",
+      "verified_article": "the",
+      "verified_rule_ref": "4.5",
+      "verified_source": "lookup",
+      "source": "harvested",
+      "date": "2026-09-07"
+    },
+    {
+      "text": "the Sahara Desert",
+      "word": "sahara",
+      "verified_article": "the",
+      "verified_rule_ref": "9.2.2",
+      "verified_source": "proper_noun",
+      "source": "harvested",
+      "date": "2026-09-07"
+    },
+    {
+      "text": "go to the shops",
+      "word": "shops",
+      "verified_article": "the",
+      "verified_rule_ref": "4.2",
+      "verified_source": "lookup",
+      "source": "harvested",
+      "date": "2026-09-07"
+    },
+    {
+      "text": "outer space",
+      "word": "space",
+      "verified_article": "no article",
+      "verified_rule_ref": "4.15",
+      "verified_source": "lookup",
+      "source": "harvested",
+      "date": "2026-09-07"
+    },
+    {
+      "text": "go to the store",
+      "word": "store",
+      "verified_article": "the",
+      "verified_rule_ref": "4.2",
+      "verified_source": "lookup",
+      "source": "harvested",
+      "date": "2026-09-07"
+    },
+    {
+      "text": "in summer",
+      "word": "summer",
+      "verified_article": "either the or no article",
+      "verified_rule_ref": "6.2.6",
+      "verified_source": "time_words:seasons",
+      "source": "harvested",
+      "date": "2026-09-07"
+    },
+    {
+      "text": "The Hague",
+      "word": "the",
+      "verified_article": "the",
+      "verified_rule_ref": "9.2.2",
+      "verified_source": "proper_noun",
+      "source": "harvested",
+      "date": "2026-09-07"
+    },
+    {
+      "text": "the Alps",
+      "word": "the",
+      "verified_article": "the",
+      "verified_rule_ref": "9.2.2",
+      "verified_source": "proper_noun",
+      "source": "harvested",
+      "date": "2026-09-07"
+    },
+    {
+      "text": "the Netherlands",
+      "word": "the",
+      "verified_article": "the",
+      "verified_rule_ref": "9.2.2",
+      "verified_source": "proper_noun",
+      "source": "harvested",
+      "date": "2026-09-07"
+    },
+    {
+      "text": "the Nile River",
+      "word": "the",
+      "verified_article": "the",
+      "verified_rule_ref": "9.2.2",
+      "verified_source": "proper_noun",
+      "source": "harvested",
+      "date": "2026-09-07"
+    },
+    {
+      "text": "the Philippines",
+      "word": "the",
+      "verified_article": "the",
+      "verified_rule_ref": "9.2.2",
+      "verified_source": "proper_noun",
+      "source": "harvested",
+      "date": "2026-09-07"
+    },
+    {
+      "text": "the Sahara Desert",
+      "word": "the",
+      "verified_article": "the",
+      "verified_rule_ref": "9.2.2",
+      "verified_source": "proper_noun",
+      "source": "harvested",
+      "date": "2026-09-07"
+    },
+    {
+      "text": "the Smiths",
+      "word": "the",
+      "verified_article": "the",
+      "verified_rule_ref": "9.4.2",
+      "verified_source": "construction:family_surname",
+      "source": "harvested",
+      "date": "2026-09-07"
+    },
+    {
+      "text": "the USA",
+      "word": "the",
+      "verified_article": "the",
+      "verified_rule_ref": "9.2.2",
+      "verified_source": "proper_noun",
+      "source": "harvested",
+      "date": "2026-09-07"
+    },
+    {
+      "text": "the United Kingdom",
+      "word": "the",
+      "verified_article": "the",
+      "verified_rule_ref": "9.2.2",
+      "verified_source": "proper_noun",
+      "source": "harvested",
+      "date": "2026-09-07"
+    },
+    {
+      "text": "go to the theater",
+      "word": "theater",
+      "verified_article": "the",
+      "verified_rule_ref": "4.1",
+      "verified_source": "lookup",
+      "source": "harvested",
+      "date": "2026-09-07"
+    },
+    {
+      "text": "go to the theatre",
+      "word": "theatre",
+      "verified_article": "the",
+      "verified_rule_ref": "4.1",
+      "verified_source": "lookup",
+      "source": "harvested",
+      "date": "2026-09-07"
+    },
+    {
+      "text": "There's a post office in my town",
+      "word": "town",
+      "verified_article": "a / an",
+      "verified_rule_ref": "2.7",
+      "verified_source": "construction:there_is_singular",
+      "source": "harvested",
+      "date": "2026-09-07"
+    },
+    {
+      "text": "play the violin",
+      "word": "violin",
+      "verified_article": "the",
+      "verified_rule_ref": "4.3",
+      "verified_source": "lookup",
+      "source": "harvested",
+      "date": "2026-09-07"
+    },
+    {
+      "text": "last Wednesday",
+      "word": "wednesday",
+      "verified_article": "no article",
+      "verified_rule_ref": "7.11",
+      "verified_source": "construction:next_last_time_word",
+      "source": "harvested",
+      "date": "2026-09-07"
+    },
+    {
+      "text": "next week",
+      "word": "week",
+      "verified_article": "no article",
+      "verified_rule_ref": "7.11",
+      "verified_source": "construction:next_last_time_word",
+      "source": "harvested",
+      "date": "2026-09-07"
+    },
+    {
+      "text": "at work",
+      "word": "work",
+      "verified_article": "no article",
+      "verified_rule_ref": "7.4.3",
+      "verified_source": "lookup",
+      "source": "harvested",
+      "date": "2026-09-07"
+    },
+    {
+      "text": "go to work",
+      "word": "work",
+      "verified_article": "no article",
+      "verified_rule_ref": "7.4.3",
+      "verified_source": "lookup",
+      "source": "harvested",
+      "date": "2026-09-07"
+    },
+    {
+      "text": "in the world",
+      "word": "world",
+      "verified_article": "the",
+      "verified_rule_ref": "2.3",
+      "verified_source": "lookup",
+      "source": "harvested",
+      "date": "2026-09-07"
+    },
+    {
+      "text": "go to the zoo",
+      "word": "zoo",
+      "verified_article": "the",
+      "verified_rule_ref": "4.1",
+      "verified_source": "lookup",
+      "source": "harvested",
+      "date": "2026-09-07"
+    }
+  ]
+}

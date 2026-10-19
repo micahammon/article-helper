@@ -21,14 +21,15 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 
+# (data file, page, script-block id). A page may carry more than one block;
+# index.html carries the rules and, alongside them, the verified example corpus.
 PAIRS = [
-    ("rules_data.json", "index.html"),
-    ("rules_data.classic.json", "classic.html"),
+    ("rules_data.json", "index.html", "rules-data"),
+    ("examples_data.json", "index.html", "examples-data"),
+    ("rules_data.classic.json", "classic.html", "rules-data"),
 ]
 
-OPEN = '<script id="rules-data" type="application/json">'
 CLOSE = "</script>"
-BLOCK = re.compile(re.escape(OPEN) + r".*?" + re.escape(CLOSE), re.DOTALL)
 
 
 def payload(data):
@@ -41,17 +42,19 @@ def payload(data):
                       separators=(",", ":")).replace("<", "\\u003c")
 
 
-def inline(data_name, page_name):
+def inline(data_name, page_name, block_id):
     data = json.loads((ROOT / data_name).read_text(encoding="utf-8"))
     page_path = ROOT / page_name
     page = page_path.read_text(encoding="utf-8")
 
-    if not BLOCK.search(page):
-        print("no rules-data block in %s" % page_name, file=sys.stderr)
+    open_tag = '<script id="%s" type="application/json">' % block_id
+    block = re.compile(re.escape(open_tag) + r".*?" + re.escape(CLOSE), re.DOTALL)
+    if not block.search(page):
+        print("no %s block in %s" % (block_id, page_name), file=sys.stderr)
         return False
 
     body = payload(data)
-    updated = BLOCK.sub(lambda _: OPEN + "\n" + body + "\n" + CLOSE, page, count=1)
+    updated = block.sub(lambda _: open_tag + "\n" + body + "\n" + CLOSE, page, count=1)
     if updated == page:
         print("%-12s already up to date" % page_name)
         return True
